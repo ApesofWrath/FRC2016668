@@ -49,9 +49,9 @@ public class Robot extends IterativeRobot {
          
          robotDrive = new RobotDrive(canTalonFrontLeft, canTalonRearLeft, canTalonFrontRight, canTalonRearRight);
          robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
-     	robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
-     	robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
-     	robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
+     	 robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
+         robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
+     	 robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
          
     }
     
@@ -68,7 +68,11 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
     	
     	boolean isMinimize = joyThrottle.getRawButton(3);
+    	boolean isIntaking = joyOp.getRawButton(3);
+    	boolean isReverse = joyOp.getRawButton(5);
+    	boolean isFire = joyOp.getRawButton(1);
     	
+    	//Drive Code
     	if (isMinimize){
     		robotDrive.arcadeDrive(joyThrottle.getY()*.6, joyWheel.getX()*.6);
     	}
@@ -76,6 +80,29 @@ public class Robot extends IterativeRobot {
     		robotDrive.arcadeDrive(joyThrottle.getY(), joyWheel.getX());
     	}
     	
+    	//intake
+    	if (isIntaking){
+    		Intake.spin(.8);
+    	}
+    	else{
+    		Intake.stop();
+    	}
+    	
+    	//reverse intake
+    	if (isReverse){
+    		Intake.spit(.8);
+    	}
+    	else{
+    		Intake.stop();
+    	}
+    	
+    	//Firing
+    	if (isFire){
+    		Shooter.fire(1.0); //TODO: change to controller
+    	}
+    	else{
+    		Shooter.stop();
+    	}
     
     }
    
