@@ -14,7 +14,7 @@ public class Robot extends IterativeRobot {
     }
     
 	
-    public void autonomousInit() {
+    public void autonomousInit(){
     	
     }
 
@@ -26,6 +26,7 @@ public class Robot extends IterativeRobot {
    
     public void teleopPeriodic() {
         
+    
     }
    
     public void testPeriodic() {
