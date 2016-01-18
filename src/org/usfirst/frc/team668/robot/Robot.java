@@ -20,6 +20,39 @@ public class Robot extends IterativeRobot {
    
     public void robotInit() {
         
+    	 joyWheel = new Joystick(0);
+         joyThrottle = new Joystick(1);
+         
+         joyOp = new Joystick(2);
+         
+         canTalonFlyWheel = new CANTalon(0);
+         canTalonTrigger = new CANTalon(1);
+         
+         canTalonIntakeOne = new CANTalon(2);
+         canTalonIntakeTwo = new CANTalon(3);
+         
+         canTalonFrontLeft = new CANTalon(4);
+         canTalonFrontRight = new CANTalon(5);
+         canTalonRearLeft = new CANTalon(6);
+         canTalonRearRight = new CANTalon(7);
+
+         canTalonFlyWheel = new CANTalon(2);
+         canTalonTrigger = new CANTalon(3);
+         
+         canTalonIntakeOne = new CANTalon(4);
+         canTalonIntakeTwo = new CANTalon(5);
+         
+         canTalonFrontLeft = new CANTalon(6);
+         canTalonFrontRight = new CANTalon(7);
+         canTalonRearLeft = new CANTalon(8);
+         canTalonRearRight = new CANTalon(9);
+         
+         robotDrive = new RobotDrive(canTalonFrontLeft, canTalonRearLeft, canTalonFrontRight, canTalonRearRight);
+         robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
+     	robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
+     	robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
+     	robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
+         
     }
     
     public void autonomousInit() {
