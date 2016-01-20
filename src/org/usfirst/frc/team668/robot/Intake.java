@@ -62,22 +62,19 @@ public class Intake {
 	
 	public static void spin(double speed){
 		
-		Robot.canTalonIntakeOne.set(speed);
-		Robot.canTalonIntakeTwo.set(speed);
+		Robot.canTalonIntake.set(speed);
 		
 	}
 	
 	public static void spit(double speed){
 		
-		Robot.canTalonIntakeOne.set(-speed);
-		Robot.canTalonIntakeTwo.set(-speed);
+		Robot.canTalonIntake.set(-speed);
 		
 	}
 	
 	public static void stop(){
 		
-		Robot.canTalonIntakeOne.set(0.0);
-		Robot.canTalonIntakeTwo.set(0.0);
+		Robot.canTalonIntake.set(0.0);
 		
 	}
 	
