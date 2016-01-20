@@ -15,7 +15,7 @@ public class Intake {
 	
 	public static boolean movePID (int ref){
 		
-		error = ref = Robot.intakeEncoder.get();
+		error = ref - Robot.intakeEncoder.get();
 		
 		long currentTime = System.currentTimeMillis();
 		
@@ -26,9 +26,8 @@ public class Intake {
 		P = Kp * error;
 		I = Ki * i;
 		D = Kd * d;
+		
 		speed = P + I + D;
-		
-		
 		
 		if(Math.abs(speed) > 1) {
 			if(speed > 1){
@@ -47,10 +46,7 @@ public class Intake {
 		if (!Robot.intakeLimitTop.get() || !Robot.intakeLimitBot.get()){
 			Robot.canTalonIntakeAngle.set(0);
 			return true;
-		}
-		
-		
-		
+		}else{
 		if (Math.abs(error) <= 4){
 			Robot.canTalonIntakeAngle.set(0);
 			return true;
@@ -58,6 +54,7 @@ public class Intake {
 		else{
 			return false;
 		}
+	}
 				
 	
 	}
