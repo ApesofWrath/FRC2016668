@@ -6,4 +6,8 @@ public class Lifter {
 		
 	}
 	
+	public static void pull(){
+		
+	}
+	
 }

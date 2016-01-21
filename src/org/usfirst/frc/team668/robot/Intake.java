@@ -13,10 +13,28 @@ public class Intake {
 	public static double d = 0;
 	public static double P, I, D;
 	
+	public static boolean talonPID( double ref ){
+		
+		Robot.canTalonIntake.setPID(0,0,0);
+		
+		Robot.canTalonIntake.setSetPoint(ref);
+		
+		error = Robot.canTalonIntake.getError();
+		
+		Robot.canTalonIntake.enable();
+		
+		if (error < 4){
+			Robot.canTalonIntake.disable();
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
 	public static boolean movePID (int ref){
 		
-		error = ref - Robot.intakeEncoder.get();
-		
+		error = ref - Robot.intakeEncoder.get(); // error = ref - Robot.canTalonIntake.get();
 		long currentTime = System.currentTimeMillis();
 		
 		i = i + (currentTime - lastTime)*(error);

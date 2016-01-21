@@ -13,6 +13,27 @@ public class Shooter {
 	public static double d = 0;
 	public static double P, I, D;
 	
+	public static boolean talonPID(double ref){
+		
+		Robot.canTalonShooteAngle.setPID(0,0,0);
+		
+		Robot.canTalonShooterAngle.setSetPoint(ref);
+		
+		error = Robot.canTalonShooterAngle.getError();
+		
+		Robot.cabTalonShootAngle.enable();
+		
+		if( error < 4){
+			Robot.canTalonShooterAngle.disable();
+			return true;
+		}		
+		else{
+			return false;
+		}
+		
+		
+		
+	}
 	public static boolean movePID(int ref){
 		
 
