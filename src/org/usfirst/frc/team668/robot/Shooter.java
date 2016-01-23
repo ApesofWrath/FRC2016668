@@ -15,13 +15,13 @@ public class Shooter {
 	
 	public static boolean talonPID(double ref){
 		
-		Robot.canTalonShooteAngle.setPID(0,0,0);
+		Robot.canTalonShooterAngle.setPID(0,0,0);
 		
-		Robot.canTalonShooterAngle.setSetPoint(ref);
+		Robot.canTalonIntakeAngle.setSetpoint(ref);
 		
-		error = Robot.canTalonShooterAngle.getError();
+		error = (int) Robot.canTalonShooterAngle.getError();
 		
-		Robot.cabTalonShootAngle.enable();
+		Robot.canTalonShooterAngle.enable();
 		
 		if( error < 4){
 			Robot.canTalonShooterAngle.disable();
@@ -89,16 +89,16 @@ public class Shooter {
 	}
 	
 	public static void spinFlyWheel(double speed){
-		Robot.canTalonFlywheel.set(speed);
+		Robot.canTalonFlyWheel.set(speed);
 	}
 	
 	public static void stopFlyWheel(){
-		Robot.canTalonFlywheel.set(0);
+		Robot.canTalonFlyWheel.set(0);
 	}
 	
 	public static void stop(){
 		
-		Robot.canTalonFlywheel.set(0);
+		Robot.canTalonFlyWheel.set(0);
 		
 	}
 	

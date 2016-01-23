@@ -17,9 +17,9 @@ public class Intake {
 		
 		Robot.canTalonIntake.setPID(0,0,0);
 		
-		Robot.canTalonIntake.setSetPoint(ref);
+		Robot.canTalonIntake.setSetpoint(ref);
 		
-		error = Robot.canTalonIntake.getError();
+		error = (int) Robot.canTalonIntake.getError();
 		
 		Robot.canTalonIntake.enable();
 		
@@ -34,7 +34,7 @@ public class Intake {
 	
 	public static boolean movePID (int ref){
 		
-		error = ref - Robot.canTalonIntake.get();
+		error = (int) (ref - Robot.canTalonIntake.get());
 		
 		long currentTime = System.currentTimeMillis();
 		
