@@ -63,7 +63,7 @@ public class Shooter {
 		Robot.canTalonShooterAngle.set(speed);
 		
 		lastError = error;
-		currentTime = lastTime;
+		lastTime = currentTime;
 			
 		if (!Robot.shooterLimitTop.get() || !Robot.shooterLimitBot.get()){
 			Robot.canTalonShooterAngle.set(0);
@@ -90,6 +90,10 @@ public class Shooter {
 	
 	public static void spinFlyWheel(double speed){
 		Robot.canTalonFlywheel.set(speed);
+	}
+	
+	public static void stopFlyWheel(){
+		Robot.canTalonFlywheel.set(0);
 	}
 	
 	public static void stop(){
