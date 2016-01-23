@@ -53,7 +53,7 @@ public class Intake {
 		D = Kd * d;
 		
 		speed = P + I + D ;
-		
+		//
 		if(Math.abs(speed) > 1) {
 			if(speed > 1){
 				speed = 1;
