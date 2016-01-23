@@ -118,10 +118,14 @@ public class Robot extends IterativeRobot {
     	if (joyOp.getRawButton(1)){
     		canTalonIntakeAngle.set(.5);
     	}
+    	if (joyOp.getRawButton(3)){
+    		canTalonIntakeAngle.set(0);
+    	}
     	
-    	//canTalonIntakeAngle.changeControlMode(CANTalon.TalonControlMode.Position);
+    	
     	System.out.println(canTalonIntakeAngle.getEncPosition());
-
+    	
+    	    	
     	//intake
     	if (isIntaking){
     		Intake.spin(.8);
@@ -153,6 +157,7 @@ public class Robot extends IterativeRobot {
    
     public void testPeriodic() {
     
+    	System.out.println("hello");
     }
     
 }

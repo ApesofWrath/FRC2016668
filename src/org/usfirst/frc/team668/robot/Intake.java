@@ -4,9 +4,9 @@ import edu.wpi.first.wpilibj.CANTalon;
 
 public class Intake {
 	
-	public static double Kp = 0;
-	public static double Ki = 0;
-	public static double Kd = 0;
+	public static double Kp = 0.0001;
+	public static double Ki = 0.5;
+	public static double Kd = 0.65;
 	public static long lastTime = System.currentTimeMillis();
 	public static double speed;
 	public static int error = 0;
@@ -21,7 +21,7 @@ public class Intake {
 
 		Robot.canTalonIntakeAngle.changeControlMode(CANTalon.TalonControlMode.Position);
 		
-		Robot.canTalonIntakeAngle.setPID(.001,1,1);
+		Robot.canTalonIntakeAngle.setPID(.0001, 5,1);
 		
 		Robot.canTalonIntakeAngle.setSetpoint(ref);
 		
@@ -40,7 +40,7 @@ public class Intake {
 	
 	public static boolean movePID (int ref){
 		
-		error = (int) (ref - Robot.canTalonIntake.get());
+		error =  ref - (int)(Robot.canTalonIntake.getEncPosition());
 		
 		long currentTime = System.currentTimeMillis();
 		
@@ -52,7 +52,7 @@ public class Intake {
 		I = Ki * i;
 		D = Kd * d;
 		
-		speed = P + I + D;
+		speed = P + I + D ;
 		
 		if(Math.abs(speed) > 1) {
 			if(speed > 1){
