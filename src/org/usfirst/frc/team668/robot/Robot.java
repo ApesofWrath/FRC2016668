@@ -6,6 +6,9 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Timer;
+
+import java.io.PrintWriter;
+
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -20,9 +23,10 @@ public class Robot extends IterativeRobot {
    							 canTalonFrontLeft, canTalonFrontRight, canTalonRearLeft, canTalonRearRight,
    							canTalonIntakeAngle, canTalonShooterAngle;
    public static RobotDrive robotDrive;
-   public static Encoder encoderLeft, encoderRight, flywheelEncoder, intakeEncoder, angleEncoder;
+  // public static Encoder encoderLeft, encoderRight, flywheelEncoder, intakeEncoder, angleEncoder;
    public static DigitalInput shooterLimitTop, shooterLimitBot, intakeLimitTop, intakeLimitBot; 
    public static CameraServer server;
+   public static PrintWriter system;
    
     public void robotInit() {
     	
@@ -35,17 +39,17 @@ public class Robot extends IterativeRobot {
          
          joyOp = new Joystick(2);
          
-         canTalonFlyWheel = new CANTalon(0);
-         canTalonTrigger = new CANTalon(1);
+         canTalonFlyWheel = new CANTalon(4);
+         canTalonTrigger = new CANTalon(5);
          
-         canTalonIntake = new CANTalon(2);
+         canTalonIntake = new CANTalon(6);
          
-         canTalonFrontLeft = new CANTalon(3);
-         canTalonFrontRight = new CANTalon(4);
-         canTalonRearLeft = new CANTalon(5);
-         canTalonRearRight = new CANTalon(6);
+         canTalonFrontLeft = new CANTalon(7);
+         canTalonFrontRight = new CANTalon(1);
+         canTalonRearLeft = new CANTalon(2);
+         canTalonRearRight = new CANTalon(3);
 
-         canTalonIntakeAngle = new CANTalon(7);
+         canTalonIntakeAngle = new CANTalon(0);
          canTalonShooterAngle = new CANTalon(8);
          
          robotDrive = new RobotDrive(canTalonFrontLeft, canTalonRearLeft, canTalonFrontRight, canTalonRearRight);
@@ -54,16 +58,16 @@ public class Robot extends IterativeRobot {
          robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
      	 robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
      	 
-     	 encoderRight = new Encoder(0,1);
-     	 encoderLeft = new Encoder(2,3);
-     	 flywheelEncoder = new Encoder(4,5);
-     	 intakeEncoder = new Encoder(6,7);
-     	 angleEncoder = new Encoder(8,9);
+//     	 encoderRight = new Encoder(0, 1)
+//     	 encoderLeft = new Encoder(2,3);
+//     	 flywheelEncoder = new Encoder(4,5);
+//     	 intakeEncoder = new Encoder(6,7);
+//     	 angleEncoder = new Encoder(8,9);
      	 
-     	 shooterLimitTop = new DigitalInput(0);
-     	 shooterLimitBot = new DigitalInput(1);
-     	 intakeLimitTop = new DigitalInput(2);
-     	 intakeLimitBot = new DigitalInput(3);
+     	 shooterLimitTop = new DigitalInput(1);
+     	 shooterLimitBot = new DigitalInput(2);
+     	 intakeLimitTop = new DigitalInput(3);
+     	 intakeLimitBot = new DigitalInput(4);
      	 
     }
     
@@ -76,7 +80,10 @@ public class Robot extends IterativeRobot {
     	
     }
 
-   
+    public void teleopInit(){
+    	canTalonIntakeAngle.setEncPosition(0);
+    	System.out.println("Working");
+    }
     public void teleopPeriodic() {
     	
     	boolean isMinimize = joyThrottle.getRawButton(3);
@@ -89,20 +96,32 @@ public class Robot extends IterativeRobot {
     	
     	//Drive Code
     	if (isMinimize){
-    		robotDrive.arcadeDrive(joyThrottle.getY()*.6, joyWheel.getX()*.6);
+    		robotDrive.arcadeDrive(joyThrottle.getY()*.6, joyWheel.getX()* .6);
     	}
     	else{
     		robotDrive.arcadeDrive(joyThrottle.getY(), joyWheel.getX());
     	}
     	
+    	
     	if (isIntakeLower){
-    		Intake.movePID(0);
+    		boolean isDone = Intake.talonPID(1200);
+    		if(isDone){
+    			Intake.stopAngle();
+    		}
     	}
     	if (isIntakeRise){
-    		Intake.movePID(0);
+    		boolean isDone = Intake.talonPID(0);
+    		if(isDone){
+    			Intake.stopAngle();
+    		}
+    	}
+    	if (joyOp.getRawButton(1)){
+    		canTalonIntakeAngle.set(.5);
     	}
     	
-    	
+    	//canTalonIntakeAngle.changeControlMode(CANTalon.TalonControlMode.Position);
+    	System.out.println(canTalonIntakeAngle.getEncPosition());
+
     	//intake
     	if (isIntaking){
     		Intake.spin(.8);

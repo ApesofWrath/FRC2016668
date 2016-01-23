@@ -37,7 +37,7 @@ public class Shooter {
 	public static boolean movePID(int ref){
 		
 
-		error = ref - Robot.angleEncoder.get();
+		error = (int) (ref - Robot.canTalonShooterAngle.get());
 		
 		long currentTime = System.currentTimeMillis();
 		
@@ -68,7 +68,8 @@ public class Shooter {
 		if (!Robot.shooterLimitTop.get() || !Robot.shooterLimitBot.get()){
 			Robot.canTalonShooterAngle.set(0);
 			return true;
-		}else{
+		}
+		else{
 		
 		if (Math.abs(error) <= 4){
 			Robot.canTalonShooterAngle.set(0);

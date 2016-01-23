@@ -1,5 +1,7 @@
 package org.usfirst.frc.team668.robot;
 
+import edu.wpi.first.wpilibj.CANTalon;
+
 public class Intake {
 	
 	public static double Kp = 0;
@@ -14,14 +16,18 @@ public class Intake {
 	public static double P, I, D;
 	
 	public static boolean talonPID( double ref ){
+	
+    	System.out.println(Robot.canTalonIntakeAngle.getEncPosition());
+
+		Robot.canTalonIntakeAngle.changeControlMode(CANTalon.TalonControlMode.Position);
 		
-		Robot.canTalonIntake.setPID(0,0,0);
+		Robot.canTalonIntakeAngle.setPID(.001,1,1);
 		
-		Robot.canTalonIntake.setSetpoint(ref);
+		Robot.canTalonIntakeAngle.setSetpoint(ref);
 		
-		error = (int) Robot.canTalonIntake.getError();
+		error = (int) Robot.canTalonIntakeAngle.getError();
 		
-		Robot.canTalonIntake.enable();
+		Robot.canTalonIntakeAngle.enable();
 		
 		if (error < 4){
 			Robot.canTalonIntake.disable();
@@ -65,7 +71,8 @@ public class Intake {
 		if (!Robot.intakeLimitTop.get() || !Robot.intakeLimitBot.get()){
 			Robot.canTalonIntakeAngle.set(0);
 			return true;
-		}else{
+		}
+		else{
 		if (Math.abs(error) <= 4){
 			Robot.canTalonIntakeAngle.set(0);
 			return true;
@@ -95,6 +102,9 @@ public class Intake {
 		
 		Robot.canTalonIntake.set(0.0);
 		
+	}
+	public static void stopAngle(){
+		Robot.canTalonIntakeAngle.set(0.0);
 	}
 	
 }
