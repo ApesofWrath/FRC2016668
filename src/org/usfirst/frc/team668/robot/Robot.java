@@ -83,6 +83,7 @@ public class Robot extends IterativeRobot {
     public void teleopInit(){
     	canTalonIntakeAngle.setEncPosition(0);
     	System.out.println("Working");
+    	
     }
     public void teleopPeriodic() {
     	
@@ -104,7 +105,7 @@ public class Robot extends IterativeRobot {
     	
     	
     	if (isIntakeLower){
-    		boolean isDone = Intake.talonPID(1200);
+    		boolean isDone = Intake.talonPID(500);
     		if(isDone){
     			Intake.stopAngle();
     		}
@@ -115,11 +116,15 @@ public class Robot extends IterativeRobot {
     			Intake.stopAngle();
     		}
     	}
+    	
     	if (joyOp.getRawButton(1)){
     		canTalonIntakeAngle.set(.5);
     	}
     	if (joyOp.getRawButton(3)){
     		canTalonIntakeAngle.set(0);
+    	}
+    	if(joyOp.getRawButton(4)){
+    		canTalonIntakeAngle.set(-.5);
     	}
     	
     	

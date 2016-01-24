@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj.CANTalon;
 public class Intake {
 	
 	public static double Kp = 0.0001;
-	public static double Ki = 0.5;
-	public static double Kd = 0.65;
+	public static double Ki = 5;
+	public static double Kd = 0.01;
 	public static long lastTime = System.currentTimeMillis();
 	public static double speed;
 	public static int error = 0;
@@ -17,19 +17,19 @@ public class Intake {
 	
 	public static boolean talonPID( double ref ){
 	
-    	System.out.println(Robot.canTalonIntakeAngle.getEncPosition());
+    	//System.out.println(Robot.canTalonIntakeAngle.getEncPosition());
 
 		Robot.canTalonIntakeAngle.changeControlMode(CANTalon.TalonControlMode.Position);
 		
-		Robot.canTalonIntakeAngle.setPID(.0001, 5,1);
+		Robot.canTalonIntakeAngle.setPID(.0000001, 5.4,.5);
 		
 		Robot.canTalonIntakeAngle.setSetpoint(ref);
 		
-		error = (int) Robot.canTalonIntakeAngle.getError();
+	//	error = (int) Robot.canTalonIntakeAngle.getError();
 		
 		Robot.canTalonIntakeAngle.enable();
 		
-		if (error < 4){
+		if (Robot.canTalonIntakeAngle.getSpeed() < 4){
 			Robot.canTalonIntake.disable();
 			return true;
 		}
@@ -52,7 +52,7 @@ public class Intake {
 		I = Ki * i;
 		D = Kd * d;
 		
-		speed = P + I + D ;
+		speed = P  ;
 		//
 		if(Math.abs(speed) > 1) {
 			if(speed > 1){
