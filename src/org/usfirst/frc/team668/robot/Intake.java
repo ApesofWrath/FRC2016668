@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj.CANTalon;
 
 public class Intake {
 	
-	public static double Kp = 0.0001;
-	public static double Ki = 5;
+	public static double Kp = 0.001;
+	public static double Ki = .005;
 	public static double Kd = 0.01;
 	public static long lastTime = System.currentTimeMillis();
 	public static double speed;
@@ -21,7 +21,7 @@ public class Intake {
 
 		Robot.canTalonIntakeAngle.changeControlMode(CANTalon.TalonControlMode.Position);
 		
-		Robot.canTalonIntakeAngle.setPID(.0000001, 5.4,.5);
+		Robot.canTalonIntakeAngle.setPID(.1, .13, .03);
 		
 		Robot.canTalonIntakeAngle.setSetpoint(ref);
 		
@@ -38,7 +38,7 @@ public class Intake {
 		}
 	}
 	
-	public static boolean movePID (int ref){
+	public static void movePID (int ref){
 		
 		error =  ref - (int)(Robot.canTalonIntake.getEncPosition());
 		
@@ -52,7 +52,7 @@ public class Intake {
 		I = Ki * i;
 		D = Kd * d;
 		
-		speed = P  ;
+		speed = P + I + D ;
 		//
 		if(Math.abs(speed) > 1) {
 			if(speed > 1){
@@ -68,19 +68,19 @@ public class Intake {
 		lastError = error;
 		lastTime = currentTime;
 			
-		if (!Robot.intakeLimitTop.get() || !Robot.intakeLimitBot.get()){
-			Robot.canTalonIntakeAngle.set(0);
-			return true;
-		}
-		else{
-		if (Math.abs(error) <= 4){
-			Robot.canTalonIntakeAngle.set(0);
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
+//		if (!Robot.intakeLimitTop.get() || !Robot.intakeLimitBot.get()){
+//			Robot.canTalonIntakeAngle.set(0);
+//			return true;
+//		}
+//		else{
+//		if (Math.abs(error) <= 4){
+//			Robot.canTalonIntakeAngle.set(0);
+//			return true;
+//		}
+//		else{
+//			return false;
+//		}
+//	}
 				
 	
 	}

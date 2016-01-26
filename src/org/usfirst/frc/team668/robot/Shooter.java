@@ -85,7 +85,7 @@ public class Shooter {
 	
 	public static void fire(double speed){
 		
-		Robot.canTalonTrigger.set(speed);
+		Robot.canTalonIntake.set(speed);
 		
 	}
 	

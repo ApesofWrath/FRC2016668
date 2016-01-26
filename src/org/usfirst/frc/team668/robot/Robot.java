@@ -93,7 +93,7 @@ public class Robot extends IterativeRobot {
     	boolean isFire = joyOp.getRawButton(1);
     	boolean isIntakeLower = joyOp.getRawButton(8);
     	boolean isIntakeRise = joyOp.getRawButton(7);
-    	
+    	boolean stopFlyWheel = joyOp.getRawButton(6);
     	
     	//Drive Code
     	if (isMinimize){
@@ -111,10 +111,8 @@ public class Robot extends IterativeRobot {
     		}
     	}
     	if (isIntakeRise){
-    		boolean isDone = Intake.talonPID(0);
-    		if(isDone){
-    			Intake.stopAngle();
-    		}
+    		Intake.movePID(500);
+    		
     	}
     	
     	if (joyOp.getRawButton(1)){
@@ -132,7 +130,7 @@ public class Robot extends IterativeRobot {
     	
     	    	
     	//intake
-    	if (isIntaking){
+    	if (isIntaking){  //TODO: add the sensor
     		Intake.spin(.8);
     	}
     		else{
@@ -149,12 +147,19 @@ public class Robot extends IterativeRobot {
     	
     	//Firing
     	if (isFire){
-    		Shooter.fire(0); //TODO: change to controller
+    		Shooter.fire(.8); //TODO: change to controller
     	}
     		else{
     			Shooter.stop();
     	}
     	
+    	//spins the flywheel
+    	if (stopFlyWheel){
+    		Shooter.stopFlyWheel();
+    	}
+    	else{
+    		Shooter.spinFlyWheel(.8);
+    	}
     	
     	
     
