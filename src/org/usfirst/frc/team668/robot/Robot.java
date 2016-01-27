@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,10 +24,10 @@ public class Robot extends IterativeRobot {
    							 canTalonFrontLeft, canTalonFrontRight, canTalonRearLeft, canTalonRearRight,
    							canTalonIntakeAngle, canTalonShooterAngle;
    public static RobotDrive robotDrive;
-  // public static Encoder encoderLeft, encoderRight, flywheelEncoder, intakeEncoder, angleEncoder;
-   public static DigitalInput shooterLimitTop, shooterLimitBot, intakeLimitTop, intakeLimitBot; 
+   public static DigitalInput shooterLimitTop, shooterLimitBot, intakeLimitTop, intakeLimitBot, opticSensor;
    public static CameraServer server;
    public static PrintWriter system;
+   public static DoubleSolenoid intakePiston, shiftRight, shiftLeft;
    
     public void robotInit() {
     	
@@ -49,8 +50,7 @@ public class Robot extends IterativeRobot {
          canTalonRearLeft = new CANTalon(2);
          canTalonRearRight = new CANTalon(3);
 
-         canTalonIntakeAngle = new CANTalon(0);
-         canTalonShooterAngle = new CANTalon(8);
+         canTalonShooterAngle = new CANTalon(0);
          
          robotDrive = new RobotDrive(canTalonFrontLeft, canTalonRearLeft, canTalonFrontRight, canTalonRearRight);
          robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
@@ -58,16 +58,15 @@ public class Robot extends IterativeRobot {
          robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
      	 robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
      	 
-//     	 encoderRight = new Encoder(0, 1)
-//     	 encoderLeft = new Encoder(2,3);
-//     	 flywheelEncoder = new Encoder(4,5);
-//     	 intakeEncoder = new Encoder(6,7);
-//     	 angleEncoder = new Encoder(8,9);
+     	 //shooterLimitTop = new DigitalInput(0);
+     	 //shooterLimitBot = new DigitalInput(4);
+     	 //intakeLimitTop = new DigitalInput(2);
+     	 //intakeLimitBot = new DigitalInput(3);
+     	 opticSensor = new DigitalInput(1);
      	 
-     	 shooterLimitTop = new DigitalInput(1);
-     	 shooterLimitBot = new DigitalInput(2);
-     	 intakeLimitTop = new DigitalInput(3);
-     	 intakeLimitBot = new DigitalInput(4);
+     	 intakePiston = new DoubleSolenoid( 0, 1);
+     	 shiftRight = new DoubleSolenoid( 2, 3);
+     	 shiftLeft = new DoubleSolenoid( 4, 5);
      	 
     }
     
@@ -81,10 +80,13 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit(){
-    	canTalonIntakeAngle.setEncPosition(0);
+    	
+    	canTalonShooterAngle.setEncPosition(0);
     	System.out.println("Working");
     	
     }
+    
+
     public void teleopPeriodic() {
     	
     	boolean isMinimize = joyThrottle.getRawButton(3);
@@ -94,6 +96,7 @@ public class Robot extends IterativeRobot {
     	boolean isIntakeLower = joyOp.getRawButton(8);
     	boolean isIntakeRise = joyOp.getRawButton(7);
     	boolean stopFlyWheel = joyOp.getRawButton(6);
+    	boolean optic = opticSensor.get();
     	
     	//Drive Code
     	if (isMinimize){
@@ -105,32 +108,18 @@ public class Robot extends IterativeRobot {
     	
     	
     	if (isIntakeLower){
-    		boolean isDone = Intake.talonPID(500);
-    		if(isDone){
-    			Intake.stopAngle();
-    		}
+    		intakePiston.set(DoubleSolenoid.Value.kForward);
     	}
     	if (isIntakeRise){
-    		Intake.movePID(500);
-    		
+    		intakePiston.set(DoubleSolenoid.Value.kReverse);   		
     	}
+    
     	
-    	if (joyOp.getRawButton(1)){
-    		canTalonIntakeAngle.set(.5);
-    	}
-    	if (joyOp.getRawButton(3)){
-    		canTalonIntakeAngle.set(0);
-    	}
-    	if(joyOp.getRawButton(4)){
-    		canTalonIntakeAngle.set(-.5);
-    	}
-    	
-    	
-    	System.out.println(canTalonIntakeAngle.getEncPosition());
+    		System.out.println(opticSensor.get());
     	
     	    	
     	//intake
-    	if (isIntaking){  //TODO: add the sensor
+    	if (isIntaking && !optic){  //TODO: add the sensor
     		Intake.spin(.8);
     	}
     		else{
@@ -162,12 +151,12 @@ public class Robot extends IterativeRobot {
     	}
     	
     	
+    	
     
     }
    
     public void testPeriodic() {
-    
-    	System.out.println("hello");
+        	System.out.println("hello");
     }
     
 }
