@@ -9,8 +9,10 @@ import edu.wpi.first.wpilibj.Timer;
 
 import java.io.PrintWriter;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
@@ -24,11 +26,12 @@ public class Robot extends IterativeRobot {
    							 canTalonFrontLeft, canTalonFrontRight, canTalonRearLeft, canTalonRearRight,
    							canTalonIntakeAngle, canTalonShooterAngle;
    public static RobotDrive robotDrive;
-   public static DigitalInput shooterLimitTop, shooterLimitBot, intakeLimitTop, intakeLimitBot, opticSensor;
+   public static DigitalInput opticSensor, opticSensor2;
    public static CameraServer server;
    public static PrintWriter system;
-   public static DoubleSolenoid intakePiston, shiftRight, shiftLeft;
-   
+   public static DoubleSolenoid intakePiston, shiftRight, shiftLeft, shooterPiston;
+   public static Compressor compressor;
+   public boolean isClose;
     public void robotInit() {
     	
     	server = CameraServer.getInstance();
@@ -58,15 +61,24 @@ public class Robot extends IterativeRobot {
          robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
      	 robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
      	 
-     	 //shooterLimitTop = new DigitalInput(0);
+     	 //shooterLimitTop = new DigitalInput(1);
      	 //shooterLimitBot = new DigitalInput(4);
      	 //intakeLimitTop = new DigitalInput(2);
      	 //intakeLimitBot = new DigitalInput(3);
-     	 opticSensor = new DigitalInput(1);
+     	 opticSensor = new DigitalInput(0);
+     	 opticSensor2 = new DigitalInput(1);
      	 
      	 intakePiston = new DoubleSolenoid( 0, 1);
      	 shiftRight = new DoubleSolenoid( 2, 3);
      	 shiftLeft = new DoubleSolenoid( 4, 5);
+     	 shooterPiston = new DoubleSolenoid(6,7);
+     	 
+     	 compressor = new Compressor(20);
+     	 
+     	 compressor.setClosedLoopControl(true);
+     	 
+     	 isClose = false;
+     	 
      	 
     }
     
@@ -90,13 +102,16 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
     	
     	boolean isMinimize = joyThrottle.getRawButton(3);
-    	boolean isIntaking = joyOp.getRawButton(3);
-    	boolean isReverse = joyOp.getRawButton(5);
+    	boolean isIntaking = joyOp.getRawButton(2);
+    	boolean isReverse = joyOp.getRawButton(3);
     	boolean isFire = joyOp.getRawButton(1);
-    	boolean isIntakeLower = joyOp.getRawButton(8);
-    	boolean isIntakeRise = joyOp.getRawButton(7);
-    	boolean stopFlyWheel = joyOp.getRawButton(6);
+    	boolean isIntakeLower = joyOp.getRawButton(7);
+    	boolean isIntakeRise = joyOp.getRawButton(8);
+    	boolean stopFlyWheel = joyOp.getRawButton(5);
+    	boolean closeAngle = joyOp.getRawButton(6);
+    	boolean farAngle = joyOp.getRawButton(4);
     	boolean optic = opticSensor.get();
+    	boolean optic2 = opticSensor2.get();
     	
     	//Drive Code
     	if (isMinimize){
@@ -119,7 +134,7 @@ public class Robot extends IterativeRobot {
     	
     	    	
     	//intake
-    	if (isIntaking && !optic){  //TODO: add the sensor
+    	if (isIntaking && !optic && !optic2 ){  //TODO: add the sensor
     		Intake.spin(.8);
     	}
     		else{
@@ -136,24 +151,43 @@ public class Robot extends IterativeRobot {
     	
     	//Firing
     	if (isFire){
-    		Shooter.fire(.8); //TODO: change to controller
+    		if(isClose){
+    			Shooter.spinFlyWheel(.7);
+    			Shooter.fire(.8); 
+    		}
+    		else{
+    			//TODO: Camera assisted firing
+    		}
     	}
     		else{
     			Shooter.stop();
     	}
     	
-    	//spins the flywheel
-    	if (stopFlyWheel){
-    		Shooter.stopFlyWheel();
+    	
+    	//Shooter angle control
+    	if (closeAngle){
+    		isClose = true;
+    		shooterPiston.set(DoubleSolenoid.Value.kForward);
     	}
-    	else{
-    		Shooter.spinFlyWheel(.8);
+    	if(farAngle){
+    		isClose = false;
+    		shooterPiston.set(DoubleSolenoid.Value.kReverse);
     	}
     	
     	
     	
     	
     	
+    	
+    	
+    	if (joyOp.getRawButton(10) && !optic){
+    		canTalonShooterAngle.set(.5);
+    	}
+    	else {
+    		
+    		canTalonShooterAngle.set(0);
+    	
+    	}
     
     }
    
