@@ -43,17 +43,17 @@ public class Robot extends IterativeRobot {
          
          joyOp = new Joystick(2);
          
-         canTalonFlyWheel = new CANTalon(4);
-         canTalonTrigger = new CANTalon(5);
+         canTalonFlyWheel = new CANTalon(0);
+         canTalonTrigger = new CANTalon(2);
          
          canTalonIntake = new CANTalon(6);
          
-         canTalonFrontLeft = new CANTalon(7);
-         canTalonFrontRight = new CANTalon(1);
-         canTalonRearLeft = new CANTalon(2);
-         canTalonRearRight = new CANTalon(3);
+         canTalonFrontLeft = new CANTalon(12);
+         canTalonFrontRight = new CANTalon(7);
+         canTalonRearLeft = new CANTalon(5);
+         canTalonRearRight = new CANTalon(8);
 
-         canTalonShooterAngle = new CANTalon(0);
+         canTalonShooterAngle = new CANTalon(4);
          
          robotDrive = new RobotDrive(canTalonFrontLeft, canTalonRearLeft, canTalonFrontRight, canTalonRearRight);
          robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
@@ -130,7 +130,7 @@ public class Robot extends IterativeRobot {
     	}
     
     	
-    		System.out.println(opticSensor.get());
+    		System.out.println(canTalonFlyWheel.getSpeed());
     	
     	    	
     	//intake
@@ -157,21 +157,32 @@ public class Robot extends IterativeRobot {
     		}
     		else{
     			//TODO: Camera assisted firing
+    			boolean isDone = Shooter.setPID(0);
+    			if (isDone){
+    				Shooter.fire(.8);
+    			}
     		}
     	}
     		else{
     			Shooter.stop();
+    			Shooter.stopFlyWheel();
     	}
     	
     	
     	//Shooter angle control
     	if (closeAngle){
     		isClose = true;
-    		shooterPiston.set(DoubleSolenoid.Value.kForward);
+    		boolean done = Shooter.movePID(0);
+    		if (done){
+    			Shooter.stopAngle();
+    		}
     	}
     	if(farAngle){
     		isClose = false;
-    		shooterPiston.set(DoubleSolenoid.Value.kReverse);
+    		boolean done1 = Shooter.movePID(0);
+    		if(done1){
+    			Shooter.stopAngle();
+    		}
     	}
     	
     	
@@ -187,6 +198,16 @@ public class Robot extends IterativeRobot {
     		
     		canTalonShooterAngle.set(0);
     	
+    	}
+    	
+    	if (joyOp.getRawButton(11)){
+    		canTalonFlyWheel.set(.5);
+    	}
+    	if (joyOp.getRawButton(12)){
+    		boolean isdone = Shooter.setPID(70);
+    		if(isdone){
+    			Shooter.stopFlyWheel();
+    		}
     	}
     
     }
