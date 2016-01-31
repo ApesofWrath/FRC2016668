@@ -10,7 +10,7 @@ public class Autonomous {
 		
 	}
 	
-	public static void shootAuton(){
+	public static void stopAuton(){
 		
 	}
 	

@@ -18,42 +18,46 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.vision.USBCamera;
 
 public class Robot extends IterativeRobot {
 	
    public static Joystick joyWheel, joyThrottle, joyOp;
-   public static CANTalon canTalonFlyWheel, canTalonTrigger, canTalonIntake, 
+   public static CANTalon canTalonFlyWheel, canTalonIntake, 
    							 canTalonFrontLeft, canTalonFrontRight, canTalonRearLeft, canTalonRearRight,
    							canTalonIntakeAngle, canTalonShooterAngle;
    public static RobotDrive robotDrive;
-   public static DigitalInput opticSensor, opticSensor2;
-   public static CameraServer server;
+   public static DigitalInput opticSensor1, opticSensor2;
+  // public static CameraServer server;
    public static PrintWriter system;
    public static DoubleSolenoid intakePiston, shiftRight, shiftLeft, shooterPiston;
    public static Compressor compressor;
    public boolean isClose;
+//   public static USBCamera camFront = new USBCamera("cam1");
+//   public static USBCamera camRear = new USBCamera("cam2");
     public void robotInit() {
     	
-    	server = CameraServer.getInstance();
-    	server.setQuality(50);
-    	server.startAutomaticCapture("cam1");
-        
-    	 joyWheel = new Joystick(0);
-         joyThrottle = new Joystick(1);
+//    	server = CameraServer.getInstance();
+//    	server.setQuality(50);
+//    	camFront.openCamera();
+//    	camRear.openCamera();
+       
+    	 joyWheel = new Joystick(RobotMap.WHEEL_ID);
+         joyThrottle = new Joystick(RobotMap.THROTTLE_ID);
          
-         joyOp = new Joystick(2);
+         joyOp = new Joystick(RobotMap.OPERATOR_ID);
          
-         canTalonFlyWheel = new CANTalon(0);
-         canTalonTrigger = new CANTalon(2);
+         canTalonFlyWheel = new CANTalon(RobotMap.FLY_WHEEL_CAN_ID);
+        // canTalonTrigger = new CANTalon(26);
          
-         canTalonIntake = new CANTalon(6);
+         canTalonIntake = new CANTalon(RobotMap.INTAKE_CAN_ID);
          
-         canTalonFrontLeft = new CANTalon(12);
-         canTalonFrontRight = new CANTalon(7);
-         canTalonRearLeft = new CANTalon(5);
-         canTalonRearRight = new CANTalon(8);
+         canTalonFrontLeft = new CANTalon(RobotMap.FRONT_LEFT_CAN_ID);
+         canTalonFrontRight = new CANTalon(RobotMap.FRONT_RIGHT_CAN_ID);
+         canTalonRearLeft = new CANTalon(RobotMap.REAR_LEFT_CAN_ID);
+         canTalonRearRight = new CANTalon(RobotMap.REAR_RIGHT_CAN_ID);
 
-         canTalonShooterAngle = new CANTalon(4);
+         canTalonShooterAngle = new CANTalon(RobotMap.SHOOTER_ANGLE_CAN_ID);
          
          robotDrive = new RobotDrive(canTalonFrontLeft, canTalonRearLeft, canTalonFrontRight, canTalonRearRight);
          robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
@@ -65,20 +69,21 @@ public class Robot extends IterativeRobot {
      	 //shooterLimitBot = new DigitalInput(4);
      	 //intakeLimitTop = new DigitalInput(2);
      	 //intakeLimitBot = new DigitalInput(3);
-     	 opticSensor = new DigitalInput(0);
-     	 opticSensor2 = new DigitalInput(1);
+     	 opticSensor1 = new DigitalInput(RobotMap.OPTIC_SENSOR_1_DIGITAL_INPUT_PORT);
+     	 opticSensor2 = new DigitalInput(RobotMap.OPTIC_SENSOR_2_DIGITAL_INPUT_PORT);
      	 
-     	 intakePiston = new DoubleSolenoid( 0, 1);
-     	 shiftRight = new DoubleSolenoid( 2, 3);
-     	 shiftLeft = new DoubleSolenoid( 4, 5);
+     	 intakePiston = new DoubleSolenoid(RobotMap.INTAKE_PISTON_EXPAND_CHANNEL, RobotMap.INTAKE_PISTON_RETRACT_CHANNNEL);
+     	 shiftRight = new DoubleSolenoid(RobotMap.PISTON_SHIFT_RIGHT_EXPAND_CHANNEL, RobotMap.PISTON_SHIFT_RIGHT_RETRACT_CHANNEL);
+     	 shiftLeft = new DoubleSolenoid(RobotMap.PISTON_SHIFT_LEFT_EXPAND_CHANNEL, RobotMap.PISTON_SHIFT_LEFT_RETRACT_CHANNEL);
      	 shooterPiston = new DoubleSolenoid(6,7);
      	 
-     	 compressor = new Compressor(20);
+     	 compressor = new Compressor(RobotMap.PCM_CAN_ID);
      	 
      	 compressor.setClosedLoopControl(true);
      	 
      	 isClose = false;
      	 
+     	SmartDashboard.putString("Status:", " Working");
      	 
     }
     
@@ -94,24 +99,33 @@ public class Robot extends IterativeRobot {
     public void teleopInit(){
     	
     	canTalonShooterAngle.setEncPosition(0);
-    	System.out.println("Working");
+    	
     	
     }
     
 
     public void teleopPeriodic() {
     	
-    	boolean isMinimize = joyThrottle.getRawButton(3);
-    	boolean isIntaking = joyOp.getRawButton(2);
-    	boolean isReverse = joyOp.getRawButton(3);
-    	boolean isFire = joyOp.getRawButton(1);
-    	boolean isIntakeLower = joyOp.getRawButton(7);
-    	boolean isIntakeRise = joyOp.getRawButton(8);
-    	boolean stopFlyWheel = joyOp.getRawButton(5);
-    	boolean closeAngle = joyOp.getRawButton(6);
-    	boolean farAngle = joyOp.getRawButton(4);
-    	boolean optic = opticSensor.get();
-    	boolean optic2 = opticSensor2.get();
+    	boolean isMinimize = RobotMap.MINIMIZE_BUTTON;
+    	boolean isIntaking = RobotMap.INTAKE_BUTTON;
+    	boolean isReverse = RobotMap.REVERSE_BUTTON;
+    	boolean isFire = RobotMap.FIRE_BUTTON;
+    	boolean isIntakeLower = RobotMap.LOWER_INTAKE_BUTTON;
+    	boolean isIntakeRise = RobotMap.RISE_INTAKE_BUTTON;
+    	boolean stopFlyWheel = RobotMap.STOP_FLYWHEEL_BUTTON;
+    	boolean closeAngle = RobotMap.CLOSE_ANGLE_BUTTON;
+    	boolean farAngle = RobotMap.FAR_ANGLE_BUTTON;
+    	boolean optic = RobotMap.OPTIC_SENSOR_VALUE;
+    	boolean optic2 = RobotMap.OPTIC_SENSOR_VALUE_2;
+    	
+//    	if(joyOp.getRawButton(9)){
+//    		camFront.startCapture();
+//    		camRear.stopCapture();
+//    	}
+//    	else{
+//    		camFront.stopCapture();
+//    		camRear.startCapture();
+//    	}
     	
     	//Drive Code
     	if (isMinimize){
@@ -121,7 +135,9 @@ public class Robot extends IterativeRobot {
     		robotDrive.arcadeDrive(joyThrottle.getY(), joyWheel.getX());
     	}
     	
-    	
+    	if(joyOp.getRawButton(8)){
+    		
+    	//controls the state of the intake pistons 
     	if (isIntakeLower){
     		intakePiston.set(DoubleSolenoid.Value.kForward);
     	}
@@ -159,6 +175,7 @@ public class Robot extends IterativeRobot {
     			//TODO: Camera assisted firing
     			boolean isDone = Shooter.setPID(0);
     			if (isDone){
+    				Shooter.setPID(0);
     				Shooter.fire(.8);
     			}
     		}
@@ -185,19 +202,13 @@ public class Robot extends IterativeRobot {
     		}
     	}
     	
-    	
-    	
-    	
-    	
-    	
+    	//Experimental code
     	
     	if (joyOp.getRawButton(10) && !optic){
     		canTalonShooterAngle.set(.5);
     	}
     	else {
-    		
     		canTalonShooterAngle.set(0);
-    	
     	}
     	
     	if (joyOp.getRawButton(11)){
@@ -209,6 +220,8 @@ public class Robot extends IterativeRobot {
     			Shooter.stopFlyWheel();
     		}
     	}
+    	}
+    	//Experimental code end
     
     }
    

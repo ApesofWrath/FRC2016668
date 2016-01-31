@@ -5,7 +5,8 @@ import edu.wpi.first.wpilibj.CANTalon;
 public class Shooter {
 	//i
 	
-	public static int error;	
+	public static int error;
+	
 	public static boolean setPID(double ref){
 
 		Robot.canTalonFlyWheel.changeControlMode(CANTalon.TalonControlMode.Speed);
@@ -17,8 +18,13 @@ public class Shooter {
 		Robot.canTalonFlyWheel.enable();
 		
 		error = (int) (ref - Robot.canTalonFlyWheel.getSpeed());
+		
 		if (error < 1){
+			
+			Robot.canTalonFlyWheel.set(0);
+			
 			Robot.canTalonFlyWheel.disable();
+			
 			return true;
 		}
 		else {
@@ -30,15 +36,20 @@ public class Shooter {
 		
 		Robot.canTalonShooterAngle.changeControlMode(CANTalon.TalonControlMode.Position);
 		
-		Robot.canTalonShooterAngle.setPID(2, .078, 1);
+		Robot.canTalonShooterAngle.setPID(.02, 0, 0);
 		
 		Robot.canTalonShooterAngle.setSetpoint(ref);
 		
 		Robot.canTalonShooterAngle.enable();
 		
 		error = (int) (ref - Robot.canTalonShooterAngle.getEncPosition());
+		
 		if (error < 1){
+			
+			Robot.canTalonShooterAngle.set(0);
+			
 			Robot.canTalonShooterAngle.disable();
+			
 			return true;
 		}
 		else {
