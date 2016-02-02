@@ -19,7 +19,7 @@ public class Shooter {
 		
 		error = (int) (ref - Robot.canTalonFlyWheel.getSpeed());
 		
-		if (error < 1){
+		if (error <= 10){
 			
 			Robot.canTalonFlyWheel.set(0);
 			
@@ -36,7 +36,7 @@ public class Shooter {
 		
 		Robot.canTalonShooterAngle.changeControlMode(CANTalon.TalonControlMode.Position);
 		
-		Robot.canTalonShooterAngle.setPID(.02, 0, 0);
+		Robot.canTalonShooterAngle.setPID(.02, .85, .95);
 		
 		Robot.canTalonShooterAngle.setSetpoint(ref);
 		
@@ -66,12 +66,14 @@ public class Shooter {
 	public static void spinFlyWheel(double speed){
 		
 		Robot.canTalonFlyWheel.set(speed);
+		Robot.canTalonFlyWheelTwo.set(-speed);
 		
 	}
 	
 	public static void stopFlyWheel(){
 		
 		Robot.canTalonFlyWheel.set(0);
+		Robot.canTalonFlyWheelTwo.set(0);
 	
 	}
 	

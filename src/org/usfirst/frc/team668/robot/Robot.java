@@ -25,7 +25,7 @@ public class Robot extends IterativeRobot {
 	public static Joystick joyWheel, joyThrottle, joyOp;
 	public static CANTalon canTalonFlyWheel, canTalonIntake, 
 	canTalonFrontLeft, canTalonFrontRight, canTalonRearLeft, canTalonRearRight,
-	canTalonIntakeAngle, canTalonShooterAngle, canTalonGhost;
+	canTalonIntakeAngle, canTalonShooterAngle, canTalonFlyWheelTwo;
 	public static RobotDrive robotDrive;
 	public static DigitalInput opticSensor1, opticSensor2;
 	public static CameraServer server;
@@ -33,6 +33,8 @@ public class Robot extends IterativeRobot {
 	public static DoubleSolenoid intakePiston, shiftRight, shiftLeft, shooterPiston;
 	public static Compressor compressor;
 	public int isClose;
+	
+
 	// public static USBCamera camFront = new USBCamera("cam1");
 	// public static USBCamera camRear = new USBCamera("cam2");
 	public void robotInit() {
@@ -52,7 +54,7 @@ public class Robot extends IterativeRobot {
 		//canTalonTrigger = new CANTalon(26);
 
 		canTalonIntake = new CANTalon(RobotMap.INTAKE_CAN_ID);
-		canTalonGhost = new CANTalon(28);
+		canTalonFlyWheelTwo = new CANTalon(RobotMap.FLY_WHEEL_TWO_CAN_ID);
 
 		canTalonFrontLeft = new CANTalon(RobotMap.FRONT_LEFT_CAN_ID);
 		canTalonFrontRight = new CANTalon(RobotMap.FRONT_RIGHT_CAN_ID);
@@ -67,10 +69,6 @@ public class Robot extends IterativeRobot {
 		robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
 		robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
 
-		//shooterLimitTop = new DigitalInput(1);
-		//shooterLimitBot = new DigitalInput(4);
-		//intakeLimitTop = new DigitalInput(2);
-		//intakeLimitBot = new DigitalInput(3);
 		opticSensor1 = new DigitalInput(RobotMap.OPTIC_SENSOR_1_DIGITAL_INPUT_PORT);
 		opticSensor2 = new DigitalInput(RobotMap.OPTIC_SENSOR_2_DIGITAL_INPUT_PORT);
 
@@ -83,7 +81,7 @@ public class Robot extends IterativeRobot {
 
 		compressor.setClosedLoopControl(true);
 
-		isClose = 0;
+		isClose = 1;
 
 		SmartDashboard.putString("Status:", " Working");
 
@@ -100,7 +98,7 @@ public class Robot extends IterativeRobot {
 
 	public void teleopInit(){
 
-		//	canTalonShooterAngle.setEncPosition(0);
+		canTalonShooterAngle.setEncPosition(0);
 
 
 	}
@@ -109,26 +107,17 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 
 		boolean isMinimize = RobotMap.MINIMIZE_BUTTON;
-		boolean isIntaking = RobotMap.INTAKE_BUTTON;
-		boolean isReverse = RobotMap.REVERSE_BUTTON;
-		boolean isFire = RobotMap.FIRE_BUTTON;
-		boolean isIntakeLower = RobotMap.LOWER_INTAKE_BUTTON;
-		boolean isIntakeRise = RobotMap.RISE_INTAKE_BUTTON;
-		boolean stopFlyWheel = RobotMap.STOP_FLYWHEEL_BUTTON;
-		boolean closeAngle = RobotMap.CLOSE_ANGLE_BUTTON;
-		boolean farAngle = RobotMap.FAR_ANGLE_BUTTON;
+		boolean isIntaking = joyOp.getRawButton(RobotMap.INTAKE_BUTTON);
+		boolean isReverse = joyOp.getRawButton(RobotMap.REVERSE_BUTTON);
+		boolean isFire = joyOp.getRawButton(RobotMap.FIRE_BUTTON);
+		boolean isIntakeLower = joyOp.getRawButton(RobotMap.LOWER_INTAKE_BUTTON);
+		boolean isIntakeRise = joyOp.getRawButton(RobotMap.RISE_INTAKE_BUTTON);
+		boolean stopFlyWheel = joyOp.getRawButton(RobotMap.STOP_FLYWHEEL_BUTTON);
+		boolean closeAngle = joyOp.getRawButton(RobotMap.CLOSE_ANGLE_BUTTON);
+		boolean farAngle = joyOp.getRawButton(RobotMap.FAR_ANGLE_BUTTON);
 		boolean optic = RobotMap.OPTIC_SENSOR_VALUE;
 		boolean optic2 = RobotMap.OPTIC_SENSOR_VALUE_2;
 		boolean isCollapse = joyOp.getRawButton(12);
-
-		//    	if(joyOp.getRawButton(9)){
-		//    		camFront.startCapture();
-		//    		camRear.stopCapture();
-		//    	}
-		//    	else{
-		//    		camFront.stopCapture();
-		//    		camRear.startCapture();
-		//    	}
 
 		//Drive Code
 		if (isMinimize){
@@ -147,36 +136,29 @@ public class Robot extends IterativeRobot {
 				}
 			}
 			if (isIntakeRise){
-				intakePiston.set(DoubleSolenoid.Value.kReverse);   		
+				intakePiston.set(DoubleSolenoid.Value.kReverse); 
 			}
 
 
-			System.out.println(canTalonFlyWheel.getSpeed());
+		//	System.out.println(canTalonFlyWheel.getSpeed());
 		
 
 		//intake
 		if (isIntaking){  //TODO: add the sensor
 			Intake.spin(.8);
-		}
-		else{
-			Intake.stop();
-		}
 
-		//reverse intake
-		if (isReverse){
+		}
+		else if (isReverse){
 			Intake.spit(.8);
+		
 		}
-		else{
-			Intake.stop();
-		}
-
 		//Firing
-		if (isFire){
-			if(isClose == 0){
+		else if (isFire){
+			if(isClose == 1){
 				Shooter.spinFlyWheel(.7);
-				Shooter.fire(.8); 
+				Shooter.fire(.8);
 			}
-			else if (isClose == 1){
+			else if (isClose == 0){
 				//TODO: Camera assisted firing
 				boolean isDone = Shooter.setPID(0);
 				if (isDone){
@@ -187,35 +169,43 @@ public class Robot extends IterativeRobot {
 		}
 		else{
 			Shooter.spinFlyWheel(.7);
-			Shooter.stopFlyWheel();
+			Intake.stop(); //has the same function as Shooter.stop();
 		}
 
 
-		//Shooter angle control
-		if (closeAngle){
-			isClose = 1;
-			boolean done = Shooter.movePID(0);
-			if (done){
-				Shooter.stopAngle();
-			}
-		}
-		if(farAngle){
-			isClose = 0;
-			boolean done1 = Shooter.movePID(0);
-			if(done1){
-				Shooter.stopAngle();
-			}
-		}
+//		//Shooter angle control
+//		if (closeAngle){
+//			isClose = 1;
+//			boolean done = Shooter.movePID(0);
+//			if (done){
+//				Shooter.stopAngle();
+//			}
+//		}
+//		if(farAngle){
+//			isClose = 0;
+//			boolean done1 = Shooter.movePID(0);
+//			if(done1){
+//				Shooter.stopAngle();
+//			}
+//		}
 		
-		if (isCollapse){
-			intakePiston.set(DoubleSolenoid.Value.kForward);
-			isClose = 2;
-			boolean done2 = Shooter.movePID(0);
+//		if (isCollapse){
+//			intakePiston.set(DoubleSolenoid.Value.kForward);
+//			isClose = 2;
+//			boolean done2 = Shooter.movePID(500);
+//			if(done2){
+//				Shooter.stopAngle();
+//			}
+//		}
+		System.out.println(canTalonShooterAngle.getEncPosition());
+		if(joyOp.getRawButton(12)){
+			boolean done2 = Shooter.movePID(500);
+			System.out.println(done2);
 			if(done2){
 				Shooter.stopAngle();
 			}
 		}
-
+		
 		
 	}
 
