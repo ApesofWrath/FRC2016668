@@ -7,7 +7,7 @@ public class Shooter {
 	
 	public static int error;
 	
-	public static boolean setPID(double ref){
+	public static void setPID(double ref){
 
 		Robot.canTalonFlyWheel.changeControlMode(CANTalon.TalonControlMode.Speed);
 		
@@ -19,20 +19,20 @@ public class Shooter {
 		
 		error = (int) (ref - Robot.canTalonFlyWheel.getSpeed());
 		
-		if (error <= 10){
-			
-			Robot.canTalonFlyWheel.set(0);
-			
-			Robot.canTalonFlyWheel.disable();
-			
-			return true;
-		}
-		else {
-			return false;
-		}
+//		if (error <= 10){
+//			
+//			Robot.canTalonFlyWheel.set(0);
+//			
+//			Robot.canTalonFlyWheel.disable();
+//			
+//			return true;
+//		}
+//		else {
+//			return false;
+//		}
 	}
 	
-	public static boolean movePID(double ref){
+	public static void movePID(double ref){
 		
 		Robot.canTalonShooterAngle.changeControlMode(CANTalon.TalonControlMode.Position);
 		
@@ -44,17 +44,17 @@ public class Shooter {
 		
 		error = (int) (ref - Robot.canTalonShooterAngle.getEncPosition());
 		
-		if (error < 1){
-			
-			Robot.canTalonShooterAngle.set(0);
-			
-			Robot.canTalonShooterAngle.disable();
-			
-			return true;
-		}
-		else {
-			return false;
-		}
+//		if (error < 1){
+//			
+//			Robot.canTalonShooterAngle.set(0);
+//			
+//			Robot.canTalonShooterAngle.disable();
+//			
+//			return true;
+//		}
+//		else {
+//			return false;
+//		}
 	}
 	
 	public static void fire(double speed){
@@ -66,14 +66,14 @@ public class Shooter {
 	public static void spinFlyWheel(double speed){
 		
 		Robot.canTalonFlyWheel.set(speed);
-		Robot.canTalonFlyWheelTwo.set(-speed);
+		//Robot.canTalonFlyWheelTwo.set(-speed);
 		
 	}
 	
 	public static void stopFlyWheel(){
 		
 		Robot.canTalonFlyWheel.set(0);
-		Robot.canTalonFlyWheelTwo.set(0);
+		//Robot.canTalonFlyWheelTwo.set(0);
 	
 	}
 	

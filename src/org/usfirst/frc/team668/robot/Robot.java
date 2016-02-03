@@ -25,7 +25,7 @@ public class Robot extends IterativeRobot {
 	public static Joystick joyWheel, joyThrottle, joyOp;
 	public static CANTalon canTalonFlyWheel, canTalonIntake, 
 	canTalonFrontLeft, canTalonFrontRight, canTalonRearLeft, canTalonRearRight,
-	canTalonIntakeAngle, canTalonShooterAngle, canTalonFlyWheelTwo;
+	canTalonIntakeAngle, canTalonShooterAngle, canTalonShooterAngleTwo;
 	public static RobotDrive robotDrive;
 	public static DigitalInput opticSensor1, opticSensor2;
 	public static CameraServer server;
@@ -54,7 +54,7 @@ public class Robot extends IterativeRobot {
 		//canTalonTrigger = new CANTalon(26);
 
 		canTalonIntake = new CANTalon(RobotMap.INTAKE_CAN_ID);
-		canTalonFlyWheelTwo = new CANTalon(RobotMap.FLY_WHEEL_TWO_CAN_ID);
+		canTalonShooterAngleTwo = new CANTalon(RobotMap.SHOOTER_ANGLE_TWO_CAN_ID);
 
 		canTalonFrontLeft = new CANTalon(RobotMap.FRONT_LEFT_CAN_ID);
 		canTalonFrontRight = new CANTalon(RobotMap.FRONT_RIGHT_CAN_ID);
@@ -115,10 +115,12 @@ public class Robot extends IterativeRobot {
 		boolean stopFlyWheel = joyOp.getRawButton(RobotMap.STOP_FLYWHEEL_BUTTON);
 		boolean closeAngle = joyOp.getRawButton(RobotMap.CLOSE_ANGLE_BUTTON);
 		boolean farAngle = joyOp.getRawButton(RobotMap.FAR_ANGLE_BUTTON);
-		boolean optic = RobotMap.OPTIC_SENSOR_VALUE;
+		boolean optic = opticSensor1.get();
 		boolean optic2 = RobotMap.OPTIC_SENSOR_VALUE_2;
 		boolean isCollapse = joyOp.getRawButton(12);
-
+		boolean isLower = joyOp.getRawButton(11);
+		
+		TeleopStateMachine.stateMachine(optic, optic2, closeAngle, farAngle, isFire, isLower, isCollapse);
 		//Drive Code
 		if (isMinimize){
 			robotDrive.arcadeDrive(joyThrottle.getY()*.6, joyWheel.getX()* .6);
@@ -127,86 +129,86 @@ public class Robot extends IterativeRobot {
 			robotDrive.arcadeDrive(joyThrottle.getY(), joyWheel.getX());
 		}
 
-		
-			//controls the state of the intake pistons 
-			if (isIntakeLower){
-				intakePiston.set(DoubleSolenoid.Value.kForward);
-				if (!optic && !optic2){
-					Intake.spin(.8);
-				}
-			}
-			if (isIntakeRise){
-				intakePiston.set(DoubleSolenoid.Value.kReverse); 
-			}
+		System.out.println(optic);
+		//controls the state of the intake pistons 
+		if (isIntakeLower){
+			intakePiston.set(DoubleSolenoid.Value.kForward);
+		}
+		if (isIntakeRise){
+			intakePiston.set(DoubleSolenoid.Value.kReverse); 
+		}
 
-
-		//	System.out.println(canTalonFlyWheel.getSpeed());
-		
-
-		//intake
-		if (isIntaking){  //TODO: add the sensor
+		if (isIntaking && optic && optic2){  //TODO: add the sensor
 			Intake.spin(.8);
 
 		}
 		else if (isReverse){
 			Intake.spit(.8);
+
+		}
+		else if(RobotMap.currentState != RobotMap.LOWER_INTAKE_STATE){
+			Intake.stop();
+		}
 		
+		if(RobotMap.currentState != RobotMap.FAR_FIRE_STATE){
+			canTalonFlyWheel.set(.6);
+			
 		}
 		//Firing
-		else if (isFire){
-			if(isClose == 1){
-				Shooter.spinFlyWheel(.7);
-				Shooter.fire(.8);
-			}
-			else if (isClose == 0){
-				//TODO: Camera assisted firing
-				boolean isDone = Shooter.setPID(0);
-				if (isDone){
-					Shooter.setPID(0);
-					Shooter.fire(.8);
-				}
-			}
-		}
-		else{
-			Shooter.spinFlyWheel(.7);
-			Intake.stop(); //has the same function as Shooter.stop();
-		}
-
-
-//		//Shooter angle control
-//		if (closeAngle){
-//			isClose = 1;
-//			boolean done = Shooter.movePID(0);
-//			if (done){
-//				Shooter.stopAngle();
+//		else if (isFire){
+//			if(isClose == 1){
+//				Shooter.spinFlyWheel(.7);
+//				Shooter.fire(.8);
+//			}
+//			else if (isClose == 0){
+//				//TODO: Camera assisted firing
+//				boolean isDone = Shooter.setPID(0);
+//				if (isDone){
+//					Shooter.setPID(0);
+//					Shooter.fire(.8);
+//				}
 //			}
 //		}
-//		if(farAngle){
-//			isClose = 0;
-//			boolean done1 = Shooter.movePID(0);
-//			if(done1){
-//				Shooter.stopAngle();
-//			}
+//		else{
+//			Shooter.spinFlyWheel(.7);
+//			Intake.stop(); //has the same function as Shooter.stop();
 //		}
-		
-//		if (isCollapse){
-//			intakePiston.set(DoubleSolenoid.Value.kForward);
-//			isClose = 2;
+//
+//
+////		//Shooter angle control
+////		if (closeAngle){
+////			isClose = 1;
+////			boolean done = Shooter.movePID(0);
+////			if (done){
+////				Shooter.stopAngle();
+////			}
+////		}
+////		if(farAngle){
+////			isClose = 0;
+////			boolean done1 = Shooter.movePID(0);
+////			if(done1){
+////				Shooter.stopAngle();
+////			}
+////		}
+//		
+////		if (isCollapse){
+////			intakePiston.set(DoubleSolenoid.Value.kForward);
+////			isClose = 2;
+////			boolean done2 = Shooter.movePID(500);
+////			if(done2){
+////				Shooter.stopAngle();
+////			}
+////		}
+//		System.out.println(canTalonShooterAngle.getEncPosition());
+//		if(joyOp.getRawButton(12)){
 //			boolean done2 = Shooter.movePID(500);
+//			System.out.println(done2);
 //			if(done2){
 //				Shooter.stopAngle();
 //			}
 //		}
-		System.out.println(canTalonShooterAngle.getEncPosition());
-		if(joyOp.getRawButton(12)){
-			boolean done2 = Shooter.movePID(500);
-			System.out.println(done2);
-			if(done2){
-				Shooter.stopAngle();
-			}
-		}
-		
-		
+//		
+//		
 	}
 
 	public void testPeriodic() {

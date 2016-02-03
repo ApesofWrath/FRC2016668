@@ -4,7 +4,6 @@ public class RobotMap {
 	
 	// Talon CAN IDs
 	public static final int FLY_WHEEL_CAN_ID = 26;
-	public static final int FLY_WHEEL_TWO_CAN_ID = 28;
 	public static final int INTAKE_CAN_ID = 27;
 	
 	public static final int FRONT_LEFT_CAN_ID = 24;
@@ -13,6 +12,7 @@ public class RobotMap {
 	public static final int REAR_RIGHT_CAN_ID = 22;
 	
 	public static final int SHOOTER_ANGLE_CAN_ID = 25;
+	public static final int SHOOTER_ANGLE_TWO_CAN_ID = 28;
 	
 	public static final int OPTIC_SENSOR_1_DIGITAL_INPUT_PORT = 0;
 	public static final int OPTIC_SENSOR_2_DIGITAL_INPUT_PORT = 1;
@@ -42,4 +42,20 @@ public class RobotMap {
 
 	public static final boolean OPTIC_SENSOR_VALUE = Robot.opticSensor1.get();
 	public static final boolean OPTIC_SENSOR_VALUE_2 = Robot.opticSensor2.get();
+	
+	public static final int INIT_STATE = 1;
+	public static final int WAIT_FOR_BUTTON_STATE = 2;
+	public static final int LOWER_INTAKE_STATE = 3;
+	public static final int INIT_FIRE_STATE = 4;
+	public static final int FAR_FIRE_STATE = 5;
+	public static final int CLOSE_FIRE_STATE = 6;
+	public static final int CLOSE_ANGLE_STATE = 7;
+	public static final int FAR_ANGLE_STATE = 8;
+	public static final int COLLAPSE_STATE = 9;
+	public static final int DEFAULT_STATE = INIT_STATE;
+	public static int currentState = DEFAULT_STATE;
+	
+	
+	
+			
 }
