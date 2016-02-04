@@ -25,10 +25,9 @@ public class RobotMap {
 	
 	public static final int INTAKE_PISTON_EXPAND_CHANNEL = 0;
 	public static final int INTAKE_PISTON_RETRACT_CHANNNEL = 1;
-	public static final int PISTON_SHIFT_RIGHT_EXPAND_CHANNEL = 2;
-	public static final int PISTON_SHIFT_RIGHT_RETRACT_CHANNEL = 3;
-	public static final int PISTON_SHIFT_LEFT_EXPAND_CHANNEL = 4;
-	public static final int PISTON_SHIFT_LEFT_RETRACT_CHANNEL = 5;
+	public static final int PISTON_SHIFT_EXPAND_CHANNEL = 2;
+	public static final int PISTON_SHIFT_RETRACT_CHANNEL = 3;
+	
 	
 	public static final boolean MINIMIZE_BUTTON = Robot.joyThrottle.getRawButton(3);
 	public static final int INTAKE_BUTTON = 2;
@@ -39,6 +38,10 @@ public class RobotMap {
 	public static final int STOP_FLYWHEEL_BUTTON = 7;
 	public static final int CLOSE_ANGLE_BUTTON = 8;
 	public static final int FAR_ANGLE_BUTTON = 9;
+	public static final int COLLAPSE_BUTTON = 10;
+	public static final int LOWER_BUTTON = 11;
+	public static final int MANUAL_BUTTON = 12;
+	public static final int RETURN_BUTTON = 1;
 
 	public static final boolean OPTIC_SENSOR_VALUE = Robot.opticSensor1.get();
 	public static final boolean OPTIC_SENSOR_VALUE_2 = Robot.opticSensor2.get();
@@ -52,8 +55,16 @@ public class RobotMap {
 	public static final int CLOSE_ANGLE_STATE = 7;
 	public static final int FAR_ANGLE_STATE = 8;
 	public static final int COLLAPSE_STATE = 9;
+	public static final int MANUAL_OVERRIDE_STATE = 10;
+	public static final int SET_FAR_PID_STATE = 11;
+	public static final int SET_CLOSE_PID_STATE = 13;
+	public static final int BALL_CLEAR_STATE = 12;
 	public static final int DEFAULT_STATE = INIT_STATE;
 	public static int currentState = DEFAULT_STATE;
+	
+	
+	//CONSTANTS
+	public static final int CONSTANT_SPEED = 0;
 	
 	
 	

@@ -6,6 +6,16 @@ public class Shooter {
 	//i
 	
 	public static int error;
+	public static long currentTime = 0;
+	public static long lastTime = System.currentTimeMillis();
+	public static double lastError = 0;
+	public static double Ki = 1;
+	public static double Kd = 1;
+	public static double Kp = 1;
+	public static double i = 0;
+	public static double d = 0;
+	public static double P, I , D;
+	public static double speed;
 	
 	public static void setPID(double ref){
 
@@ -57,6 +67,72 @@ public class Shooter {
 //		}
 	}
 	
+	
+	
+	
+	public static void movePotPID(int ref){
+		
+		error = ref - Robot.pot.getValue();
+		
+		currentTime = System.currentTimeMillis();
+		
+		i = i + (currentTime - lastTime)*(error - lastError);
+		
+		d = (error - lastError)/(currentTime - lastTime);
+		
+		P = Kp * error;
+		I = Ki * i;
+		D = Kd * d;
+		 
+		speed = P + I + D;
+		
+		if (Math.abs(speed) > 1){
+			if (speed > 0){
+				speed = 1;
+			}
+			else{
+				speed = -1;
+			}
+		}
+		
+		if (!Robot.limitSwitch.get() && !Robot.limitSwitchTwo.get()){
+			if (!Robot.limitSwitch.get()){
+				if (speed > 0){
+					speed = 0;
+				}
+			}
+			else{
+				if (speed < 0){
+					speed = 0;
+				}
+			}
+		}
+		Robot.canTalonShooterAngle.set(speed);
+		Robot.canTalonShooterAngleTwo.set(-speed);
+		
+		lastError = error;
+		lastTime = currentTime;
+	
+	
+		
+		
+	}
+	
+	
+	
+	
+	
+	public static boolean hoodCollapse(){
+		Robot.canTalonShooterAngle.set(-.7);
+		Robot.canTalonShooterAngleTwo.set(.7);
+		
+		if (Robot.limitSwitch.get() == false){
+			return true;
+		}
+		return false;
+	}
+	
+	
 	public static void fire(double speed){
 		
 		Robot.canTalonIntake.set(speed);
@@ -86,6 +162,7 @@ public class Shooter {
 	public static void stopAngle(){
 		
 		Robot.canTalonShooterAngle.set(0);
+		Robot.canTalonShooterAngleTwo.set(0);
 	
 	}
 

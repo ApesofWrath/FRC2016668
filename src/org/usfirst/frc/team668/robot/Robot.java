@@ -27,13 +27,15 @@ public class Robot extends IterativeRobot {
 	canTalonFrontLeft, canTalonFrontRight, canTalonRearLeft, canTalonRearRight,
 	canTalonIntakeAngle, canTalonShooterAngle, canTalonShooterAngleTwo;
 	public static RobotDrive robotDrive;
-	public static DigitalInput opticSensor1, opticSensor2;
+	public static DigitalInput opticSensor1, opticSensor2,limitSwitch, limitSwitchTwo;
 	public static CameraServer server;
 	public static PrintWriter system;
-	public static DoubleSolenoid intakePiston, shiftRight, shiftLeft, shooterPiston;
+	public static DoubleSolenoid intakePiston, shiftPiston, shooterPiston;
 	public static Compressor compressor;
+	public static AnalogInput pot;
 	public int isClose;
-	
+	public static int ref = 0;
+	public static int lastRef = 100000;
 
 	// public static USBCamera camFront = new USBCamera("cam1");
 	// public static USBCamera camRear = new USBCamera("cam2");
@@ -71,12 +73,15 @@ public class Robot extends IterativeRobot {
 
 		opticSensor1 = new DigitalInput(RobotMap.OPTIC_SENSOR_1_DIGITAL_INPUT_PORT);
 		opticSensor2 = new DigitalInput(RobotMap.OPTIC_SENSOR_2_DIGITAL_INPUT_PORT);
-
+		limitSwitch = new DigitalInput(2);
+		limitSwitchTwo = new DigitalInput(3);
+		
 		intakePiston = new DoubleSolenoid(RobotMap.INTAKE_PISTON_EXPAND_CHANNEL, RobotMap.INTAKE_PISTON_RETRACT_CHANNNEL);
-		shiftRight = new DoubleSolenoid(RobotMap.PISTON_SHIFT_RIGHT_EXPAND_CHANNEL, RobotMap.PISTON_SHIFT_RIGHT_RETRACT_CHANNEL);
-		shiftLeft = new DoubleSolenoid(RobotMap.PISTON_SHIFT_LEFT_EXPAND_CHANNEL, RobotMap.PISTON_SHIFT_LEFT_RETRACT_CHANNEL);
+		shiftPiston = new DoubleSolenoid(RobotMap.PISTON_SHIFT_EXPAND_CHANNEL, RobotMap.PISTON_SHIFT_RETRACT_CHANNEL);
 		shooterPiston = new DoubleSolenoid(6,7);
-
+		
+		pot = new AnalogInput(0);
+		
 		compressor = new Compressor(RobotMap.PCM_CAN_ID);
 
 		compressor.setClosedLoopControl(true);
@@ -116,11 +121,16 @@ public class Robot extends IterativeRobot {
 		boolean closeAngle = joyOp.getRawButton(RobotMap.CLOSE_ANGLE_BUTTON);
 		boolean farAngle = joyOp.getRawButton(RobotMap.FAR_ANGLE_BUTTON);
 		boolean optic = opticSensor1.get();
-		boolean optic2 = RobotMap.OPTIC_SENSOR_VALUE_2;
-		boolean isCollapse = joyOp.getRawButton(12);
-		boolean isLower = joyOp.getRawButton(11);
+		boolean optic2 = opticSensor2.get();
+		boolean limit1 = limitSwitch.get();
+		boolean limit2 = limitSwitchTwo.get();
+		boolean isReturn = joyOp.getRawButton(RobotMap.RETURN_BUTTON);
+		boolean isManual = joyOp.getRawButton(RobotMap.MANUAL_BUTTON);
+		boolean isCollapse = joyOp.getRawButton(RobotMap.COLLAPSE_BUTTON);
+		boolean isLower = joyOp.getRawButton(RobotMap.LOWER_BUTTON);
 		
-		TeleopStateMachine.stateMachine(optic, optic2, closeAngle, farAngle, isFire, isLower, isCollapse);
+		TeleopStateMachine.stateMachine(optic, optic2, closeAngle, farAngle, isFire, isLower, isCollapse, isManual, isReturn);
+		
 		//Drive Code
 		if (isMinimize){
 			robotDrive.arcadeDrive(joyThrottle.getY()*.6, joyWheel.getX()* .6);
@@ -129,7 +139,9 @@ public class Robot extends IterativeRobot {
 			robotDrive.arcadeDrive(joyThrottle.getY(), joyWheel.getX());
 		}
 
-		System.out.println(optic);
+		System.out.println(RobotMap.currentState);
+		
+		
 		//controls the state of the intake pistons 
 		if (isIntakeLower){
 			intakePiston.set(DoubleSolenoid.Value.kForward);
@@ -138,22 +150,33 @@ public class Robot extends IterativeRobot {
 			intakePiston.set(DoubleSolenoid.Value.kReverse); 
 		}
 
-		if (isIntaking && optic && optic2){  //TODO: add the sensor
+		
+		//INTAKE SPEED
+		if (isIntaking && optic && optic2 && RobotMap.currentState != RobotMap.FAR_FIRE_STATE && RobotMap.currentState != RobotMap.CLOSE_FIRE_STATE){  //TODO: add the sensor
 			Intake.spin(.8);
-
 		}
 		else if (isReverse){
 			Intake.spit(.8);
-
 		}
-		else if(RobotMap.currentState != RobotMap.LOWER_INTAKE_STATE){
+		else if(RobotMap.currentState != RobotMap.LOWER_INTAKE_STATE && RobotMap.currentState != RobotMap.FAR_FIRE_STATE && RobotMap.currentState != RobotMap.CLOSE_FIRE_STATE){
 			Intake.stop();
 		}
 		
-		if(RobotMap.currentState != RobotMap.FAR_FIRE_STATE){
-			canTalonFlyWheel.set(.6);
-			
-		}
+		
+		
+	}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		//Firing
 //		else if (isFire){
 //			if(isClose == 1){
@@ -209,7 +232,7 @@ public class Robot extends IterativeRobot {
 //		}
 //		
 //		
-	}
+	
 
 	public void testPeriodic() {
 		System.out.println("hello");
