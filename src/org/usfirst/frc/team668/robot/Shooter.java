@@ -42,33 +42,6 @@ public class Shooter {
 //		}
 	}
 	
-	public static void movePID(double ref){
-		
-		Robot.canTalonShooterAngle.changeControlMode(CANTalon.TalonControlMode.Position);
-		
-		Robot.canTalonShooterAngle.setPID(.02, .85, .95);
-		
-		Robot.canTalonShooterAngle.setSetpoint(ref);
-		
-		Robot.canTalonShooterAngle.enable();
-		
-		error = (int) (ref - Robot.canTalonShooterAngle.getEncPosition());
-		
-//		if (error < 1){
-//			
-//			Robot.canTalonShooterAngle.set(0);
-//			
-//			Robot.canTalonShooterAngle.disable();
-//			
-//			return true;
-//		}
-//		else {
-//			return false;
-//		}
-	}
-	
-	
-	
 	
 	public static void movePotPID(int ref){
 		
@@ -118,7 +91,26 @@ public class Shooter {
 		
 	}
 	
+	public static boolean moveHood(double ref){
+		
+		if(Math.abs(Robot.pot.getValue() - ref) < RobotMap.ACCEPTABLE_HOOD_RANGE){
+			Robot.canTalonShooterAngle.set(0);
+			Robot.canTalonShooterAngleTwo.set(0);
+			return true;
+		}
+		else if(Robot.pot.getValue() > ref){
+			Robot.canTalonShooterAngle.set(RobotMap.HOOD_SPEED);
+			Robot.canTalonShooterAngleTwo.set(-RobotMap.HOOD_SPEED);
+			return false;
+		}
+		else{
+			Robot.canTalonShooterAngle.set(-RobotMap.HOOD_SPEED);
+			Robot.canTalonShooterAngleTwo.set(RobotMap.HOOD_SPEED);
+			return false;
+		}
+		
 	
+	}
 	
 	
 	

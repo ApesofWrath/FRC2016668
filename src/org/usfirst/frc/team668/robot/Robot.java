@@ -36,6 +36,7 @@ public class Robot extends IterativeRobot {
 	public int isClose;
 	public static int ref = 0;
 	public static int lastRef = 100000;
+	public static boolean canIntake = true;
 
 	// public static USBCamera camFront = new USBCamera("cam1");
 	// public static USBCamera camRear = new USBCamera("cam2");
@@ -152,17 +153,22 @@ public class Robot extends IterativeRobot {
 
 		
 		//INTAKE SPEED
-		if (isIntaking && optic && optic2 && RobotMap.currentState != RobotMap.FAR_FIRE_STATE && RobotMap.currentState != RobotMap.CLOSE_FIRE_STATE){  //TODO: add the sensor
+		//If none of these are true the teleop state machine can take over and use the intake for fire. 
+		if (isIntaking && optic && optic2 && (RobotMap.currentState != RobotMap.FAR_FIRE_STATE)
+				&& (RobotMap.currentState != RobotMap.CLOSE_FIRE_STATE)){  //TODO: add the sensor
 			Intake.spin(.8);
 		}
 		else if (isReverse){
 			Intake.spit(.8);
 		}
-		else if(RobotMap.currentState != RobotMap.LOWER_INTAKE_STATE && RobotMap.currentState != RobotMap.FAR_FIRE_STATE && RobotMap.currentState != RobotMap.CLOSE_FIRE_STATE){
+		else if((RobotMap.currentState != RobotMap.LOWER_INTAKE_STATE) 
+				&& (RobotMap.currentState != RobotMap.FAR_FIRE_STATE)
+				&& (RobotMap.currentState != RobotMap.CLOSE_FIRE_STATE)){
 			Intake.stop();
 		}
 		
-		
+		System.out.println(pot.getValue());
+	
 		
 	}
 		

@@ -64,8 +64,14 @@ public class RobotMap {
 	
 	
 	//CONSTANTS
-	public static final int CONSTANT_SPEED = 0;
-	
+	public static final double CONSTANT_SPEED = 0;
+	public static final double HOOD_SPEED = 1;
+	public static final double ACCEPTABLE_HOOD_RANGE = 0;
+	public static final double FAR_ANGLE_VALUE = 0;
+	public static final double CLOSE_ANGLE_VALUE = 0;
+	public static final double COLLAPSE_ANGLE_VALUE = 0;
+	public static final double MAX_HOOD_POSITION = 0;
+	public static final double MIN_HOOD_POSITION = 0;
 	
 	
 			
