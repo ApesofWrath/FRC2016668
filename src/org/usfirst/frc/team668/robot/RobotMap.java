@@ -29,7 +29,7 @@ public class RobotMap {
 	public static final int PISTON_SHIFT_RETRACT_CHANNEL = 3;
 	
 	
-	public static final boolean MINIMIZE_BUTTON = Robot.joyThrottle.getRawButton(3);
+	public static final int MINIMIZE_BUTTON = 3;
 	public static final int INTAKE_BUTTON = 2;
 	public static final int REVERSE_BUTTON = 3;
 	public static final int FIRE_BUTTON = 4;
@@ -42,7 +42,9 @@ public class RobotMap {
 	public static final int LOWER_BUTTON = 11;
 	public static final int MANUAL_BUTTON = 12;
 	public static final int RETURN_BUTTON = 1;
-
+	public static final int LOW_GEAR_BUTTON = 7;
+	public static final int HIGH_GEAR_BUTTON = 8;
+	
 	public static final boolean OPTIC_SENSOR_VALUE = Robot.opticSensor1.get();
 	public static final boolean OPTIC_SENSOR_VALUE_2 = Robot.opticSensor2.get();
 	
@@ -63,6 +65,21 @@ public class RobotMap {
 	public static int currentState = DEFAULT_STATE;
 	
 	
+	public static final int MANUAL_CLOSE_ANGLE_STATE = 0;
+	public static final int MANUAL_FAR_ANGLE_STATE = 1;
+	public static final int MANUAL_CONTROLL_HOOD_ANGLE_STATE = 2;
+	public static final int MANUAL_FIRE_STATE = 3;
+	public static final int MANUAL_WAIT_FOR_BUTTON_STATE = 4; 
+	public static final int MANUAL_COLLAPSE_ANGLE_STATE = 5;
+	public static final int MANUAL_DEFAULT_STATE = MANUAL_WAIT_FOR_BUTTON_STATE;
+	public static final int manualState = DEFAULT_STATE;
+	
+	public static final int POT_ANALOG_INPUT_PORT = 0;
+	public static final int LIMIT_SWITCH_DIGITAL_INPUT = 2;
+	public static final int LIMIT_SWITCH_TWO_DIGITAL_INPUT = 3;
+	
+	
+	
 	//CONSTANTS
 	public static final double CONSTANT_SPEED = 0;
 	public static final double HOOD_SPEED = 1;
@@ -72,7 +89,11 @@ public class RobotMap {
 	public static final double COLLAPSE_ANGLE_VALUE = 0;
 	public static final double MAX_HOOD_POSITION = 0;
 	public static final double MIN_HOOD_POSITION = 0;
+	public static final double FAR_FIRE_SPEED_RANGE = 0;
+	public static final double FIRE_INTAKE_SPEED = .8;
+	public static final double BALL_WAIT_TIME = 200;
 	
 	
 			
 }
+

@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 import java.io.PrintWriter;
 
@@ -30,9 +31,11 @@ public class Robot extends IterativeRobot {
 	public static DigitalInput opticSensor1, opticSensor2,limitSwitch, limitSwitchTwo;
 	public static CameraServer server;
 	public static PrintWriter system;
-	public static DoubleSolenoid intakePiston, shiftPiston, shooterPiston;
+	public static DoubleSolenoid intakePiston, shiftPiston;
 	public static Compressor compressor;
 	public static AnalogInput pot;
+	public static NetworkTable table;
+	public double distance;
 	public int isClose;
 	public static int ref = 0;
 	public static int lastRef = 100000;
@@ -47,6 +50,8 @@ public class Robot extends IterativeRobot {
 		server.startAutomaticCapture("cam1");
 		//     	 camFront.openCamera();
 		//     	 camRear.openCamera();
+		
+		table = NetworkTable.getTable("SmartDashboard");
 
 		joyWheel = new Joystick(RobotMap.WHEEL_ID);
 		joyThrottle = new Joystick(RobotMap.THROTTLE_ID);
@@ -74,20 +79,17 @@ public class Robot extends IterativeRobot {
 
 		opticSensor1 = new DigitalInput(RobotMap.OPTIC_SENSOR_1_DIGITAL_INPUT_PORT);
 		opticSensor2 = new DigitalInput(RobotMap.OPTIC_SENSOR_2_DIGITAL_INPUT_PORT);
-		limitSwitch = new DigitalInput(2);
-		limitSwitchTwo = new DigitalInput(3);
+		limitSwitch = new DigitalInput(RobotMap.LIMIT_SWITCH_DIGITAL_INPUT);
+		limitSwitchTwo = new DigitalInput(RobotMap.LIMIT_SWITCH_TWO_DIGITAL_INPUT);
 		
 		intakePiston = new DoubleSolenoid(RobotMap.INTAKE_PISTON_EXPAND_CHANNEL, RobotMap.INTAKE_PISTON_RETRACT_CHANNNEL);
 		shiftPiston = new DoubleSolenoid(RobotMap.PISTON_SHIFT_EXPAND_CHANNEL, RobotMap.PISTON_SHIFT_RETRACT_CHANNEL);
-		shooterPiston = new DoubleSolenoid(6,7);
 		
-		pot = new AnalogInput(0);
+		pot = new AnalogInput(RobotMap.POT_ANALOG_INPUT_PORT);
 		
 		compressor = new Compressor(RobotMap.PCM_CAN_ID);
 
 		compressor.setClosedLoopControl(true);
-
-		isClose = 1;
 
 		SmartDashboard.putString("Status:", " Working");
 
@@ -112,7 +114,9 @@ public class Robot extends IterativeRobot {
 
 	public void teleopPeriodic() {
 
-		boolean isMinimize = RobotMap.MINIMIZE_BUTTON;
+		boolean isMinimize = joyOp.getRawButton(RobotMap.MINIMIZE_BUTTON);
+		boolean lowGear = joyOp.getRawButton(RobotMap.HIGH_GEAR_BUTTON);
+		boolean highGear = joyOp.getRawButton(RobotMap.LOW_GEAR_BUTTON);
 		boolean isIntaking = joyOp.getRawButton(RobotMap.INTAKE_BUTTON);
 		boolean isReverse = joyOp.getRawButton(RobotMap.REVERSE_BUTTON);
 		boolean isFire = joyOp.getRawButton(RobotMap.FIRE_BUTTON);
@@ -132,6 +136,14 @@ public class Robot extends IterativeRobot {
 		
 		TeleopStateMachine.stateMachine(optic, optic2, closeAngle, farAngle, isFire, isLower, isCollapse, isManual, isReturn);
 		
+		//gear shifting code vvv
+		if (lowGear){
+			intakePiston.set(DoubleSolenoid.Value.kReverse);
+		}
+		else if (highGear){
+			intakePiston.set(DoubleSolenoid.Value.kForward);
+		}
+		
 		//Drive Code
 		if (isMinimize){
 			robotDrive.arcadeDrive(joyThrottle.getY()*.6, joyWheel.getX()* .6);
@@ -140,7 +152,7 @@ public class Robot extends IterativeRobot {
 			robotDrive.arcadeDrive(joyThrottle.getY(), joyWheel.getX());
 		}
 
-		System.out.println(RobotMap.currentState);
+		//System.out.println(RobotMap.currentState);
 		
 		
 		//controls the state of the intake pistons 
@@ -158,7 +170,7 @@ public class Robot extends IterativeRobot {
 				&& (RobotMap.currentState != RobotMap.CLOSE_FIRE_STATE)){  //TODO: add the sensor
 			Intake.spin(.8);
 		}
-		else if (isReverse){
+		else if (isReverse  && TeleopStateMachine.canReverse){
 			Intake.spit(.8);
 		}
 		else if((RobotMap.currentState != RobotMap.LOWER_INTAKE_STATE) 
@@ -167,9 +179,12 @@ public class Robot extends IterativeRobot {
 			Intake.stop();
 		}
 		
-		System.out.println(pot.getValue());
-	
+		//System.out.println(pot.getValue());
 		
+		
+		distance = table.getNumber("Distance", 0);
+		
+		System.out.println(distance);
 	}
 		
 		
