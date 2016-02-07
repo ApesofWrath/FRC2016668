@@ -133,10 +133,11 @@ public class Robot extends IterativeRobot {
 		boolean isManual = joyOp.getRawButton(RobotMap.MANUAL_BUTTON);
 		boolean isCollapse = joyOp.getRawButton(RobotMap.COLLAPSE_BUTTON);
 		boolean isLower = joyOp.getRawButton(RobotMap.LOWER_BUTTON);
+		boolean manualHood = joyOp.getRawButton(RobotMap.MANUAL_HOOD_BUTTON);
+		TeleopStateMachine.stateMachine(optic, optic2, closeAngle, farAngle, isFire, isLower, 
+				isCollapse, isManual, isReturn, manualHood);
 		
-		TeleopStateMachine.stateMachine(optic, optic2, closeAngle, farAngle, isFire, isLower, isCollapse, isManual, isReturn);
-		
-		//gear shifting code vvv
+		//gear shifting code 
 		if (lowGear){
 			intakePiston.set(DoubleSolenoid.Value.kReverse);
 		}

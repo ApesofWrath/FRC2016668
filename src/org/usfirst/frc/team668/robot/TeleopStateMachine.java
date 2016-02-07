@@ -9,7 +9,8 @@ public class TeleopStateMachine {
 	public static double reference;
 	public static long time;
 	public static void stateMachine(boolean optic, boolean optic2, boolean closeAngle, boolean farAngle, 
-			boolean isFire, boolean isLower, boolean isCollapse, boolean isManual, boolean isReturn){
+			boolean isFire, boolean isLower, boolean isCollapse, boolean isManual,
+			boolean isReturn, boolean manualHood){
 			
 		boolean isClose = true;
 		boolean isFar = false;
@@ -26,7 +27,7 @@ public class TeleopStateMachine {
 			
 			//System.out.println("Here");
 			Robot.intakePiston.set(DoubleSolenoid.Value.kForward);
-			boolean completed = Shooter.moveHood(RobotMap.CLOSE_ANGLE_VALUE);
+			boolean completed = Shooter.moveHoodBang(RobotMap.CLOSE_ANGLE_VALUE);
 			if(completed){
 				Shooter.stopAngle();
 				RobotMap.currentState = RobotMap.SET_CLOSE_PID_STATE;
@@ -151,7 +152,7 @@ public class TeleopStateMachine {
 
 			isFar = false;
 			isClose = true;
-			boolean reached = Shooter.moveHood(RobotMap.CLOSE_ANGLE_VALUE);
+			boolean reached = Shooter.moveHoodBang(RobotMap.CLOSE_ANGLE_VALUE);
 			if(reached){
 				Shooter.stopAngle();
 				RobotMap.currentState = RobotMap.WAIT_FOR_BUTTON_STATE;
@@ -162,7 +163,7 @@ public class TeleopStateMachine {
 
 			isFar = true;
 			isClose = false;
-			boolean finished = Shooter.moveHood(RobotMap.FAR_ANGLE_VALUE);
+			boolean finished = Shooter.moveHoodBang(RobotMap.FAR_ANGLE_VALUE);
 			if(finished){
 				Shooter.stopAngle();
 				RobotMap.currentState = RobotMap.WAIT_FOR_BUTTON_STATE;
@@ -174,7 +175,7 @@ public class TeleopStateMachine {
 			isFar = false;
 			isClose = false;
 			Robot.intakePiston.set(DoubleSolenoid.Value.kForward);
-			boolean done = Shooter.moveHood(RobotMap.COLLAPSE_ANGLE_VALUE);
+			boolean done = Shooter.moveHoodBang(RobotMap.COLLAPSE_ANGLE_VALUE);
 			if(done){
 				Shooter.stopAngle();
 				RobotMap.currentState = RobotMap.WAIT_FOR_BUTTON_STATE;
@@ -190,9 +191,19 @@ public class TeleopStateMachine {
 			switch(RobotMap.manualState){
 			
 			case RobotMap.MANUAL_FAR_ANGLE_STATE:
+				boolean manualFar = Shooter.moveHoodBang(RobotMap.FAR_ANGLE_VALUE);
+				if (manualFar){
+					Shooter.stopAngle();
+					RobotMap.manualState = RobotMap.MANUAL_WAIT_FOR_BUTTON_STATE;
+				}
 				break;
 				
 			case RobotMap.MANUAL_CONTROLL_HOOD_ANGLE_STATE:
+				
+				if(manualHood){
+					Shooter.moveHood(Robot.joyOp.getY());
+				}
+				
 				break;
 				
 			case RobotMap.MANUAL_WAIT_FOR_BUTTON_STATE:
@@ -202,8 +213,14 @@ public class TeleopStateMachine {
 				break;
 				
 			case RobotMap.MANUAL_CLOSE_ANGLE_STATE:
+				boolean manualClose = Shooter.moveHoodBang(RobotMap.CLOSE_ANGLE_VALUE);
+				if (manualClose){
+					Shooter.stopAngle();
+					RobotMap.manualState = RobotMap.MANUAL_WAIT_FOR_BUTTON_STATE;
+				}
 				break;
 			}
+			
 			break;
 			
 		default:

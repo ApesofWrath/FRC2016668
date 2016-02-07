@@ -90,12 +90,16 @@ public class Shooter {
 		
 		
 	}
-	
-	public static boolean moveHood(double ref){
+	public static void moveHood(double speed){
 		
-		if(Math.abs(Robot.pot.getValue() - ref) < RobotMap.ACCEPTABLE_HOOD_RANGE){
-			Robot.canTalonShooterAngle.set(0);
-			Robot.canTalonShooterAngleTwo.set(0);
+		Robot.canTalonShooterAngle.set(speed);
+		Robot.canTalonShooterAngleTwo.set(-speed);
+	}
+	
+	public static boolean moveHoodBang(double ref){
+		
+		if(Math.abs(Robot.pot.getValue() - ref) <= RobotMap.ACCEPTABLE_HOOD_RANGE){
+			stopAngle();
 			return true;
 		}
 		else if(Robot.pot.getValue() > ref){

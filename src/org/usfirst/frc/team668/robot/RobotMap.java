@@ -29,7 +29,7 @@ public class RobotMap {
 	public static final int PISTON_SHIFT_RETRACT_CHANNEL = 3;
 	
 	
-	public static final int MINIMIZE_BUTTON = 3;
+	public static final int MINIMIZE_BUTTON = 3; // throttle
 	public static final int INTAKE_BUTTON = 2;
 	public static final int REVERSE_BUTTON = 3;
 	public static final int FIRE_BUTTON = 4;
@@ -41,9 +41,10 @@ public class RobotMap {
 	public static final int COLLAPSE_BUTTON = 10;
 	public static final int LOWER_BUTTON = 11;
 	public static final int MANUAL_BUTTON = 12;
+	public static final int MANUAL_HOOD_BUTTON = 12;
 	public static final int RETURN_BUTTON = 1;
-	public static final int LOW_GEAR_BUTTON = 7;
-	public static final int HIGH_GEAR_BUTTON = 8;
+	public static final int LOW_GEAR_BUTTON = 7; //throttle
+	public static final int HIGH_GEAR_BUTTON = 8; //throttle
 	
 	public static final boolean OPTIC_SENSOR_VALUE = Robot.opticSensor1.get();
 	public static final boolean OPTIC_SENSOR_VALUE_2 = Robot.opticSensor2.get();
@@ -72,7 +73,7 @@ public class RobotMap {
 	public static final int MANUAL_WAIT_FOR_BUTTON_STATE = 4; 
 	public static final int MANUAL_COLLAPSE_ANGLE_STATE = 5;
 	public static final int MANUAL_DEFAULT_STATE = MANUAL_WAIT_FOR_BUTTON_STATE;
-	public static final int manualState = DEFAULT_STATE;
+	public static int manualState = DEFAULT_STATE;
 	
 	public static final int POT_ANALOG_INPUT_PORT = 0;
 	public static final int LIMIT_SWITCH_DIGITAL_INPUT = 2;
