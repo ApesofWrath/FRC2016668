@@ -10,7 +10,7 @@ public class TeleopStateMachine {
 	public static long time;
 	public static void stateMachine(boolean optic, boolean optic2, boolean closeAngle, boolean farAngle, 
 			boolean isFire, boolean isLower, boolean isCollapse, boolean isManual,
-			boolean isReturn, boolean manualHood){
+			boolean isReturn){
 			
 		boolean isClose = true;
 		boolean isFar = false;
@@ -26,6 +26,9 @@ public class TeleopStateMachine {
 		case RobotMap.INIT_STATE:
 			
 			//System.out.println("Here");
+			Shooter.stopAngle();
+			isClose = true;
+			isFar = false;
 			Robot.intakePiston.set(DoubleSolenoid.Value.kForward);
 			boolean completed = Shooter.moveHoodBang(RobotMap.CLOSE_ANGLE_VALUE);
 			if(completed){
@@ -183,7 +186,8 @@ public class TeleopStateMachine {
 			break;
 			
 		case RobotMap.MANUAL_OVERRIDE_STATE:
-			
+		
+	
 			if (isReturn){
 				RobotMap.currentState = RobotMap.INIT_STATE;
 			}
@@ -191,6 +195,8 @@ public class TeleopStateMachine {
 			switch(RobotMap.manualState){
 			
 			case RobotMap.MANUAL_FAR_ANGLE_STATE:
+				isFar = true;
+				isClose = false;
 				boolean manualFar = Shooter.moveHoodBang(RobotMap.FAR_ANGLE_VALUE);
 				if (manualFar){
 					Shooter.stopAngle();
@@ -198,21 +204,47 @@ public class TeleopStateMachine {
 				}
 				break;
 				
-			case RobotMap.MANUAL_CONTROLL_HOOD_ANGLE_STATE:
+			
+			case RobotMap.MANUAL_WAIT_FOR_BUTTON_STATE:
 				
-				if(manualHood){
-					Shooter.moveHood(Robot.joyOp.getY());
+				if (isClose){
+					RobotMap.manualState = RobotMap.MANUAL_CLOSE_ANGLE_STATE;
+				}
+				else if (isFar){
+					RobotMap.manualState = RobotMap.MANUAL_FAR_ANGLE_STATE;
+				}
+				else if (isFire){
+					RobotMap.manualState = RobotMap.MANUAL_FIRE_STATE;
 				}
 				
 				break;
 				
-			case RobotMap.MANUAL_WAIT_FOR_BUTTON_STATE:
+			case RobotMap.MANUAL_FIRE_STATE:
+				if (isClose && !optic){
+					Robot.canTalonFlyWheel.set(RobotMap.MANUAL_CLOSE_FIRE_SPEED);
+					Shooter.fire(RobotMap.FIRE_INTAKE_SPEED);
+				}
+				else if (!optic){
+					Robot.canTalonFlyWheel.set(RobotMap.MANUAL_FAR_FIRE_SPEED);
+					Shooter.fire(RobotMap.FIRE_INTAKE_SPEED);
+				}
+				else{
+					Shooter.stopFlyWheel();
+					time = System.currentTimeMillis();
+					RobotMap.manualState = RobotMap.MANUAL_BALL_CLEAR_STATE;
+				}
 				break;
 				
-			case RobotMap.MANUAL_FIRE_STATE:
-				break;
+			case RobotMap.MANUAL_BALL_CLEAR_STATE:
+				
+				if (System.currentTimeMillis() >= time + RobotMap.BALL_WAIT_TIME){
+					Intake.stop();
+					RobotMap.manualState = RobotMap.MANUAL_WAIT_FOR_BUTTON_STATE;
+				}
 				
 			case RobotMap.MANUAL_CLOSE_ANGLE_STATE:
+				isClose = true;
+				isFar = false;
 				boolean manualClose = Shooter.moveHoodBang(RobotMap.CLOSE_ANGLE_VALUE);
 				if (manualClose){
 					Shooter.stopAngle();

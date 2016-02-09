@@ -72,6 +72,7 @@ public class RobotMap {
 	public static final int MANUAL_FIRE_STATE = 3;
 	public static final int MANUAL_WAIT_FOR_BUTTON_STATE = 4; 
 	public static final int MANUAL_COLLAPSE_ANGLE_STATE = 5;
+	public static final int MANUAL_BALL_CLEAR_STATE = 6;
 	public static final int MANUAL_DEFAULT_STATE = MANUAL_WAIT_FOR_BUTTON_STATE;
 	public static int manualState = DEFAULT_STATE;
 	
@@ -93,6 +94,8 @@ public class RobotMap {
 	public static final double FAR_FIRE_SPEED_RANGE = 0;
 	public static final double FIRE_INTAKE_SPEED = .8;
 	public static final double BALL_WAIT_TIME = 200;
+	public static final double MANUAL_CLOSE_FIRE_SPEED = .7;
+	public static final double MANUAL_FAR_FIRE_SPEED = .9;
 	
 	
 			

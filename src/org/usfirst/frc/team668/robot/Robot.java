@@ -135,7 +135,7 @@ public class Robot extends IterativeRobot {
 		boolean isLower = joyOp.getRawButton(RobotMap.LOWER_BUTTON);
 		boolean manualHood = joyOp.getRawButton(RobotMap.MANUAL_HOOD_BUTTON);
 		TeleopStateMachine.stateMachine(optic, optic2, closeAngle, farAngle, isFire, isLower, 
-				isCollapse, isManual, isReturn, manualHood);
+				isCollapse, isManual, isReturn);
 		
 		//gear shifting code 
 		if (lowGear){
@@ -176,12 +176,21 @@ public class Robot extends IterativeRobot {
 		}
 		else if((RobotMap.currentState != RobotMap.LOWER_INTAKE_STATE) 
 				&& (RobotMap.currentState != RobotMap.FAR_FIRE_STATE)
-				&& (RobotMap.currentState != RobotMap.CLOSE_FIRE_STATE)){
+				&& (RobotMap.currentState != RobotMap.CLOSE_FIRE_STATE)
+				&& (RobotMap.manualState != RobotMap.MANUAL_FIRE_STATE)){
 			Intake.stop();
 		}
 		
 		//System.out.println(pot.getValue());
 		
+		if (RobotMap.currentState == RobotMap.MANUAL_OVERRIDE_STATE){
+			if (manualHood){
+				Shooter.moveHood(-joyOp.getY());
+			}
+			else{
+				Shooter.stopAngle();
+			}
+		}
 		
 		distance = table.getNumber("Distance", 0);
 		
