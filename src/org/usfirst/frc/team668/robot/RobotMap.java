@@ -14,8 +14,7 @@ public class RobotMap {
 	public static final int SHOOTER_ANGLE_CAN_ID = 25;
 	public static final int SHOOTER_ANGLE_TWO_CAN_ID = 28;
 	
-	public static final int OPTIC_SENSOR_1_DIGITAL_INPUT_PORT = 0;
-	public static final int OPTIC_SENSOR_2_DIGITAL_INPUT_PORT = 1;
+	public static final int OPTIC_SENSOR_DIGITAL_INPUT_PORT = 0;
 	
 	public static final int PCM_CAN_ID = 20;
 	
@@ -46,8 +45,7 @@ public class RobotMap {
 	public static final int LOW_GEAR_BUTTON = 7; //throttle
 	public static final int HIGH_GEAR_BUTTON = 8; //throttle
 	
-	public static final boolean OPTIC_SENSOR_VALUE = Robot.opticSensor1.get();
-	public static final boolean OPTIC_SENSOR_VALUE_2 = Robot.opticSensor2.get();
+	public static final boolean OPTIC_SENSOR_VALUE = Robot.opticSensor.get();
 	
 	public static final int INIT_STATE = 1;
 	public static final int WAIT_FOR_BUTTON_STATE = 2;
@@ -97,7 +95,9 @@ public class RobotMap {
 	public static final double MANUAL_CLOSE_FIRE_SPEED = .7;
 	public static final double MANUAL_FAR_FIRE_SPEED = .9;
 	
-	
+	public static final double FIRE_DISTANCE_1 = 0;
+	public static final double FIRE_DISTANCE_2 = 0;
+	public static final double FIRE_DISTANCE_3 = 0;
 			
 }
 

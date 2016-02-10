@@ -28,14 +28,14 @@ public class Robot extends IterativeRobot {
 	canTalonFrontLeft, canTalonFrontRight, canTalonRearLeft, canTalonRearRight,
 	canTalonIntakeAngle, canTalonShooterAngle, canTalonShooterAngleTwo;
 	public static RobotDrive robotDrive;
-	public static DigitalInput opticSensor1, opticSensor2,limitSwitch, limitSwitchTwo;
+	public static DigitalInput opticSensor, limitSwitch, limitSwitchTwo;
 	public static CameraServer server;
 	public static PrintWriter system;
 	public static DoubleSolenoid intakePiston, shiftPiston;
 	public static Compressor compressor;
 	public static AnalogInput pot;
 	public static NetworkTable table;
-	public double distance;
+	public static double distance;
 	public int isClose;
 	public static int ref = 0;
 	public static int lastRef = 100000;
@@ -77,8 +77,7 @@ public class Robot extends IterativeRobot {
 		robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
 		robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
 
-		opticSensor1 = new DigitalInput(RobotMap.OPTIC_SENSOR_1_DIGITAL_INPUT_PORT);
-		opticSensor2 = new DigitalInput(RobotMap.OPTIC_SENSOR_2_DIGITAL_INPUT_PORT);
+		opticSensor = new DigitalInput(RobotMap.OPTIC_SENSOR_DIGITAL_INPUT_PORT);
 		limitSwitch = new DigitalInput(RobotMap.LIMIT_SWITCH_DIGITAL_INPUT);
 		limitSwitchTwo = new DigitalInput(RobotMap.LIMIT_SWITCH_TWO_DIGITAL_INPUT);
 		
@@ -125,8 +124,7 @@ public class Robot extends IterativeRobot {
 		boolean stopFlyWheel = joyOp.getRawButton(RobotMap.STOP_FLYWHEEL_BUTTON);
 		boolean closeAngle = joyOp.getRawButton(RobotMap.CLOSE_ANGLE_BUTTON);
 		boolean farAngle = joyOp.getRawButton(RobotMap.FAR_ANGLE_BUTTON);
-		boolean optic = opticSensor1.get();
-		boolean optic2 = opticSensor2.get();
+		boolean optic = opticSensor.get();
 		boolean limit1 = limitSwitch.get();
 		boolean limit2 = limitSwitchTwo.get();
 		boolean isReturn = joyOp.getRawButton(RobotMap.RETURN_BUTTON);
@@ -134,7 +132,7 @@ public class Robot extends IterativeRobot {
 		boolean isCollapse = joyOp.getRawButton(RobotMap.COLLAPSE_BUTTON);
 		boolean isLower = joyOp.getRawButton(RobotMap.LOWER_BUTTON);
 		boolean manualHood = joyOp.getRawButton(RobotMap.MANUAL_HOOD_BUTTON);
-		TeleopStateMachine.stateMachine(optic, optic2, closeAngle, farAngle, isFire, isLower, 
+		TeleopStateMachine.stateMachine(optic, closeAngle, farAngle, isFire, isLower, 
 				isCollapse, isManual, isReturn);
 		
 		//gear shifting code 
@@ -167,7 +165,7 @@ public class Robot extends IterativeRobot {
 		
 		//INTAKE SPEED
 		//If none of these are true the teleop state machine can take over and use the intake for fire. 
-		if (isIntaking && optic && optic2 && (RobotMap.currentState != RobotMap.FAR_FIRE_STATE)
+		if (isIntaking && optic && (RobotMap.currentState != RobotMap.FAR_FIRE_STATE)
 				&& (RobotMap.currentState != RobotMap.CLOSE_FIRE_STATE)){  //TODO: add the sensor
 			Intake.spin(.8);
 		}
