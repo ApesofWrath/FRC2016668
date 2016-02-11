@@ -5,6 +5,7 @@ package org.usfirst.frc.team668.robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
@@ -35,6 +36,8 @@ public class Robot extends IterativeRobot {
 	public static Compressor compressor;
 	public static AnalogInput pot;
 	public static NetworkTable table;
+	public static SendableChooser autonChooser;
+	
 	public static double distance;
 	public int isClose;
 	public static int ref = 0;
@@ -91,11 +94,40 @@ public class Robot extends IterativeRobot {
 		compressor.setClosedLoopControl(true);
 
 		SmartDashboard.putString("Status:", " Working");
+		
+		autonChooser = new SendableChooser();
+		
+		autonChooser.addDefault("Drive and Shoot Autonomous", new Integer(RobotMap.DRIVE_AND_SHOOT_AUTON));
+		autonChooser.addObject("Drive Autonomous", new Integer(RobotMap.DRIVE_AUTON));
+		autonChooser.addObject("Stop Autonomous", new Integer(RobotMap.STOP_AUTON));
+		
+		SmartDashboard.putData("Autonomous Selection: ", autonChooser);
+		
+		
 
 	}
 
 	public void autonomousInit() {
-
+		
+		canTalonFrontRight.setEncPosition(0);
+		canTalonFrontRight.setEncPosition(0);
+		
+		
+		Intake.stop();
+		Shooter.stopAngle();
+		Shooter.stopFlyWheel();
+		
+		RobotMap.autonMode = ((Integer) (autonChooser.getSelected())).intValue();
+		
+		if (RobotMap.autonMode == RobotMap.DRIVE_AND_SHOOT_AUTON){
+			Autonomous.driveAndShootAuton();
+		}
+		else if (RobotMap.autonMode == RobotMap.DRIVE_AUTON){
+			Autonomous.driveAuton();
+		}
+		else if (RobotMap.autonMode == RobotMap.STOP_AUTON){
+			Autonomous.stopAuton();
+		}
 	}
 
 
@@ -105,8 +137,14 @@ public class Robot extends IterativeRobot {
 
 	public void teleopInit(){
 
-		canTalonShooterAngle.setEncPosition(0);
-
+		robotDrive.drive(0, 0);
+		
+		Intake.stop();
+		Shooter.stopAngle();
+		Shooter.stopFlyWheel();
+		
+		canTalonFrontRight.setEncPosition(0);
+		canTalonFrontRight.setEncPosition(0);
 
 	}
 
@@ -121,7 +159,7 @@ public class Robot extends IterativeRobot {
 		boolean isFire = joyOp.getRawButton(RobotMap.FIRE_BUTTON);
 		boolean isIntakeLower = joyOp.getRawButton(RobotMap.LOWER_INTAKE_BUTTON);
 		boolean isIntakeRise = joyOp.getRawButton(RobotMap.RISE_INTAKE_BUTTON);
-		boolean stopFlyWheel = joyOp.getRawButton(RobotMap.STOP_FLYWHEEL_BUTTON);
+		boolean stopFlyWheel = joyOp.getRawButton(RobotMap.STOP_FLYWHEEL_BUTTON); //prob wont need this 
 		boolean closeAngle = joyOp.getRawButton(RobotMap.CLOSE_ANGLE_BUTTON);
 		boolean farAngle = joyOp.getRawButton(RobotMap.FAR_ANGLE_BUTTON);
 		boolean optic = opticSensor.get();
@@ -157,14 +195,16 @@ public class Robot extends IterativeRobot {
 		//controls the state of the intake pistons 
 		if (isIntakeLower){
 			intakePiston.set(DoubleSolenoid.Value.kForward);
+			SmartDashboard.putBoolean("Intake Postion ", true);
 		}
 		if (isIntakeRise){
-			intakePiston.set(DoubleSolenoid.Value.kReverse); 
+			intakePiston.set(DoubleSolenoid.Value.kReverse);
+			SmartDashboard.putBoolean("Intake Position: ", false);
 		}
 
 		
 		//INTAKE SPEED
-		//If none of these are true the teleop state machine can take over and use the intake for fire. 
+		//If none of these are true the teleop state machine can take over and use the intake for fire state. 
 		if (isIntaking && optic && (RobotMap.currentState != RobotMap.FAR_FIRE_STATE)
 				&& (RobotMap.currentState != RobotMap.CLOSE_FIRE_STATE)){  //TODO: add the sensor
 			Intake.spin(.8);
@@ -242,11 +282,12 @@ public class Robot extends IterativeRobot {
 ////				Shooter.stopAngle();
 ////			}
 ////		}
+	//		WHY SEAN WHY< WHY ARE YOU SO BAD
 //		
 ////		if (isCollapse){
 ////			intakePiston.set(DoubleSolenoid.Value.kForward);
 ////			isClose = 2;
-////			boolean done2 = Shooter.movePID(500);
+////			boolean done2 = Shooter.movePID(500); 
 ////			if(done2){
 ////				Shooter.stopAngle();
 ////			}

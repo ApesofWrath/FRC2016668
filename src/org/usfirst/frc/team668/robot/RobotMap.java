@@ -78,7 +78,11 @@ public class RobotMap {
 	public static final int LIMIT_SWITCH_DIGITAL_INPUT = 2;
 	public static final int LIMIT_SWITCH_TWO_DIGITAL_INPUT = 3;
 	
-	
+	public static int autonState;
+	public static int autonMode;
+	public static final int DRIVE_AND_SHOOT_AUTON = 0;
+	public static final int DRIVE_AUTON = 1;
+	public static final int STOP_AUTON = 2;
 	
 	//CONSTANTS
 	public static final double CONSTANT_SPEED = 0;
