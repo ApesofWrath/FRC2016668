@@ -20,14 +20,15 @@ public class Shooter {
 	public static void setPID(double ref){
 
 		Robot.canTalonFlyWheel.changeControlMode(CANTalon.TalonControlMode.Speed);
-		
-		Robot.canTalonFlyWheel.setPID(2, .078, 1);
-		
+		Robot.canTalonFlyWheel.setP(2);
+		Robot.canTalonFlyWheel.setI(.078);
+		Robot.canTalonFlyWheel.setD(0);
+		//Robot.canTalonFlyWheel.setPID(2, .078, 1);
 		Robot.canTalonFlyWheel.setSetpoint(ref);
-		
 		Robot.canTalonFlyWheel.enable();
-		
 		error = (int) (ref - Robot.canTalonFlyWheel.getSpeed());
+		
+	
 		
 //		if (error <= 10){
 //			

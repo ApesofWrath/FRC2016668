@@ -97,9 +97,11 @@ public class Robot extends IterativeRobot {
 		
 		autonChooser = new SendableChooser();
 		
-		autonChooser.addDefault("Drive and Shoot Autonomous", new Integer(RobotMap.DRIVE_AND_SHOOT_AUTON));
-		autonChooser.addObject("Drive Autonomous", new Integer(RobotMap.DRIVE_AUTON));
+		autonChooser.addDefault("Drive and Shoot Camera Autonomous", new Integer(RobotMap.DRIVE_AND_SHOOT_CAMERA_AUTON));
+		autonChooser.addObject("Drive Autonomous", new Integer(RobotMap.DRIVE_UNDER_BAR_AUTON));
 		autonChooser.addObject("Stop Autonomous", new Integer(RobotMap.STOP_AUTON));
+		autonChooser.addObject("Drive to Defense Autonomous", new Integer(RobotMap.DRIVE_TO_DEFENSE_AUTON));
+		autonChooser.addObject("Drive and shoot PID Autonomous", new Integer(RobotMap.DRIVE_AND_SHOOT_PID_AUTON));
 		
 		SmartDashboard.putData("Autonomous Selection: ", autonChooser);
 		
@@ -119,14 +121,20 @@ public class Robot extends IterativeRobot {
 		
 		RobotMap.autonMode = ((Integer) (autonChooser.getSelected())).intValue();
 		
-		if (RobotMap.autonMode == RobotMap.DRIVE_AND_SHOOT_AUTON){
-			Autonomous.driveAndShootAuton();
+		if (RobotMap.autonMode == RobotMap.DRIVE_AND_SHOOT_CAMERA_AUTON){
+			Autonomous.driveAndShootCameraAuton(this);
 		}
-		else if (RobotMap.autonMode == RobotMap.DRIVE_AUTON){
-			Autonomous.driveAuton();
+		else if (RobotMap.autonMode == RobotMap.DRIVE_UNDER_BAR_AUTON){
+			Autonomous.driveUnderBarAuton(this);
 		}
 		else if (RobotMap.autonMode == RobotMap.STOP_AUTON){
 			Autonomous.stopAuton();
+		}
+		else if (RobotMap.autonMode == RobotMap.DRIVE_TO_DEFENSE_AUTON){
+			Autonomous.driveToDefenseAuton(this);
+		}
+		else if (RobotMap.autonMode == RobotMap.DRIVE_AND_SHOOT_PID_AUTON){
+			Autonomous.driveAndShootPIDAuton(this);
 		}
 	}
 
@@ -273,7 +281,7 @@ public class Robot extends IterativeRobot {
 ////			boolean done = Shooter.movePID(0);
 ////			if (done){
 ////				Shooter.stopAngle();
-////			}
+////			}22
 ////		}
 ////		if(farAngle){
 ////			isClose = 0;

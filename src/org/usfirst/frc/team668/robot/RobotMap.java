@@ -80,28 +80,50 @@ public class RobotMap {
 	
 	public static int autonState;
 	public static int autonMode;
-	public static final int DRIVE_AND_SHOOT_AUTON = 0;
-	public static final int DRIVE_AUTON = 1;
+	public static final int DRIVE_AND_SHOOT_CAMERA_AUTON = 0;
+	public static final int DRIVE_UNDER_BAR_AUTON = 1;
 	public static final int STOP_AUTON = 2;
+	public static final int DRIVE_TO_DEFENSE_AUTON = 3;
+	public static final int DRIVE_AND_SHOOT_PID_AUTON = 4;
 	
 	//CONSTANTS
 	public static final double CONSTANT_SPEED = 0;
 	public static final double HOOD_SPEED = 1;
+	
 	public static final double ACCEPTABLE_HOOD_RANGE = 0;
+	
 	public static final double FAR_ANGLE_VALUE = 0;
 	public static final double CLOSE_ANGLE_VALUE = 0;
 	public static final double COLLAPSE_ANGLE_VALUE = 0;
 	public static final double MAX_HOOD_POSITION = 0;
 	public static final double MIN_HOOD_POSITION = 0;
+	
 	public static final double FAR_FIRE_SPEED_RANGE = 0;
 	public static final double FIRE_INTAKE_SPEED = .8;
 	public static final double BALL_WAIT_TIME = 200;
 	public static final double MANUAL_CLOSE_FIRE_SPEED = .7;
 	public static final double MANUAL_FAR_FIRE_SPEED = .9;
 	
+	public static final double DRIVE_AND_SHOOT_TURN_SPEED = 0;
+	
 	public static final double FIRE_DISTANCE_1 = 0;
 	public static final double FIRE_DISTANCE_2 = 0;
 	public static final double FIRE_DISTANCE_3 = 0;
+	
+	public static final int DRIVE_UNDER_BAR_RIGHT_DISTANCE = 0;
+	public static final int DRIVE_UNDER_BAR_LEFT_DISTANCE = 0;
+	
+	public static final int DRIVE_TO_DEFENSE_RIGHT_DISTANCE = 0;
+	public static final int DRIVE_TO_DEFENSE_LEFT_DISTANCE = 0;
+	
+	public static final int DRIVE_AND_SHOOT_LEFT_DISTANCE = 0;
+	public static final int DRIVE_AND_SHOOT_RIGHT_DISTANCE = 0;
+	
+	public static final int TURN_RIGHT_AUTON_DISTANCE = 0;
+	public static final int TURN_LEFT_AUTON_DISTANCE = 0;
+	
+	public static final int LEEROY_JENKINS_DISTANCE = 0;
+	public static final int LEEROY_JENKINS_SPEED = 1;
 			
 }
 

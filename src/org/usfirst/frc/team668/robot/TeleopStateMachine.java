@@ -142,7 +142,7 @@ public class TeleopStateMachine {
 			
 		case RobotMap.FAR_FIRE_STATE:
 			SmartDashboard.putString("State: ", "Far Fire State");
-			if (reference - Robot.canTalonFlyWheel.getSpeed() <= RobotMap.FAR_FIRE_SPEED_RANGE){ //waits for the speed of the motor to be correct 
+			if (Math.abs(reference - Robot.canTalonFlyWheel.getSpeed()) <= RobotMap.FAR_FIRE_SPEED_RANGE){ //waits for the speed of the motor to be correct 
 				Intake.spin(RobotMap.FIRE_INTAKE_SPEED); //fires the ball by spinning the intake
 				if(optic){ //optic sensors no longer see the ball
 					time = System.currentTimeMillis(); //sets the time for the timer in BALL_CLEAR_STATE
@@ -154,7 +154,7 @@ public class TeleopStateMachine {
 		case RobotMap.BALL_CLEAR_STATE: //we have both fire states come here for continuity even though close fire state doesn't need to
 			
 			SmartDashboard.putString("State: ", "Ball Clear State");			
-			if (System.currentTimeMillis() >= time + RobotMap.BALL_WAIT_TIME){//waits for the ball to be out of the firing area before slowing the motor down
+			if (System.currentTimeMillis() - time  >= RobotMap.BALL_WAIT_TIME){//waits for the ball to be out of the firing area before slowing the motor down
 				Intake.stop();
 				//Robot.canTalonFlyWheel.disable(); //TODO:Check if this line will hurt the code (i think so)
 				RobotMap.currentState = RobotMap.SET_CLOSE_PID_STATE;
