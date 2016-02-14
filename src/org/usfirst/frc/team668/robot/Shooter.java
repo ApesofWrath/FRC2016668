@@ -18,17 +18,18 @@ public class Shooter {
 	public static double speed;
 	
 	public static void setPID(double ref){
-
+		ref = (ref/600) * 4096;
+		//Robot.canTalonFlyWheel.ConfigFwdLimitSwitchNormallyOpen(false);
 		Robot.canTalonFlyWheel.changeControlMode(CANTalon.TalonControlMode.Speed);
-		Robot.canTalonFlyWheel.setP(2);
-		Robot.canTalonFlyWheel.setI(.078);
-		Robot.canTalonFlyWheel.setD(0);
-		//Robot.canTalonFlyWheel.setPID(2, .078, 1);
+		Robot.canTalonFlyWheel.setP(.00002);
+//		Robot.canTalonFlyWheel.setI(.00078);
+//		Robot.canTalonFlyWheel.setD(.000000009);
+		//Robot.canTalonFlyWheel.setPID(.0002, .00078, .0001);
 		Robot.canTalonFlyWheel.setSetpoint(ref);
 		Robot.canTalonFlyWheel.enable();
 		error = (int) (ref - Robot.canTalonFlyWheel.getSpeed());
 		
-	
+		System.out.println(error);
 		
 //		if (error <= 10){
 //			
@@ -104,13 +105,13 @@ public class Shooter {
 			return true;
 		}
 		else if(Robot.pot.getValue() > ref){
-			Robot.canTalonShooterAngle.set(RobotMap.HOOD_SPEED);
-			Robot.canTalonShooterAngleTwo.set(-RobotMap.HOOD_SPEED);
+			Robot.canTalonShooterAngle.set(-RobotMap.HOOD_SPEED);
+			//Robot.canTalonShooterAngleTwo.set(-RobotMap.HOOD_SPEED);
 			return false;
 		}
 		else{
-			Robot.canTalonShooterAngle.set(-RobotMap.HOOD_SPEED);
-			Robot.canTalonShooterAngleTwo.set(RobotMap.HOOD_SPEED);
+			Robot.canTalonShooterAngle.set(RobotMap.HOOD_SPEED);
+		//	Robot.canTalonShooterAngleTwo.set(RobotMap.HOOD_SPEED);
 			return false;
 		}
 		

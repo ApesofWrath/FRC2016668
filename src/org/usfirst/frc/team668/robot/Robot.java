@@ -4,6 +4,7 @@ package org.usfirst.frc.team668.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.Timer;
@@ -37,6 +38,7 @@ public class Robot extends IterativeRobot {
 	public static AnalogInput pot;
 	public static NetworkTable table;
 	public static SendableChooser autonChooser;
+	public static PowerDistributionPanel pdp;
 	
 	public static double distance;
 	public int isClose;
@@ -50,7 +52,7 @@ public class Robot extends IterativeRobot {
 
 		server = CameraServer.getInstance();
 		server.setQuality(50);
-		server.startAutomaticCapture("cam1");
+		server.startAutomaticCapture("cam0");
 		//     	 camFront.openCamera();
 		//     	 camRear.openCamera();
 		
@@ -84,8 +86,10 @@ public class Robot extends IterativeRobot {
 		limitSwitch = new DigitalInput(RobotMap.LIMIT_SWITCH_DIGITAL_INPUT);
 		limitSwitchTwo = new DigitalInput(RobotMap.LIMIT_SWITCH_TWO_DIGITAL_INPUT);
 		
-		intakePiston = new DoubleSolenoid(RobotMap.INTAKE_PISTON_EXPAND_CHANNEL, RobotMap.INTAKE_PISTON_RETRACT_CHANNNEL);
-		shiftPiston = new DoubleSolenoid(RobotMap.PISTON_SHIFT_EXPAND_CHANNEL, RobotMap.PISTON_SHIFT_RETRACT_CHANNEL);
+		intakePiston = new DoubleSolenoid(RobotMap.PCM_CAN_ID, RobotMap.INTAKE_PISTON_EXPAND_CHANNEL, RobotMap.INTAKE_PISTON_RETRACT_CHANNNEL);
+		shiftPiston = new DoubleSolenoid(RobotMap.PCM_CAN_ID, RobotMap.PISTON_SHIFT_EXPAND_CHANNEL, RobotMap.PISTON_SHIFT_RETRACT_CHANNEL);
+		
+		pdp = new PowerDistributionPanel(20);
 		
 		pot = new AnalogInput(RobotMap.POT_ANALOG_INPUT_PORT);
 		
@@ -311,9 +315,69 @@ public class Robot extends IterativeRobot {
 //		
 //		
 	
-
+	public void testInit(){
+		//canTalonFlyWheel.setEncPosition(0);
+	}
 	public void testPeriodic() {
-		System.out.println("hello");
+		//System.out.println("hello");
+		
+		compressor.setClosedLoopControl(true);
+		
+		robotDrive.arcadeDrive(joyThrottle.getY(), joyWheel.getX());
+//		
+//		System.out.println(pdp.getCurrent(0));
+//		System.out.println(pdp.getCurrent(1));
+//		System.out.println(pdp.getCurrent(2));
+//		System.out.println(pdp.getCurrent(3));
+		
+		System.out.print( "RPM: " + ((canTalonFlyWheel.getSpeed() *600)/4096));
+		System.out.print(" OUTPUT: " + canTalonFlyWheel.getOutputVoltage());
+		System.out.println(" Error: " + canTalonFlyWheel.getClosedLoopError());
+		if (joyOp.getRawButton(8)){
+			canTalonShooterAngle.set(.1);
+		}
+		else if (joyOp.getRawButton(7)){
+			canTalonShooterAngle.set(-.1);
+		}
+		else{
+			canTalonShooterAngle.set(0);
+		}
+		if (joyOp.getRawButton(11)){
+			Shooter.moveHoodBang(1100);
+			
+		}
+		else if(joyOp.getRawButton(12)){
+			Shooter.moveHoodBang(800);
+		}
+		
+		if ( joyOp.getRawButton(2)){
+			canTalonIntake.set(.7);
+		}
+		else if (joyOp.getRawButton(3)){
+			canTalonIntake.set(-.7);
+		}
+		else{
+			canTalonIntake.set(0);
+		}
+		
+		canTalonFlyWheel.set(-((joyOp.getRawAxis(3)/2)+.5));
+		
+	//	System.out.println(pot.getValue());
+		
+		if (joyOp.getRawButton(9)){
+			intakePiston.set(DoubleSolenoid.Value.kReverse);
+		}
+		else if (joyOp.getRawButton(10)){
+			intakePiston.set(DoubleSolenoid.Value.kForward);
+		}
+			
+		if(joyOp.getRawButton(4)){
+			Shooter.setPID(-300);
+			
+		}
+//		else if (joyOp.getRawButton(6)){
+//			canTalonFlyWheel.disable();
+//		}
 	}
 
 }
