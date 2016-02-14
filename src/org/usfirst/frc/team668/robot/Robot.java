@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -109,7 +110,17 @@ public class Robot extends IterativeRobot {
 		
 		SmartDashboard.putData("Autonomous Selection: ", autonChooser);
 		
-		
+//		canTalonFlyWheel.setClosedLoopOutputDirection(true);
+		canTalonFlyWheel.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+		canTalonFlyWheel.reverseSensor(true);
+		canTalonFlyWheel.configNominalOutputVoltage(+2.0f, -0.0f);
+		canTalonFlyWheel.configPeakOutputVoltage(+12.0f, -0.0f);
+		//canTalonFlyWheel.configMaxOutputVoltage(0.0);
+		canTalonFlyWheel.setProfile(0);
+//		canTalonFlyWheel.setF(0);
+//		canTalonFlyWheel.setP(0);
+//		canTalonFlyWheel.setI(0);
+//		canTalonFlyWheel.setD(0);
 
 	}
 
@@ -330,9 +341,10 @@ public class Robot extends IterativeRobot {
 //		System.out.println(pdp.getCurrent(2));
 //		System.out.println(pdp.getCurrent(3));
 		
-		System.out.print( "RPM: " + ((canTalonFlyWheel.getSpeed() *600)/4096));
+		System.out.print( "RPM: " + canTalonFlyWheel.getSpeed());
 		System.out.print(" OUTPUT: " + canTalonFlyWheel.getOutputVoltage());
 		System.out.println(" Error: " + canTalonFlyWheel.getClosedLoopError());
+		System.out.println("ANGLE: " + pot.getValue());
 		if (joyOp.getRawButton(8)){
 			canTalonShooterAngle.set(.1);
 		}
@@ -343,11 +355,11 @@ public class Robot extends IterativeRobot {
 			canTalonShooterAngle.set(0);
 		}
 		if (joyOp.getRawButton(11)){
-			Shooter.moveHoodBang(1100);
+			Shooter.movePotPID(1130);
 			
 		}
 		else if(joyOp.getRawButton(12)){
-			Shooter.moveHoodBang(800);
+			Shooter.moveHoodBang(1130);
 		}
 		
 		if ( joyOp.getRawButton(2)){
@@ -360,7 +372,7 @@ public class Robot extends IterativeRobot {
 			canTalonIntake.set(0);
 		}
 		
-		canTalonFlyWheel.set(-((joyOp.getRawAxis(3)/2)+.5));
+	//	canTalonFlyWheel.set(((joyOp.getRawAxis(3)/2)+.5));
 		
 	//	System.out.println(pot.getValue());
 		
@@ -370,14 +382,17 @@ public class Robot extends IterativeRobot {
 		else if (joyOp.getRawButton(10)){
 			intakePiston.set(DoubleSolenoid.Value.kForward);
 		}
-			
+//			
 		if(joyOp.getRawButton(4)){
-			Shooter.setPID(-300);
+			Shooter.setPID(7000);
 			
 		}
-//		else if (joyOp.getRawButton(6)){
-//			canTalonFlyWheel.disable();
-//		}
+		else if (joyOp.getRawButton(6)){
+			Shooter.setPID(6500);
+		}
+		else if (joyOp.getRawButton(5)){
+			canTalonFlyWheel.disable();
+		}
 	}
 
 }

@@ -9,24 +9,23 @@ public class Shooter {
 	public static long currentTime = 0;
 	public static long lastTime = System.currentTimeMillis();
 	public static double lastError = 0;
-	public static double Ki = 1;
-	public static double Kd = 1;
-	public static double Kp = 1;
+	public static double Ki = .0009;
+	public static double Kd = 0;
+	public static double Kp = .09;
 	public static double i = 0;
 	public static double d = 0;
 	public static double P, I , D;
 	public static double speed;
 	
 	public static void setPID(double ref){
-		ref = (ref/600) * 4096;
 		//Robot.canTalonFlyWheel.ConfigFwdLimitSwitchNormallyOpen(false);
 		Robot.canTalonFlyWheel.changeControlMode(CANTalon.TalonControlMode.Speed);
-		Robot.canTalonFlyWheel.setP(.00002);
+//		Robot.canTalonFlyWheel.setP(.00002);
 //		Robot.canTalonFlyWheel.setI(.00078);
 //		Robot.canTalonFlyWheel.setD(.000000009);
 		//Robot.canTalonFlyWheel.setPID(.0002, .00078, .0001);
-		Robot.canTalonFlyWheel.setSetpoint(ref);
-		Robot.canTalonFlyWheel.enable();
+		Robot.canTalonFlyWheel.set(ref);
+		//Robot.canTalonFlyWheel.enable();
 		error = (int) (ref - Robot.canTalonFlyWheel.getSpeed());
 		
 		System.out.println(error);
