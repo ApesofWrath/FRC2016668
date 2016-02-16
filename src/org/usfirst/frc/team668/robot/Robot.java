@@ -46,6 +46,8 @@ public class Robot extends IterativeRobot {
 	public static int ref = 0;
 	public static int lastRef = 100000;
 	public static boolean canIntake = true;
+	
+	public int target = 1070;
 
 	// public static USBCamera camFront = new USBCamera("cam1");
 	// public static USBCamera camRear = new USBCamera("cam2");
@@ -53,7 +55,7 @@ public class Robot extends IterativeRobot {
 
 		server = CameraServer.getInstance();
 		server.setQuality(50);
-		server.startAutomaticCapture("cam0");
+		server.startAutomaticCapture("cam2");
 		//     	 camFront.openCamera();
 		//     	 camRear.openCamera();
 		
@@ -68,7 +70,7 @@ public class Robot extends IterativeRobot {
 		//canTalonTrigger = new CANTalon(26);
 
 		canTalonIntake = new CANTalon(RobotMap.INTAKE_CAN_ID);
-		canTalonShooterAngleTwo = new CANTalon(RobotMap.SHOOTER_ANGLE_TWO_CAN_ID);
+		//canTalonShooterAngleTwo = new CANTalon(RobotMap.SHOOTER_ANGLE_TWO_CAN_ID);
 
 		canTalonFrontLeft = new CANTalon(RobotMap.FRONT_LEFT_CAN_ID);
 		canTalonFrontRight = new CANTalon(RobotMap.FRONT_RIGHT_CAN_ID);
@@ -114,7 +116,7 @@ public class Robot extends IterativeRobot {
 		canTalonFlyWheel.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		canTalonFlyWheel.reverseSensor(true);
 		canTalonFlyWheel.configNominalOutputVoltage(+2.0f, -0.0f);
-		canTalonFlyWheel.configPeakOutputVoltage(+12.0f, -0.0f);
+		canTalonFlyWheel.configPeakOutputVoltage(+12.0f, +2.0f);
 		//canTalonFlyWheel.configMaxOutputVoltage(0.0);
 		canTalonFlyWheel.setProfile(0);
 //		canTalonFlyWheel.setF(0);
@@ -168,9 +170,10 @@ public class Robot extends IterativeRobot {
 		
 		canTalonFrontRight.setEncPosition(0);
 		canTalonFrontRight.setEncPosition(0);
+		
+		RobotMap.currentState = RobotMap.INIT_STATE;
 
 	}
-
 
 	public void teleopPeriodic() {
 
@@ -179,11 +182,11 @@ public class Robot extends IterativeRobot {
 		boolean highGear = joyOp.getRawButton(RobotMap.LOW_GEAR_BUTTON);
 		boolean isIntaking = joyOp.getRawButton(RobotMap.INTAKE_BUTTON);
 		boolean isReverse = joyOp.getRawButton(RobotMap.REVERSE_BUTTON);
-		boolean isFire = joyOp.getRawButton(RobotMap.FIRE_BUTTON);
+		boolean isFarFire = joyOp.getRawButton(RobotMap.FIRE_BUTTON);
 		boolean isIntakeLower = joyOp.getRawButton(RobotMap.LOWER_INTAKE_BUTTON);
 		boolean isIntakeRise = joyOp.getRawButton(RobotMap.RISE_INTAKE_BUTTON);
-		boolean stopFlyWheel = joyOp.getRawButton(RobotMap.STOP_FLYWHEEL_BUTTON); //prob wont need this 
-		boolean closeAngle = joyOp.getRawButton(RobotMap.CLOSE_ANGLE_BUTTON);
+		boolean stopFlyWheel = joyOp.getRawButton(RobotMap.STOP_FLYWHEEL_BUTTON); //prob won't need this 
+		boolean isCloseFar = joyOp.getRawButton(RobotMap.CLOSE_ANGLE_BUTTON);
 		boolean farAngle = joyOp.getRawButton(RobotMap.FAR_ANGLE_BUTTON);
 		boolean optic = opticSensor.get();
 		boolean limit1 = limitSwitch.get();
@@ -193,9 +196,11 @@ public class Robot extends IterativeRobot {
 		boolean isCollapse = joyOp.getRawButton(RobotMap.COLLAPSE_BUTTON);
 		boolean isLower = joyOp.getRawButton(RobotMap.LOWER_BUTTON);
 		boolean manualHood = joyOp.getRawButton(RobotMap.MANUAL_HOOD_BUTTON);
-		TeleopStateMachine.stateMachine(optic, closeAngle, farAngle, isFire, isLower, 
-				isCollapse, isManual, isReturn);
-		
+		boolean closeAngle = joyOp.getRawButton(1);
+		boolean isFire = joyOp.getRawButton(2);
+		TeleopStateMachine.stateMachine(optic, isCloseFar, isFarFire, isLower, 
+				isCollapse, isManual, isReturn, closeAngle, farAngle, isFire);
+		Shooter.hoodStateMachine();
 		//gear shifting code 
 		if (lowGear){
 			intakePiston.set(DoubleSolenoid.Value.kReverse);
@@ -342,25 +347,41 @@ public class Robot extends IterativeRobot {
 //		System.out.println(pdp.getCurrent(3));
 		
 		System.out.print( "RPM: " + canTalonFlyWheel.getSpeed());
-		System.out.print(" OUTPUT: " + canTalonFlyWheel.getOutputVoltage());
-		System.out.println(" Error: " + canTalonFlyWheel.getClosedLoopError());
-		System.out.println("ANGLE: " + pot.getValue());
+		System.out.println(" OUTPUT: " + canTalonFlyWheel.getOutputVoltage());
+	//	System.out.println(" SPEED: " + Shooter.speed);
+		//System.out.print(" Error: " + Shooter.error);
+		//System.out.print(" ANGLE: " + pot.getValue());
+		//System.out.println(" Target: " + target);
+		
+		
 		if (joyOp.getRawButton(8)){
-			canTalonShooterAngle.set(.1);
+			//canTalonShooterAngle.set(.3);
+			target = target + 2;
 		}
 		else if (joyOp.getRawButton(7)){
-			canTalonShooterAngle.set(-.1);
+			//canTalonShooterAngle.set(-.3);
+			target = target -2;
 		}
 		else{
 			canTalonShooterAngle.set(0);
 		}
 		if (joyOp.getRawButton(11)){
-			Shooter.movePotPID(1130);
+			Shooter.movePotPID(target);
 			
 		}
 		else if(joyOp.getRawButton(12)){
-			Shooter.moveHoodBang(1130);
+			Shooter.moveHoodBang(target);
 		}
+		else{
+			canTalonShooterAngle.set(0);
+		}
+		
+		
+		if (!joyOp.getRawButton(11)){
+			Shooter.i = 0.0;
+		}
+		
+		
 		
 		if ( joyOp.getRawButton(2)){
 			canTalonIntake.set(.7);

@@ -34,7 +34,7 @@ public class Autonomous {
 			DriveController.turnInPlace(RobotMap.DRIVE_AND_SHOOT_TURN_SPEED);
 		}
 		
-		double ref = Vision.getSpeed();
+		double ref = Vision.getAngle();
 		Shooter.setPID(ref);
 		
 		while (r.isEnabled() && r.isAutonomous() && !fired){
@@ -76,7 +76,7 @@ public class Autonomous {
 		}
 		
 
-		double ref = Vision.getSpeed();
+		double ref = Vision.getAngle();
 		Shooter.setPID(ref);
 		
 		while (r.isEnabled() && r.isAutonomous() && !fired){

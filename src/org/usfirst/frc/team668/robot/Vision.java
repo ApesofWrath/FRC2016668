@@ -2,21 +2,21 @@ package org.usfirst.frc.team668.robot;
 
 public class Vision {
 	
-	public static double getSpeed(){
+	public static int getAngle(){
 		
-		double[] speeds = {1, 2, 3, 4};
+			int[] angles = {1, 2, 3, 4};
 		
 		if (Robot.distance < RobotMap.FIRE_DISTANCE_1){
-			return speeds[0];
+			return angles[0];
 		}
 		else if (Robot.distance > RobotMap.FIRE_DISTANCE_1 && Robot.distance < RobotMap.FIRE_DISTANCE_2){
-			return speeds[1];
+			return angles[1];
 		}
 		else if (Robot.distance > RobotMap.FIRE_DISTANCE_2 && Robot.distance < RobotMap.FIRE_DISTANCE_3){
-			return speeds[2];
+			return angles[2];
 		}
 		else {
-			return speeds[3];
+			return angles[3];
 		}
 	}
 	

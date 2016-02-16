@@ -9,13 +9,13 @@ public class Intake {
 	
 	public static void spin(double speed){
 		
-		Robot.canTalonIntake.set(speed);
+		Robot.canTalonIntake.set(-speed);
 		
 	}
 	
 	public static void spit(double speed){
 		
-		Robot.canTalonIntake.set(-speed);
+		Robot.canTalonIntake.set(speed);
 		
 	}
 	
