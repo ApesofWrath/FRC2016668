@@ -76,8 +76,9 @@ public class Autonomous {
 		}
 		
 
-		double ref = Vision.getAngle();
+		int ref = RobotMap.FAR_FIRE_SPEED;
 		Shooter.setPID(ref);
+		
 		
 		while (r.isEnabled() && r.isAutonomous() && !fired){
 			if (Math.abs(ref - Robot.canTalonFlyWheel.getSpeed()) <= RobotMap.FAR_FIRE_SPEED_RANGE){ //waits for the speed of the motor to be correct 

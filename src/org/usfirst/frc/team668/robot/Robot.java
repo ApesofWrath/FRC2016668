@@ -53,9 +53,9 @@ public class Robot extends IterativeRobot {
 	// public static USBCamera camRear = new USBCamera("cam2");
 	public void robotInit() {
 
-		server = CameraServer.getInstance();
-		server.setQuality(50);
-		server.startAutomaticCapture("cam2");
+//		server = CameraServer.getInstance();
+//		server.setQuality(50);
+//		server.startAutomaticCapture("cam2");
 		//     	 camFront.openCamera();
 		//     	 camRear.openCamera();
 		
@@ -135,6 +135,7 @@ public class Robot extends IterativeRobot {
 		Intake.stop();
 		Shooter.stopAngle();
 		Shooter.stopFlyWheel();
+
 		
 		RobotMap.autonMode = ((Integer) (autonChooser.getSelected())).intValue();
 		
@@ -171,6 +172,7 @@ public class Robot extends IterativeRobot {
 		canTalonFrontRight.setEncPosition(0);
 		canTalonFrontRight.setEncPosition(0);
 		
+		RobotMap.hoodState = RobotMap.HOOD_DEFAULT_STATE;
 		RobotMap.currentState = RobotMap.INIT_STATE;
 
 	}
@@ -186,7 +188,7 @@ public class Robot extends IterativeRobot {
 		boolean isIntakeLower = joyOp.getRawButton(RobotMap.LOWER_INTAKE_BUTTON);
 		boolean isIntakeRise = joyOp.getRawButton(RobotMap.RISE_INTAKE_BUTTON);
 		boolean stopFlyWheel = joyOp.getRawButton(RobotMap.STOP_FLYWHEEL_BUTTON); //prob won't need this 
-		boolean isCloseFar = joyOp.getRawButton(RobotMap.CLOSE_ANGLE_BUTTON);
+		boolean isCloseFire = joyOp.getRawButton(RobotMap.CLOSE_ANGLE_BUTTON);
 		boolean farAngle = joyOp.getRawButton(RobotMap.FAR_ANGLE_BUTTON);
 		boolean optic = opticSensor.get();
 		boolean limit1 = limitSwitch.get();
@@ -198,7 +200,7 @@ public class Robot extends IterativeRobot {
 		boolean manualHood = joyOp.getRawButton(RobotMap.MANUAL_HOOD_BUTTON);
 		boolean closeAngle = joyOp.getRawButton(1);
 		boolean isFire = joyOp.getRawButton(2);
-		TeleopStateMachine.stateMachine(optic, isCloseFar, isFarFire, isLower, 
+		TeleopStateMachine.stateMachine(optic, isCloseFire, isFarFire, isLower, 
 				isCollapse, isManual, isReturn, closeAngle, farAngle, isFire);
 		Shooter.hoodStateMachine();
 		//gear shifting code 

@@ -16,7 +16,7 @@ public class RobotMap {
 	
 	public static final int OPTIC_SENSOR_DIGITAL_INPUT_PORT = 0;
 	
-	public static final int PCM_CAN_ID = 31;
+	public static final int PCM_CAN_ID = 4;
 	
 	public static final int WHEEL_ID = 0;
 	public static final int THROTTLE_ID = 1;
@@ -61,6 +61,8 @@ public class RobotMap {
 	public static final int SET_FAR_PID_STATE = 11;
 	public static final int SET_CLOSE_PID_STATE = 13;
 	public static final int BALL_CLEAR_STATE = 12;
+	public static final int CLOSE_FIRE_INIT_STATE = 14;
+	public static final int SHOOT_TIMER_STATE = 15;
 	public static final int DEFAULT_STATE = INIT_STATE;
 	public static int currentState = DEFAULT_STATE;
 	
@@ -97,7 +99,7 @@ public class RobotMap {
 	public static final int DRIVE_AND_SHOOT_PID_AUTON = 4;
 	
 	//CONSTANTS
-	public static final double CONSTANT_SPEED = 6500;
+	public static final double CONSTANT_SPEED = 7000;
 	public static final double HOOD_SPEED = .3;
 	
 	public static final double ACCEPTABLE_HOOD_RANGE = 5;
@@ -109,10 +111,10 @@ public class RobotMap {
 	public static final int MIN_HOOD_POSITION = 0;
 	
 	
-	public static final double FAR_FIRE_SPEED_RANGE = 0;
+	public static final double FAR_FIRE_SPEED_RANGE = 300;
 	public static final double FIRE_INTAKE_SPEED = .8;
 	public static final double BALL_WAIT_TIME = 200;
-	public static final int CLOSE_FIRE_SPEED = 6500;
+	public static final int CLOSE_FIRE_SPEED = 7000;
 	public static final int FAR_FIRE_SPEED = 7000;
 	
 	public static final double DRIVE_AND_SHOOT_TURN_SPEED = 0;

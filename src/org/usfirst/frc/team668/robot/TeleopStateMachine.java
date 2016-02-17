@@ -8,6 +8,7 @@ public class TeleopStateMachine {
 	public static boolean canReverse = true;
 	public static double reference;
 	public static long time;
+	public static long shootTime;
 	
 	public static void stateMachine(boolean optic, boolean isCloseFire, 
 			boolean isFarFire, boolean isLower, boolean isCollapse, boolean isManual,
@@ -31,6 +32,8 @@ public class TeleopStateMachine {
 			RobotMap.currentState = RobotMap.MANUAL_OVERRIDE_STATE;
 		}
 		System.out.print("pot: "+ Robot.pot.getValue());
+		System.out.print(" POWER: " + Robot.canTalonFlyWheel.getOutputVoltage());
+		System.out.println(" VAL: " + Robot.canTalonFlyWheel.get());
 		System.out.println( " RPM: " + Robot.canTalonFlyWheel.getSpeed());
 		//teleop state machine 
 		switch (RobotMap.currentState){
@@ -46,7 +49,7 @@ public class TeleopStateMachine {
 			Intake.stop();
 //			isClose = false;
 //			isFar = false;
-			Robot.intakePiston.set(DoubleSolenoid.Value.kForward);
+			Robot.intakePiston.set(DoubleSolenoid.Value.kReverse);
 //			boolean completed = Shooter.moveHoodBang(RobotMap.CLOSE_ANGLE_VALUE);
 //			if(completed){
 //				Shooter.stopAngle();
@@ -106,7 +109,7 @@ public class TeleopStateMachine {
 			SmartDashboard.putString("State: ", "Lower Intake State");
 			
 			SmartDashboard.putBoolean("Intake Position ", true);
-			Robot.intakePiston.set(DoubleSolenoid.Value.kForward);
+			Robot.intakePiston.set(DoubleSolenoid.Value.kReverse);
 			
 			if (optic ){ //runs until one of the sensors are false. Inverted for that reason
 				Intake.spin(.8);
@@ -185,15 +188,26 @@ public class TeleopStateMachine {
 			}
 			break;
 
-		case RobotMap.CLOSE_FIRE_STATE:
+		case RobotMap.CLOSE_FIRE_INIT_STATE:
 			SmartDashboard.putString("State: ", "CLose Fire State");
 			if (Math.abs(RobotMap.CLOSE_ANGLE_VALUE - Robot.pot.getValue()) <= RobotMap.ACCEPTABLE_HOOD_RANGE){
-				Intake.spin(RobotMap.FIRE_INTAKE_SPEED); //spins the ball into the flywheel
+				shootTime = System.currentTimeMillis();
+				RobotMap.currentState = RobotMap.SHOOT_TIMER_STATE;
+				
+			}
+			break;	
+				
+		case RobotMap.SHOOT_TIMER_STATE:
+			if (System.currentTimeMillis() - shootTime  >= 900){//waits for the ball to be out of the firing area before slowing the motor down
+				RobotMap.currentState = RobotMap.CLOSE_FIRE_STATE;
+			}
+			
+		case RobotMap.CLOSE_FIRE_STATE:
+			Intake.spin(RobotMap.FIRE_INTAKE_SPEED); //spins the ball into the flywheel
 				if(optic){ //checks if the ball is gone (inversed logic)
 					RobotMap.currentState = RobotMap.BALL_CLEAR_STATE;
 				}
-			}
-			else if (isReturn){
+		 if (isReturn){
 				Intake.stop();
 				RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
 				RobotMap.currentState = RobotMap.WAIT_FOR_BUTTON_STATE;
