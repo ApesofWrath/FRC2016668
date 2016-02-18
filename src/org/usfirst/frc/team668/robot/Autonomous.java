@@ -34,8 +34,13 @@ public class Autonomous {
 			DriveController.turnInPlace(RobotMap.DRIVE_AND_SHOOT_TURN_SPEED);
 		}
 		
-		double ref = Vision.getAngle();
+		int ref = RobotMap.FAR_FIRE_SPEED;
 		Shooter.setPID(ref);
+		
+		RobotMap.hoodState = RobotMap.HOOD_GET_STATE;
+		while ( Math.abs(Shooter.angle - Robot.pot.getValue()) <= RobotMap.ACCEPTABLE_HOOD_RANGE){
+			RobotMap.hoodState = RobotMap.HOOD_GET_STATE;
+		}
 		
 		while (r.isEnabled() && r.isAutonomous() && !fired){
 			if (Math.abs(ref - Robot.canTalonFlyWheel.getSpeed()) <= RobotMap.FAR_FIRE_SPEED_RANGE){ //waits for the speed of the motor to be correct 
@@ -78,6 +83,11 @@ public class Autonomous {
 
 		int ref = RobotMap.FAR_FIRE_SPEED;
 		Shooter.setPID(ref);
+		
+		RobotMap.hoodState = RobotMap.HOOD_GET_STATE;
+		while ( Math.abs(Shooter.angle - Robot.pot.getValue()) <= RobotMap.ACCEPTABLE_HOOD_RANGE){
+			RobotMap.hoodState = RobotMap.HOOD_GET_STATE;
+		}
 		
 		
 		while (r.isEnabled() && r.isAutonomous() && !fired){

@@ -32,10 +32,12 @@ public class RobotMap {
 	public static final int INTAKE_BUTTON = 2;
 	public static final int REVERSE_BUTTON = 3;
 	public static final int FIRE_BUTTON = 4;
+	public static final int FAR_FIRE_BUTTON = 4;
 	public static final int LOWER_INTAKE_BUTTON = 5;
 	public static final int RISE_INTAKE_BUTTON = 6;
 	public static final int STOP_FLYWHEEL_BUTTON = 7;
 	public static final int CLOSE_ANGLE_BUTTON = 8;
+	public static final int CLOSE_FIRE_BUTTON = 8;
 	public static final int FAR_ANGLE_BUTTON = 9;
 	public static final int COLLAPSE_BUTTON = 10;
 	public static final int LOWER_BUTTON = 11;
@@ -44,6 +46,7 @@ public class RobotMap {
 	public static final int RETURN_BUTTON = 1;
 	public static final int LOW_GEAR_BUTTON = 7; //throttle
 	public static final int HIGH_GEAR_BUTTON = 8; //throttle
+	public static final int AIM_BUTTON = 2;
 	
 	public static final boolean OPTIC_SENSOR_VALUE = Robot.opticSensor.get();
 	
@@ -63,6 +66,7 @@ public class RobotMap {
 	public static final int BALL_CLEAR_STATE = 12;
 	public static final int CLOSE_FIRE_INIT_STATE = 14;
 	public static final int SHOOT_TIMER_STATE = 15;
+	public static final int FAR_FIRE_INIT_STATE = 16;
 	public static final int DEFAULT_STATE = INIT_STATE;
 	public static int currentState = DEFAULT_STATE;
 	
@@ -75,7 +79,7 @@ public class RobotMap {
 	public static final int MANUAL_COLLAPSE_ANGLE_STATE = 5;
 	public static final int MANUAL_BALL_CLEAR_STATE = 6;
 	public static final int MANUAL_DEFAULT_STATE = MANUAL_WAIT_FOR_BUTTON_STATE;
-	public static int manualState = DEFAULT_STATE;
+	public static int manualState = MANUAL_DEFAULT_STATE;
 	
 	//HOOD STATE MACHINE
 	public static final int HOOD_CLOSE_SHOT_STATE = 0;
@@ -105,7 +109,7 @@ public class RobotMap {
 	public static final double ACCEPTABLE_HOOD_RANGE = 5;
 	
 	public static final int FAR_ANGLE_VALUE = 1070;
-	public static final int CLOSE_ANGLE_VALUE = 1070;
+	public static final int CLOSE_ANGLE_VALUE = 1050;
 	public static final int COLLAPSE_ANGLE_VALUE = 0;
 	public static final int MAX_HOOD_POSITION = 0;
 	public static final int MIN_HOOD_POSITION = 0;
@@ -116,6 +120,8 @@ public class RobotMap {
 	public static final double BALL_WAIT_TIME = 200;
 	public static final int CLOSE_FIRE_SPEED = 7000;
 	public static final int FAR_FIRE_SPEED = 7000;
+	
+	public static final double AZIMUTH_RANGE = 5;
 	
 	public static final double DRIVE_AND_SHOOT_TURN_SPEED = 0;
 	

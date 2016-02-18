@@ -41,7 +41,9 @@ public class Robot extends IterativeRobot {
 	public static SendableChooser autonChooser;
 	public static PowerDistributionPanel pdp;
 	
-	public static double distance;
+	public static double distance; //get from network table
+	public static double azimuth; //get from network table
+	
 	public int isClose;
 	public static int ref = 0;
 	public static int lastRef = 100000;
@@ -173,7 +175,8 @@ public class Robot extends IterativeRobot {
 		canTalonFrontRight.setEncPosition(0);
 		
 		RobotMap.hoodState = RobotMap.HOOD_DEFAULT_STATE;
-		RobotMap.currentState = RobotMap.INIT_STATE;
+		RobotMap.currentState = RobotMap.DEFAULT_STATE;
+		RobotMap.manualState = RobotMap.MANUAL_DEFAULT_STATE;
 
 	}
 
@@ -184,11 +187,11 @@ public class Robot extends IterativeRobot {
 		boolean highGear = joyOp.getRawButton(RobotMap.LOW_GEAR_BUTTON);
 		boolean isIntaking = joyOp.getRawButton(RobotMap.INTAKE_BUTTON);
 		boolean isReverse = joyOp.getRawButton(RobotMap.REVERSE_BUTTON);
-		boolean isFarFire = joyOp.getRawButton(RobotMap.FIRE_BUTTON);
+		boolean isFarFire = joyOp.getRawButton(RobotMap.FAR_FIRE_BUTTON);
 		boolean isIntakeLower = joyOp.getRawButton(RobotMap.LOWER_INTAKE_BUTTON);
 		boolean isIntakeRise = joyOp.getRawButton(RobotMap.RISE_INTAKE_BUTTON);
 		boolean stopFlyWheel = joyOp.getRawButton(RobotMap.STOP_FLYWHEEL_BUTTON); //prob won't need this 
-		boolean isCloseFire = joyOp.getRawButton(RobotMap.CLOSE_ANGLE_BUTTON);
+		boolean isCloseFire = joyOp.getRawButton(RobotMap.CLOSE_FIRE_BUTTON);
 		boolean farAngle = joyOp.getRawButton(RobotMap.FAR_ANGLE_BUTTON);
 		boolean optic = opticSensor.get();
 		boolean limit1 = limitSwitch.get();
@@ -198,12 +201,21 @@ public class Robot extends IterativeRobot {
 		boolean isCollapse = joyOp.getRawButton(RobotMap.COLLAPSE_BUTTON);
 		boolean isLower = joyOp.getRawButton(RobotMap.LOWER_BUTTON);
 		boolean manualHood = joyOp.getRawButton(RobotMap.MANUAL_HOOD_BUTTON);
-		boolean closeAngle = joyOp.getRawButton(1);
-		boolean isFire = joyOp.getRawButton(2);
+		boolean closeAngle = joyOp.getRawButton(RobotMap.FIRE_BUTTON);
+		boolean isFire = joyOp.getRawButton(RobotMap.CLOSE_ANGLE_BUTTON);
+		boolean aim = joyThrottle.getRawButton(RobotMap.AIM_BUTTON);
 		TeleopStateMachine.stateMachine(optic, isCloseFire, isFarFire, isLower, 
 				isCollapse, isManual, isReturn, closeAngle, farAngle, isFire);
 		Shooter.hoodStateMachine();
 		//gear shifting code 
+		
+		if (aim){
+			DriveController.aim(.5);
+		}
+		else{
+			DriveController.stop();
+		}
+		
 		if (lowGear){
 			intakePiston.set(DoubleSolenoid.Value.kReverse);
 		}
@@ -261,8 +273,10 @@ public class Robot extends IterativeRobot {
 		}
 		
 		distance = table.getNumber("Distance", 0);
-		
 		System.out.println(distance);
+		
+		azimuth = table.getNumber("Azimuth", 400);
+		System.out.println(azimuth);
 	}
 		
 		
@@ -395,7 +409,7 @@ public class Robot extends IterativeRobot {
 			canTalonIntake.set(0);
 		}
 		
-	//	canTalonFlyWheel.set(((joyOp.getRawAxis(3)/2)+.5));
+		canTalonFlyWheel.set(((joyOp.getRawAxis(3)/2)+.5));
 		
 	//	System.out.println(pot.getValue());
 		
@@ -406,16 +420,16 @@ public class Robot extends IterativeRobot {
 			intakePiston.set(DoubleSolenoid.Value.kForward);
 		}
 //			
-		if(joyOp.getRawButton(4)){
-			Shooter.setPID(7000);
-			
-		}
-		else if (joyOp.getRawButton(6)){
-			Shooter.setPID(6500);
-		}
-		else if (joyOp.getRawButton(5)){
-			canTalonFlyWheel.disable();
-		}
+//		if(joyOp.getRawButton(4)){
+//			Shooter.setPID(7000);
+//			
+//		}
+//		else if (joyOp.getRawButton(6)){
+//			Shooter.setPID(6500);
+//		}
+//		else if (joyOp.getRawButton(5)){
+//			canTalonFlyWheel.disable();
+//		}
 	}
 
 }

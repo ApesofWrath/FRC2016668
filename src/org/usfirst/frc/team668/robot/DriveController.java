@@ -110,7 +110,6 @@ public class DriveController {
 	}
 	
 	public static void stop(){
-		
 		Robot.robotDrive.drive(0.0, 0.0);
 //		Robot.canTalonFrontLeft.set(0);
 //		Robot.canTalonFrontRight.set(0);
@@ -119,7 +118,6 @@ public class DriveController {
 		
 	}
 	public static void turnInPlace(double speed){
-		
 		Robot.canTalonFrontLeft.set(speed);
 		Robot.canTalonFrontRight.set(speed);
 		Robot.canTalonRearLeft.set(speed);
@@ -130,5 +128,19 @@ public class DriveController {
 		Robot.canTalonFrontRight.set(-speed);
 		Robot.canTalonRearLeft.set(speed);
 		Robot.canTalonRearRight.set(-speed);
+	}
+	public static void aim(double speed){
+		if ((Robot.azimuth > RobotMap.AZIMUTH_RANGE) && (Robot.azimuth < 360 - RobotMap.AZIMUTH_RANGE) 
+				&& (Robot.azimuth !=400)){
+			if (Robot.azimuth > 180){
+				drive(-speed);
+			}
+			else{
+				drive(speed);
+			}
+		}
+		else{
+			stop();
+		}
 	}
 }
