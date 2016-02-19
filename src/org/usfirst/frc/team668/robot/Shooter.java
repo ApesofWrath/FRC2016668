@@ -171,7 +171,7 @@ public class Shooter {
 	
 	}
 	
-	public static void hoodStateMachine(){
+	public static void hoodStateMachine(boolean manualHood){
 		
 		switch(RobotMap.hoodState){
 		
@@ -191,7 +191,17 @@ public class Shooter {
 		case RobotMap.HOOD_MANUAL_FAR_STATE:
 			movePotPID(RobotMap.FAR_ANGLE_VALUE);
 			break;
-	}
+		
+//		case RobotMap.HOOD_MANUAL_STATE:
+//			if (manualHood){
+//				Shooter.moveHood(-Robot.joyOp.getY());
+//			}
+//			else{
+//				Shooter.stopAngle();
+//			}
+
+		//	break;
+			}
 		
 		
 	}

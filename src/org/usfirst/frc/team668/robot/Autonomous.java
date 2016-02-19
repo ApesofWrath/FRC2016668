@@ -34,6 +34,11 @@ public class Autonomous {
 			DriveController.turnInPlace(RobotMap.DRIVE_AND_SHOOT_TURN_SPEED);
 		}
 		
+		while(r.isAutonomous() && r.isEnabled() && (Robot.azimuth > RobotMap.AZIMUTH_RANGE)
+				&& (Robot.azimuth < 360 - RobotMap.AZIMUTH_RANGE) && (Robot.azimuth !=400) ){
+			DriveController.aim(RobotMap.DRIVE_AND_SHOOT_TURN_SPEED);
+		}
+		
 		int ref = RobotMap.FAR_FIRE_SPEED;
 		Shooter.setPID(ref);
 		

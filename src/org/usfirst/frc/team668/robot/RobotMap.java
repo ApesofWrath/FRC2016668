@@ -29,21 +29,21 @@ public class RobotMap {
 	
 	
 	public static final int MINIMIZE_BUTTON = 3; // throttle
-	public static final int INTAKE_BUTTON = 2;
-	public static final int REVERSE_BUTTON = 3;
-	public static final int FIRE_BUTTON = 4;
-	public static final int FAR_FIRE_BUTTON = 4;
-	public static final int LOWER_INTAKE_BUTTON = 5;
-	public static final int RISE_INTAKE_BUTTON = 6;
-	public static final int STOP_FLYWHEEL_BUTTON = 7;
-	public static final int CLOSE_ANGLE_BUTTON = 8;
-	public static final int CLOSE_FIRE_BUTTON = 8;
-	public static final int FAR_ANGLE_BUTTON = 9;
+	public static final int INTAKE_BUTTON = 2; //4
+	public static final int REVERSE_BUTTON = 6; 
+	public static final int FIRE_BUTTON = 1; // manual
+	public static final int FAR_FIRE_BUTTON = 3;
+	public static final int LOWER_INTAKE_BUTTON = 7;
+	public static final int RISE_INTAKE_BUTTON = 8;
+	public static final int STOP_FLYWHEEL_BUTTON = 111; // not needed
+	public static final int CLOSE_ANGLE_BUTTON = 5; // manual
+	public static final int CLOSE_FIRE_BUTTON = 5;
+	public static final int FAR_ANGLE_BUTTON = 3; //manual
 	public static final int COLLAPSE_BUTTON = 10;
-	public static final int LOWER_BUTTON = 11;
+//	public static final int LOWER_BUTTON = 2;
 	public static final int MANUAL_BUTTON = 12;
-	public static final int MANUAL_HOOD_BUTTON = 12;
-	public static final int RETURN_BUTTON = 1;
+	public static final int MANUAL_HOOD_BUTTON = 9; //manuAL
+	public static final int RETURN_BUTTON = 11;
 	public static final int LOW_GEAR_BUTTON = 7; //throttle
 	public static final int HIGH_GEAR_BUTTON = 8; //throttle
 	public static final int AIM_BUTTON = 2;
@@ -108,8 +108,8 @@ public class RobotMap {
 	
 	public static final double ACCEPTABLE_HOOD_RANGE = 5;
 	
-	public static final int FAR_ANGLE_VALUE = 1070;
-	public static final int CLOSE_ANGLE_VALUE = 1050;
+	public static final int FAR_ANGLE_VALUE = 1000;
+	public static final int CLOSE_ANGLE_VALUE = 600;
 	public static final int COLLAPSE_ANGLE_VALUE = 0;
 	public static final int MAX_HOOD_POSITION = 0;
 	public static final int MIN_HOOD_POSITION = 0;

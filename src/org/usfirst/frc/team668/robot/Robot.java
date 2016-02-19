@@ -49,7 +49,7 @@ public class Robot extends IterativeRobot {
 	public static int lastRef = 100000;
 	public static boolean canIntake = true;
 	
-	public int target = 1070;
+	public int target = 950;
 
 	// public static USBCamera camFront = new USBCamera("cam1");
 	// public static USBCamera camRear = new USBCamera("cam2");
@@ -182,31 +182,34 @@ public class Robot extends IterativeRobot {
 
 	public void teleopPeriodic() {
 
-		boolean isMinimize = joyOp.getRawButton(RobotMap.MINIMIZE_BUTTON);
+		boolean isMinimize = joyThrottle.getRawButton(RobotMap.MINIMIZE_BUTTON);
 		boolean lowGear = joyOp.getRawButton(RobotMap.HIGH_GEAR_BUTTON);
 		boolean highGear = joyOp.getRawButton(RobotMap.LOW_GEAR_BUTTON);
 		boolean isIntaking = joyOp.getRawButton(RobotMap.INTAKE_BUTTON);
 		boolean isReverse = joyOp.getRawButton(RobotMap.REVERSE_BUTTON);
 		boolean isFarFire = joyOp.getRawButton(RobotMap.FAR_FIRE_BUTTON);
+		boolean isCloseFire = joyOp.getRawButton(RobotMap.CLOSE_FIRE_BUTTON);
 		boolean isIntakeLower = joyOp.getRawButton(RobotMap.LOWER_INTAKE_BUTTON);
 		boolean isIntakeRise = joyOp.getRawButton(RobotMap.RISE_INTAKE_BUTTON);
-		boolean stopFlyWheel = joyOp.getRawButton(RobotMap.STOP_FLYWHEEL_BUTTON); //prob won't need this 
-		boolean isCloseFire = joyOp.getRawButton(RobotMap.CLOSE_FIRE_BUTTON);
-		boolean farAngle = joyOp.getRawButton(RobotMap.FAR_ANGLE_BUTTON);
+		boolean stopFlyWheel = joyOp.getRawButton(RobotMap.STOP_FLYWHEEL_BUTTON); //we dont use this button
+		//boolean isLower = joyOp.getRawButton(RobotMap.LOWER_BUTTON);
+
+		
+		boolean isReturn = joyOp.getRawButton(RobotMap.RETURN_BUTTON);
 		boolean optic = opticSensor.get();
 		boolean limit1 = limitSwitch.get();
 		boolean limit2 = limitSwitchTwo.get();
-		boolean isReturn = joyOp.getRawButton(RobotMap.RETURN_BUTTON);
+		
+		boolean farAngle = joyOp.getRawButton(RobotMap.FAR_ANGLE_BUTTON);
 		boolean isManual = joyOp.getRawButton(RobotMap.MANUAL_BUTTON);
 		boolean isCollapse = joyOp.getRawButton(RobotMap.COLLAPSE_BUTTON);
-		boolean isLower = joyOp.getRawButton(RobotMap.LOWER_BUTTON);
 		boolean manualHood = joyOp.getRawButton(RobotMap.MANUAL_HOOD_BUTTON);
-		boolean closeAngle = joyOp.getRawButton(RobotMap.FIRE_BUTTON);
-		boolean isFire = joyOp.getRawButton(RobotMap.CLOSE_ANGLE_BUTTON);
+		boolean closeAngle = joyOp.getRawButton(RobotMap.CLOSE_ANGLE_BUTTON);
+		boolean isFire = joyOp.getRawButton(RobotMap.FIRE_BUTTON);
 		boolean aim = joyThrottle.getRawButton(RobotMap.AIM_BUTTON);
-		TeleopStateMachine.stateMachine(optic, isCloseFire, isFarFire, isLower, 
-				isCollapse, isManual, isReturn, closeAngle, farAngle, isFire);
-		Shooter.hoodStateMachine();
+		TeleopStateMachine.stateMachine(optic, isCloseFire, isFarFire, isIntakeLower, 
+				isCollapse, isManual, isReturn, closeAngle, farAngle, isFire, isReverse);
+		Shooter.hoodStateMachine(manualHood);
 		//gear shifting code 
 		
 		if (aim){
@@ -234,13 +237,15 @@ public class Robot extends IterativeRobot {
 		//System.out.println(RobotMap.currentState);
 		
 		
+		
+		
 		//controls the state of the intake pistons 
 		if (isIntakeLower){
-			intakePiston.set(DoubleSolenoid.Value.kForward);
+			intakePiston.set(DoubleSolenoid.Value.kReverse);
 			SmartDashboard.putBoolean("Intake Postion ", true);
 		}
 		if (isIntakeRise){
-			intakePiston.set(DoubleSolenoid.Value.kReverse);
+			intakePiston.set(DoubleSolenoid.Value.kForward);
 			SmartDashboard.putBoolean("Intake Position: ", false);
 		}
 
@@ -263,14 +268,7 @@ public class Robot extends IterativeRobot {
 		
 		//System.out.println(pot.getValue());
 		
-		if (RobotMap.currentState == RobotMap.MANUAL_OVERRIDE_STATE){
-			if (manualHood){
-				Shooter.moveHood(-joyOp.getY());
-			}
-			else{
-				Shooter.stopAngle();
-			}
-		}
+	
 		
 		distance = table.getNumber("Distance", 0);
 		System.out.println(distance);
@@ -363,11 +361,11 @@ public class Robot extends IterativeRobot {
 //		System.out.println(pdp.getCurrent(3));
 		
 		System.out.print( "RPM: " + canTalonFlyWheel.getSpeed());
-		System.out.println(" OUTPUT: " + canTalonFlyWheel.getOutputVoltage());
+		//System.out.print(" OUTPUT: " + canTalonFlyWheel.getOutputVoltage());
 	//	System.out.println(" SPEED: " + Shooter.speed);
 		//System.out.print(" Error: " + Shooter.error);
-		//System.out.print(" ANGLE: " + pot.getValue());
-		//System.out.println(" Target: " + target);
+		System.out.print(" ANGLE: " + pot.getValue());
+		System.out.print(" Target: " + target);
 		
 		
 		if (joyOp.getRawButton(8)){
@@ -379,7 +377,7 @@ public class Robot extends IterativeRobot {
 			target = target -2;
 		}
 		else{
-			canTalonShooterAngle.set(0);
+			//canTalonShooterAngle.set(0);
 		}
 		if (joyOp.getRawButton(11)){
 			Shooter.movePotPID(target);
@@ -400,16 +398,16 @@ public class Robot extends IterativeRobot {
 		
 		
 		if ( joyOp.getRawButton(2)){
-			canTalonIntake.set(.7);
+			canTalonIntake.set(1);
 		}
 		else if (joyOp.getRawButton(3)){
-			canTalonIntake.set(-.7);
+			canTalonIntake.set(-1);
 		}
 		else{
 			canTalonIntake.set(0);
 		}
 		
-		canTalonFlyWheel.set(((joyOp.getRawAxis(3)/2)+.5));
+		//canTalonFlyWheel.set(((joyOp.getRawAxis(3)/2)+.5));
 		
 	//	System.out.println(pot.getValue());
 		
@@ -419,17 +417,22 @@ public class Robot extends IterativeRobot {
 		else if (joyOp.getRawButton(10)){
 			intakePiston.set(DoubleSolenoid.Value.kForward);
 		}
-//			
-//		if(joyOp.getRawButton(4)){
-//			Shooter.setPID(7000);
-//			
-//		}
-//		else if (joyOp.getRawButton(6)){
-//			Shooter.setPID(6500);
-//		}
-//		else if (joyOp.getRawButton(5)){
-//			canTalonFlyWheel.disable();
-//		}
+		
+		distance = table.getNumber("Distance" , 0);
+		System.out.print(" Distance: " + distance);
+			
+		azimuth = table.getNumber("Azimuth", 0);
+		System.out.println(" AZIMUTH: " + azimuth);
+		if(joyOp.getRawButton(4)){
+			Shooter.setPID(7000);
+			
+		}
+		else if (joyOp.getRawButton(6)){
+			Shooter.setPID(6500);
+		}
+		else if (joyOp.getRawButton(5)){
+			canTalonFlyWheel.disable();
+		}
 	}
 
 }
