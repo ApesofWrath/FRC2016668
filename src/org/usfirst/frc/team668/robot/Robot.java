@@ -49,7 +49,7 @@ public class Robot extends IterativeRobot {
 	public static int lastRef = 100000;
 	public static boolean canIntake = true;
 	
-	public int target = 950;
+	public int target = 3210;
 
 	public static boolean isTestRobot = false;
 	// public static USBCamera camFront = new USBCamera("cam1");
@@ -126,6 +126,14 @@ public class Robot extends IterativeRobot {
 //		canTalonFlyWheel.setP(0);
 //		canTalonFlyWheel.setI(0);
 //		canTalonFlyWheel.setD(0);
+		
+		
+		if (isTestRobot){
+			target = 950;
+		}
+		else{
+			target = 3210;
+		}
 
 	}
 
@@ -362,9 +370,9 @@ public class Robot extends IterativeRobot {
 //		System.out.println(pdp.getCurrent(3));
 		
 		System.out.print( "RPM: " + canTalonFlyWheel.getSpeed());
-		//System.out.print(" OUTPUT: " + canTalonFlyWheel.getOutputVoltage());
-	//	System.out.println(" SPEED: " + Shooter.speed);
-		//System.out.print(" Error: " + Shooter.error);
+		System.out.print(" OUTPUT: " + canTalonFlyWheel.getOutputVoltage());
+		System.out.println(" SPEED: " + Shooter.speed);
+		System.out.print(" Error: " + Shooter.error);
 		System.out.print(" ANGLE: " + pot.getValue());
 		System.out.print(" Target: " + target);
 		
@@ -420,19 +428,19 @@ public class Robot extends IterativeRobot {
 		
 	//	System.out.println(pot.getValue());
 		
-//		if (joyThrottle.getRawButton(3)){
-//			shiftPiston.set(DoubleSolenoid.Value.kReverse);
-//		}
-//		else if (joyThrottle.getRawButton(2)){
-//			shiftPiston.set(DoubleSolenoid.Value.kForward);
-//		}
-//		
-//		if (joyOp.getRawButton(9)){
-//			intakePiston.set(DoubleSolenoid.Value.kReverse);
-//		}
-//		else if (joyOp.getRawButton(10)){
-//			intakePiston.set(DoubleSolenoid.Value.kForward);
-//		}
+		if (joyThrottle.getRawButton(3)){
+			shiftPiston.set(DoubleSolenoid.Value.kReverse);
+		}
+		else if (joyThrottle.getRawButton(2)){
+			shiftPiston.set(DoubleSolenoid.Value.kForward);
+		}
+		
+		if (joyOp.getRawButton(9)){
+			intakePiston.set(DoubleSolenoid.Value.kReverse);
+		}
+		else if (joyOp.getRawButton(10)){
+			intakePiston.set(DoubleSolenoid.Value.kForward);
+		}
 		
 		
 		distance = table.getNumber("Distance" , 0);

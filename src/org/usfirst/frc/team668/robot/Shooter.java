@@ -53,9 +53,9 @@ public class Shooter {
 			Kp = .003;
 		}
 		else {
-			Ki = 0;
+			Ki = 0.0003;
 			Kd = 0;
-			Kp = 0;
+			Kp = 0.015;
 		}
 		error = ref - Robot.pot.getValue();
 		
