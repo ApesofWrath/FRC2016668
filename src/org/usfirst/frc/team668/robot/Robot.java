@@ -51,6 +51,7 @@ public class Robot extends IterativeRobot {
 	
 	public int target = 950;
 
+	public static boolean isTestRobot = false;
 	// public static USBCamera camFront = new USBCamera("cam1");
 	// public static USBCamera camRear = new USBCamera("cam2");
 	public void robotInit() {
@@ -208,16 +209,16 @@ public class Robot extends IterativeRobot {
 		boolean isFire = joyOp.getRawButton(RobotMap.FIRE_BUTTON);
 		boolean aim = joyThrottle.getRawButton(RobotMap.AIM_BUTTON);
 		TeleopStateMachine.stateMachine(optic, isCloseFire, isFarFire, isIntakeLower, 
-				isCollapse, isManual, isReturn, closeAngle, farAngle, isFire, isReverse);
+				isCollapse, isManual, isReturn, closeAngle, farAngle, isFire, isReverse, manualHood);
 		Shooter.hoodStateMachine(manualHood);
 		//gear shifting code 
 		
-		if (aim){
-			DriveController.aim(.5);
+		if ( Math.abs(joyThrottle.getY()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE 
+				&& Math.abs(joyWheel.getX()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE && aim){
+			DriveController.aim(-.38);
 		}
-		else{
-			DriveController.stop();
-		}
+		
+		System.out.println("AZIMUTH: " + azimuth);
 		
 		if (lowGear){
 			intakePiston.set(DoubleSolenoid.Value.kReverse);
@@ -246,7 +247,7 @@ public class Robot extends IterativeRobot {
 		}
 		if (isIntakeRise){
 			intakePiston.set(DoubleSolenoid.Value.kForward);
-			SmartDashboard.putBoolean("Intake Position: ", false);
+			SmartDashboard.putBoolean("Intake Position ", false);
 		}
 
 		
@@ -368,6 +369,13 @@ public class Robot extends IterativeRobot {
 		System.out.print(" Target: " + target);
 		
 		
+		if ( Math.abs(joyThrottle.getY()) < .2 && Math.abs(joyWheel.getX()) < .2 && joyThrottle.getRawButton(2)){
+			DriveController.aim(-.18);
+		}
+//		else if (){
+//			DriveController.stop();
+//		}
+		
 		if (joyOp.getRawButton(8)){
 			//canTalonShooterAngle.set(.3);
 			target = target + 2;
@@ -379,6 +387,7 @@ public class Robot extends IterativeRobot {
 		else{
 			//canTalonShooterAngle.set(0);
 		}
+		
 		if (joyOp.getRawButton(11)){
 			Shooter.movePotPID(target);
 			
@@ -411,12 +420,20 @@ public class Robot extends IterativeRobot {
 		
 	//	System.out.println(pot.getValue());
 		
-		if (joyOp.getRawButton(9)){
-			intakePiston.set(DoubleSolenoid.Value.kReverse);
-		}
-		else if (joyOp.getRawButton(10)){
-			intakePiston.set(DoubleSolenoid.Value.kForward);
-		}
+//		if (joyThrottle.getRawButton(3)){
+//			shiftPiston.set(DoubleSolenoid.Value.kReverse);
+//		}
+//		else if (joyThrottle.getRawButton(2)){
+//			shiftPiston.set(DoubleSolenoid.Value.kForward);
+//		}
+//		
+//		if (joyOp.getRawButton(9)){
+//			intakePiston.set(DoubleSolenoid.Value.kReverse);
+//		}
+//		else if (joyOp.getRawButton(10)){
+//			intakePiston.set(DoubleSolenoid.Value.kForward);
+//		}
+		
 		
 		distance = table.getNumber("Distance" , 0);
 		System.out.print(" Distance: " + distance);

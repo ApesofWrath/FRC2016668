@@ -47,6 +47,16 @@ public class Shooter {
 	
 	public static void movePotPID(int ref){
 		
+		if (Robot.isTestRobot){
+			Ki = 0.0000007;//38
+			Kd = 0.000;//8
+			Kp = .003;
+		}
+		else {
+			Ki = 0;
+			Kd = 0;
+			Kp = 0;
+		}
 		error = ref - Robot.pot.getValue();
 		
 		currentTime = ((double)System.currentTimeMillis())/1000.0;
@@ -89,7 +99,7 @@ public class Shooter {
 //				}
 //			}
 //		}
-		Robot.canTalonShooterAngle.set(speed);
+		Robot.canTalonShooterAngle.set(-speed);
 	//	Robot.canTalonShooterAngleTwo.set(-speed);
 		
 		lastError = error;
@@ -192,15 +202,15 @@ public class Shooter {
 			movePotPID(RobotMap.FAR_ANGLE_VALUE);
 			break;
 		
-//		case RobotMap.HOOD_MANUAL_STATE:
-//			if (manualHood){
-//				Shooter.moveHood(-Robot.joyOp.getY());
-//			}
-//			else{
-//				Shooter.stopAngle();
-//			}
+		case RobotMap.HOOD_MANUAL_STATE:
+			if (manualHood){
+				Shooter.moveHood(-Robot.joyOp.getY()/3);
+			}
+			else{
+				Shooter.stopAngle();
+			}
 
-		//	break;
+			break;
 			}
 		
 		

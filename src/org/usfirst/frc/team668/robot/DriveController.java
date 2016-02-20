@@ -6,9 +6,9 @@ public class DriveController {
 	public static long currentTimeRight = 0;
 	public static long lastTimeRight = System.currentTimeMillis();
 	public static double lastErrorRight = 0;
-	public static double Kir = 1;
-	public static double Kdr = 1;
-	public static double Kpr = 1;
+	public static double Kir;
+	public static double Kdr;
+	public static double Kpr;
 	public static double iR = 0;
 	public static double dR = 0;
 	public static double Pr, Ir, Dr;
@@ -18,9 +18,9 @@ public class DriveController {
 	public static long currentTimeLeft = 0;
 	public static long lastTimeLeft = System.currentTimeMillis();
 	public static double lastErrorLeft = 0;
-	public static double Kil = 1;
-	public static double Kdl = 1;
-	public static double Kpl = 1;
+	public static double Kil;
+	public static double Kdl;
+	public static double Kpl;
 	public static double iL = 0;
 	public static double dL = 0;
 	public static double Pl, Il, Dl;
@@ -28,6 +28,16 @@ public class DriveController {
 
 	public static boolean rightPID(int ref){
 		
+		if (Robot.isTestRobot){
+			Kil = 1;
+			Kdl = 1;
+			Kpl = 1;
+		}
+		else{
+			Kil = 1;
+			Kdl = 1;
+			Kpl = 1;
+		}
 		errorRight= ref - Robot.canTalonRearRight.getEncPosition();
 		
 		currentTimeRight = System.currentTimeMillis();
@@ -69,6 +79,17 @@ public class DriveController {
 		
 	}
 	public static boolean leftPID(int ref){
+		
+		if (Robot.isTestRobot){
+			Kir = 1;
+			Kdr = 1;
+			Kpr = 1;
+		}
+		else{
+			Kir = 1;
+			Kdr = 1;
+			Kpr = 1;
+		}
 		
 		errorLeft= ref - Robot.canTalonRearLeft.getEncPosition();
 		
@@ -118,6 +139,7 @@ public class DriveController {
 		
 	}
 	public static void turnInPlace(double speed){
+		//System.out.println("HERE");
 		Robot.canTalonFrontLeft.set(speed);
 		Robot.canTalonFrontRight.set(speed);
 		Robot.canTalonRearLeft.set(speed);
@@ -130,13 +152,15 @@ public class DriveController {
 		Robot.canTalonRearRight.set(-speed);
 	}
 	public static void aim(double speed){
-		if ((Robot.azimuth > RobotMap.AZIMUTH_RANGE) && (Robot.azimuth < 360 - RobotMap.AZIMUTH_RANGE) 
+		if ((Robot.azimuth > RobotMap.AZIMUTH_RANGE) && (Robot.azimuth < (360 - RobotMap.AZIMUTH_RANGE)) 
 				&& (Robot.azimuth !=400)){
 			if (Robot.azimuth > 180){
-				drive(-speed);
+				turnInPlace(-speed);
+				System.out.println("HERE");
 			}
 			else{
-				drive(speed);
+				turnInPlace(speed);
+				System.out.println("HERE");
 			}
 		}
 		else{

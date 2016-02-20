@@ -12,7 +12,8 @@ public class TeleopStateMachine {
 	
 	public static void stateMachine(boolean optic, boolean isCloseFire, 
 			boolean isFarFire, boolean isIntakeLower, boolean isCollapse, boolean isManual,
-			boolean isReturn, boolean farAngle, boolean closeAngle, boolean isFire, boolean isReverse){
+			boolean isReturn, boolean farAngle, boolean closeAngle, boolean isFire, 
+			boolean isReverse, boolean manualHood ){
 			
 		boolean isClose = false;
 		boolean isFar = false;
@@ -43,7 +44,7 @@ public class TeleopStateMachine {
 			
 			//System.out.println("Here");
 			SmartDashboard.putString("State: ", "Init State");
-			System.out.println("Init State");
+			//System.out.println("Init State");
 			canReverse = true;																																																																																																																																																																																																			
 			Shooter.stopAngle();
 			Shooter.stopFlyWheel();																																																																																																																																																																																																																																			
@@ -129,13 +130,13 @@ public class TeleopStateMachine {
 		case RobotMap.INIT_FIRE_STATE:
 			SmartDashboard.putString("State: ", "Init Fire State");	
 			canReverse = false;
-			if (isFar == true && Vision.isShotPossible()){
-				RobotMap.currentState = RobotMap.SET_FAR_PID_STATE; // begins the far firing sequence
-			}
+//			if (isFar == true && Vision.isShotPossible()){
+	//			RobotMap.currentState = RobotMap.SET_FAR_PID_STATE; // begins the far firing sequence
+		//	}
 
-			else {
+			//else {
 				RobotMap.currentState = RobotMap.CLOSE_ANGLE_STATE; // begins the close firing sequence
-			}
+			//}
 
 //			else {
 //				RobotMap.currentState = RobotMap.WAIT_FOR_BUTTON_STATE;
@@ -202,7 +203,7 @@ public class TeleopStateMachine {
 				
 		case RobotMap.SHOOT_TIMER_STATE:
 			SmartDashboard.putString("State: ", "Shoot Timer State");
-			if (System.currentTimeMillis() - shootTime  >= 5000){
+			if (System.currentTimeMillis() - shootTime  >= 100){
 				if (isFar){
 					RobotMap.currentState = RobotMap.FAR_FIRE_STATE;
 				}
@@ -318,6 +319,9 @@ public class TeleopStateMachine {
 					isClose = true;
 					RobotMap.manualState = RobotMap.MANUAL_FIRE_STATE;
 				}
+				else if (manualHood){
+					RobotMap.manualState = RobotMap.MANUAL_CONTROLL_HOOD_ANGLE_STATE;
+				}
 				
 				break;
 				
@@ -372,6 +376,15 @@ public class TeleopStateMachine {
 				RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
 				break;
 				
+			case RobotMap.MANUAL_CONTROLL_HOOD_ANGLE_STATE:
+				if (manualHood){
+					RobotMap.hoodState = RobotMap.HOOD_MANUAL_STATE;
+				}
+				else {
+					RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
+					RobotMap.manualState = RobotMap.MANUAL_WAIT_FOR_BUTTON_STATE;
+				}
+				break;
 			} //end of manual switch
 			
 			}
