@@ -47,15 +47,15 @@ public class Shooter {
 	
 	public static void movePotPID(int ref){
 		
-		if (Robot.isTestRobot){
+		if (Robot.isBrightEyes){
 			Ki = 0.0000007;//38
 			Kd = 0.000;//8
 			Kp = .003;
 		}
 		else {
-			Ki = 0.0003;
-			Kd = 0;
-			Kp = 0.015;
+			Ki = 0.0002;
+			Kd = 0.0003;
+			Kp = 0.009;
 		}
 		error = ref - Robot.pot.getValue();
 		
@@ -70,10 +70,20 @@ public class Shooter {
 		D = Kd * d;
 		
 		if (error < 0){
-			F = -.15; // make sure you know that F is not in VOlts!
+			if (Robot.isBrightEyes){
+				F = -.15; // make sure you know that F is not in VOlts
+			}
+			else{
+				F = 0;
+			}
 		}
 		else if (error >= 0){
-			F = -.05;
+			if (Robot.isBrightEyes){
+				F = -.05;
+			}
+			else{
+				F = .05;
+			}
 		}
 		 
 		speed = P + I + D + F;
@@ -196,6 +206,11 @@ public class Shooter {
 		
 		case RobotMap.HOOD_ZERO_STATE:
 			Robot.canTalonShooterAngle.set(0);
+			i = 0.0;
+			d = 0.0;
+			I = 0.0;
+			D = 0.0;
+			lastError = 3190 - Robot.pot.getValue(); //TODO: make a constant
 			break;
 		
 		case RobotMap.HOOD_MANUAL_FAR_STATE:

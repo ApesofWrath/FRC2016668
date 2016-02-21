@@ -51,14 +51,14 @@ public class Robot extends IterativeRobot {
 	
 	public int target = 3210;
 
-	public static boolean isTestRobot = false;
+	public static boolean isBrightEyes = false;
 	// public static USBCamera camFront = new USBCamera("cam1");
 	// public static USBCamera camRear = new USBCamera("cam2");
 	public void robotInit() {
 
-//		server = CameraServer.getInstance();
-//		server.setQuality(50);
-//		server.startAutomaticCapture("cam2");
+		server = CameraServer.getInstance();
+		server.setQuality(50);
+		server.startAutomaticCapture("cam0");
 		//     	 camFront.openCamera();
 		//     	 camRear.openCamera();
 		
@@ -128,7 +128,7 @@ public class Robot extends IterativeRobot {
 //		canTalonFlyWheel.setD(0);
 		
 		
-		if (isTestRobot){
+		if (isBrightEyes){
 			target = 950;
 		}
 		else{
@@ -221,12 +221,12 @@ public class Robot extends IterativeRobot {
 		Shooter.hoodStateMachine(manualHood);
 		//gear shifting code 
 		
-		if ( Math.abs(joyThrottle.getY()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE 
-				&& Math.abs(joyWheel.getX()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE && aim){
-			DriveController.aim(-.38);
+		if ((Math.abs(joyThrottle.getY()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE 
+				|| Math.abs(joyWheel.getX()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE) && aim){
+			DriveController.aim(-.13);
 		}
 		
-		System.out.println("AZIMUTH: " + azimuth);
+		//System.out.println("AZIMUTH: " + azimuth);
 		
 		if (lowGear){
 			intakePiston.set(DoubleSolenoid.Value.kReverse);
@@ -236,11 +236,14 @@ public class Robot extends IterativeRobot {
 		}
 		
 		//Drive Code
-		if (isMinimize){
-			robotDrive.arcadeDrive(joyThrottle.getY()*.6, joyWheel.getX()* .6);
-		}
-		else{
-			robotDrive.arcadeDrive(joyThrottle.getY(), joyWheel.getX());
+		if ((Math.abs(joyThrottle.getY()) > .2 || Math.abs(joyWheel.getX()) > .2) 
+				&& !joyThrottle.getRawButton(2)){
+			if (isMinimize){
+				robotDrive.arcadeDrive(joyThrottle.getY()*.6, joyWheel.getX()* .6);
+			}
+			else{
+				robotDrive.arcadeDrive(joyThrottle.getY(), joyWheel.getX());
+			}
 		}
 
 		//System.out.println(RobotMap.currentState);
@@ -280,10 +283,10 @@ public class Robot extends IterativeRobot {
 	
 		
 		distance = table.getNumber("Distance", 0);
-		System.out.println(distance);
+		//System.out.println(distance);
 		
 		azimuth = table.getNumber("Azimuth", 400);
-		System.out.println(azimuth);
+		//System.out.println(azimuth);
 	}
 		
 		
@@ -362,23 +365,29 @@ public class Robot extends IterativeRobot {
 		
 		compressor.setClosedLoopControl(true);
 		
-		robotDrive.arcadeDrive(joyThrottle.getY(), joyWheel.getX());
+		if((Math.abs(joyThrottle.getY()) > .2 || Math.abs(joyWheel.getX()) > .2) 
+				&& !joyThrottle.getRawButton(2) && !joyThrottle.getRawButton(1)){
+			robotDrive.arcadeDrive(joyThrottle.getY(), joyWheel.getX());
+		}
+		
+//		robotDrive.arcadeDrive(joyThrottle.getY(), joyWheel.getX());
+
 //		
 //		System.out.println(pdp.getCurrent(0));
 //		System.out.println(pdp.getCurrent(1));
 //		System.out.println(pdp.getCurrent(2));
 //		System.out.println(pdp.getCurrent(3));
 		
-		System.out.print( "RPM: " + canTalonFlyWheel.getSpeed());
-		System.out.print(" OUTPUT: " + canTalonFlyWheel.getOutputVoltage());
-		System.out.println(" SPEED: " + Shooter.speed);
-		System.out.print(" Error: " + Shooter.error);
-		System.out.print(" ANGLE: " + pot.getValue());
-		System.out.print(" Target: " + target);
+		SmartDashboard.putNumber("RPM: ", canTalonFlyWheel.getSpeed());
+//		System.out.print(" OUTPUT: " + canTalonFlyWheel.getOutputVoltage());
+//		/System.out.print(" SPEED: " + Shooter.speed);
+		//System.out.print(" Error: " + Shooter.error);
+		SmartDashboard.putNumber("ANGLE: ", pot.getValue());
+		SmartDashboard.putNumber("Target: ", target);
 		
 		
-		if ( Math.abs(joyThrottle.getY()) < .2 && Math.abs(joyWheel.getX()) < .2 && joyThrottle.getRawButton(2)){
-			DriveController.aim(-.18);
+		if ( Math.abs(joyThrottle.getY()) < .1 && Math.abs(joyWheel.getX()) < .1 && joyThrottle.getRawButton(7)){
+			DriveController.aim(-.13);
 		}
 //		else if (){
 //			DriveController.stop();
@@ -392,24 +401,29 @@ public class Robot extends IterativeRobot {
 			//canTalonShooterAngle.set(-.3);
 			target = target -2;
 		}
-		else{
-			//canTalonShooterAngle.set(0);
-		}
+//		else{
+//			//canTalonShooterAngle.set(0);
+//		}
 		
 		if (joyOp.getRawButton(11)){
 			Shooter.movePotPID(target);
 			
 		}
-		else if(joyOp.getRawButton(12)){
-			Shooter.moveHoodBang(target);
-		}
+//		else if(joyOp.getRawButton(12)){
+//			Shooter.moveHoodBang(target);
+//		}
 		else{
 			canTalonShooterAngle.set(0);
+			
 		}
 		
 		
 		if (!joyOp.getRawButton(11)){
 			Shooter.i = 0.0;
+			Shooter.d = 0.0; 
+			Shooter.I = 0.0;
+			Shooter.D = 0.0; 
+			Shooter.lastError = target - pot.getValue();
 		}
 		
 		
@@ -444,10 +458,19 @@ public class Robot extends IterativeRobot {
 		
 		
 		distance = table.getNumber("Distance" , 0);
-		System.out.print(" Distance: " + distance);
+		SmartDashboard.putNumber("Distance: ", distance);
 			
-		azimuth = table.getNumber("Azimuth", 0);
-		System.out.println(" AZIMUTH: " + azimuth);
+		azimuth = table.getNumber("Azimuth", 400);
+		SmartDashboard.putNumber("AZIMUTH: ", azimuth);
+		
+//		SmartDashboard.putNumber("P", Shooter.P);
+//		SmartDashboard.putNumber("I", Shooter.I);
+//		SmartDashboard.putNumber("D", Shooter.D);
+		
+		System.out.printf("P: %2.2f I: %2.2f D: %2.2f Speed: %2.2f Target: %2.2f Angle: %2.2f\n" 
+				, Shooter.P, Shooter.I, Shooter.D, Shooter.speed, (double)target, (double)pot.getValue());
+		
+		
 		if(joyOp.getRawButton(4)){
 			Shooter.setPID(7000);
 			

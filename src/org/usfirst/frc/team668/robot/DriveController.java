@@ -28,7 +28,7 @@ public class DriveController {
 
 	public static boolean rightPID(int ref){
 		
-		if (Robot.isTestRobot){
+		if (Robot.isBrightEyes){
 			Kil = 1;
 			Kdl = 1;
 			Kpl = 1;
@@ -80,7 +80,7 @@ public class DriveController {
 	}
 	public static boolean leftPID(int ref){
 		
-		if (Robot.isTestRobot){
+		if (Robot.isBrightEyes){
 			Kir = 1;
 			Kdr = 1;
 			Kpr = 1;
