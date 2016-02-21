@@ -33,11 +33,17 @@ public class TeleopStateMachine {
 			Shooter.stopFlyWheel();
 			RobotMap.currentState = RobotMap.MANUAL_OVERRIDE_STATE;
 		}
-		System.out.println("pot: "+ Robot.pot.getValue());
+//		
+//		if (Robot.pot.getValue() > 3225){
+//			System.out.println("pot: "+ Robot.pot.getValue());
+//		}
+		
 		//System.out.print(" TARGET: " + RobotMap.CLOSE_ANGLE_VALUE);
 		//System.out.print(" POWER: " + Robot.canTalonFlyWheel.getOutputVoltage());
 		//System.out.println(" VAL: " + Robot.canTalonFlyWheel.get());
-		//System.out.println( " RPM: " + Robot.canTalonFlyWheel.getSpeed());
+		System.out.print( " RPM: " + Robot.canTalonFlyWheel.getSpeed());
+		System.out.println(" POT: " + Robot.pot.getValue());
+		
 		//teleop state machine 
 		switch (RobotMap.currentState){
 
@@ -104,7 +110,7 @@ public class TeleopStateMachine {
 			SmartDashboard.putString("State: ", "Lower Intake State");
 			
 			SmartDashboard.putBoolean("Intake Position ", true);
-			Robot.intakePiston.set(DoubleSolenoid.Value.kReverse);
+		
 			
 			if (optic && !isReverse){ //runs until one of the sensors are false. Inverted for that reason
 				Intake.spin(.8);
@@ -131,7 +137,7 @@ public class TeleopStateMachine {
 		case RobotMap.INIT_FIRE_STATE:
 			SmartDashboard.putString("State: ", "Init Fire State");	
 			canReverse = false;
-			
+			Robot.intakePiston.set(DoubleSolenoid.Value.kForward);
 			if (isFar == true && Vision.isShotPossible()){
 				RobotMap.currentState = RobotMap.SET_FAR_PID_STATE; // begins the far firing sequence
 			}
@@ -181,6 +187,7 @@ public class TeleopStateMachine {
 			if (System.currentTimeMillis() - time  >= RobotMap.BALL_WAIT_TIME){//waits for the ball to be out of the firing area before slowing the motor down
 				Intake.stop();
 				//Robot.canTalonFlyWheel.disable(); //TODO:Check if this line will hurt the code (i think so)
+				Robot.canTalonFlyWheel.clearIAccum();
 				RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
 				RobotMap.currentState = RobotMap.SET_CLOSE_PID_STATE;
 			}
@@ -207,7 +214,7 @@ public class TeleopStateMachine {
 			
 		case RobotMap.SHOOT_TIMER_STATE:
 			SmartDashboard.putString("State: ", "Shoot Timer State");
-			if (System.currentTimeMillis() - shootTime  >= 100){
+			if (System.currentTimeMillis() - shootTime  >= 300){
 				if (isFar){
 					RobotMap.currentState = RobotMap.FAR_FIRE_STATE;
 				}

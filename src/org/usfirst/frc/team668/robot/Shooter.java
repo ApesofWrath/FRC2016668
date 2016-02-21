@@ -201,7 +201,12 @@ public class Shooter {
 		
 		case RobotMap.HOOD_GET_STATE:
 			angle = Vision.getAngle();
-			movePotPID(angle);	
+			RobotMap.hoodState = RobotMap.HOOD_SET_FAR_ANGLE_STATE;
+			break;
+			
+		case RobotMap.HOOD_SET_FAR_ANGLE_STATE:
+			System.out.println("ANGLE: " + angle);
+			movePotPID(angle);
 			break;
 		
 		case RobotMap.HOOD_ZERO_STATE:
@@ -210,7 +215,7 @@ public class Shooter {
 			d = 0.0;
 			I = 0.0;
 			D = 0.0;
-			lastError = 3190 - Robot.pot.getValue(); //TODO: make a constant
+			lastError = 0; //TODO: make a constant
 			break;
 		
 		case RobotMap.HOOD_MANUAL_FAR_STATE:

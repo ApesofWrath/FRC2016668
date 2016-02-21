@@ -222,8 +222,8 @@ public class Robot extends IterativeRobot {
 		//gear shifting code 
 		
 		if ((Math.abs(joyThrottle.getY()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE 
-				|| Math.abs(joyWheel.getX()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE) && aim){
-			DriveController.aim(-.13);
+				&& Math.abs(joyWheel.getX()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE) && aim){
+			DriveController.aim(-.15);
 		}
 		
 		//System.out.println("AZIMUTH: " + azimuth);
@@ -359,6 +359,11 @@ public class Robot extends IterativeRobot {
 	
 	public void testInit(){
 		//canTalonFlyWheel.setEncPosition(0);
+		Shooter.i = 0.0;
+		Shooter.d = 0.0;
+		Shooter.I = 0.0;
+		Shooter.D = 0.0;
+		Shooter.lastError = 0; //TODO: make a constant
 	}
 	public void testPeriodic() {
 		//System.out.println("hello");
@@ -378,12 +383,13 @@ public class Robot extends IterativeRobot {
 //		System.out.println(pdp.getCurrent(2));
 //		System.out.println(pdp.getCurrent(3));
 		
-		SmartDashboard.putNumber("RPM: ", canTalonFlyWheel.getSpeed());
-//		System.out.print(" OUTPUT: " + canTalonFlyWheel.getOutputVoltage());
-//		/System.out.print(" SPEED: " + Shooter.speed);
-		//System.out.print(" Error: " + Shooter.error);
-		SmartDashboard.putNumber("ANGLE: ", pot.getValue());
-		SmartDashboard.putNumber("Target: ", target);
+		//SmartDashboard.putNumber("RPM: ", canTalonFlyWheel.getSpeed());
+		System.out.print("RPM: " + canTalonFlyWheel.getSpeed());
+		System.out.print(" OUTPUT: " + canTalonFlyWheel.getOutputVoltage());
+		System.out.print(" SPEED: " + Shooter.speed);
+		System.out.println(" Error: " + Shooter.error);
+	//	SmartDashboard.putNumber("ANGLE: ", pot.getValue());
+	//	SmartDashboard.putNumber("Target: ", target);
 		
 		
 		if ( Math.abs(joyThrottle.getY()) < .1 && Math.abs(joyWheel.getX()) < .1 && joyThrottle.getRawButton(7)){
@@ -423,7 +429,7 @@ public class Robot extends IterativeRobot {
 			Shooter.d = 0.0; 
 			Shooter.I = 0.0;
 			Shooter.D = 0.0; 
-			Shooter.lastError = target - pot.getValue();
+			Shooter.lastError = 0;
 		}
 		
 		
@@ -467,8 +473,8 @@ public class Robot extends IterativeRobot {
 //		SmartDashboard.putNumber("I", Shooter.I);
 //		SmartDashboard.putNumber("D", Shooter.D);
 		
-		System.out.printf("P: %2.2f I: %2.2f D: %2.2f Speed: %2.2f Target: %2.2f Angle: %2.2f\n" 
-				, Shooter.P, Shooter.I, Shooter.D, Shooter.speed, (double)target, (double)pot.getValue());
+		//System.out.printf("P: %2.2f I: %2.2f D: %2.2f Speed: %2.2f Target: %2.2f Angle: %2.2f\n" 
+		//		, Shooter.P, Shooter.I, Shooter.D, Shooter.speed, (double)target, (double)pot.getValue());
 		
 		
 		if(joyOp.getRawButton(4)){
