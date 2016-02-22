@@ -23,7 +23,7 @@ public class Vision {
 	public static int getAngle(){
 		int angle = 3225;
 		if (Robot.distance < 132){
-			angle =  (int)(((Robot.distance - 84)/(48))*(20))+3210;
+			angle =  (int)(((Robot.distance - 84)/(48))*(20))+3207;
 		}
 		System.out.println("Target " + angle);
 		return angle;

@@ -83,10 +83,10 @@ public class Robot extends IterativeRobot {
 		canTalonShooterAngle = new CANTalon(RobotMap.SHOOTER_ANGLE_CAN_ID);
 
 		robotDrive = new RobotDrive(canTalonFrontLeft, canTalonRearLeft, canTalonFrontRight, canTalonRearRight);
-		robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
-		robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
-		robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
-		robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
+		robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, false);
+		robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, false);
+		robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, false);
+		robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, false);
 
 		opticSensor = new DigitalInput(RobotMap.OPTIC_SENSOR_DIGITAL_INPUT_PORT);
 		limitSwitch = new DigitalInput(RobotMap.LIMIT_SWITCH_DIGITAL_INPUT);
@@ -183,6 +183,13 @@ public class Robot extends IterativeRobot {
 		canTalonFrontRight.setEncPosition(0);
 		canTalonFrontRight.setEncPosition(0);
 		
+		Shooter.i = 0.0;
+		Shooter.d = 0.0;
+		Shooter.I = 0.0;
+		Shooter.D = 0.0;
+		Shooter.lastError = 0; //TODO: make a constant
+
+		
 		RobotMap.hoodState = RobotMap.HOOD_DEFAULT_STATE;
 		RobotMap.currentState = RobotMap.DEFAULT_STATE;
 		RobotMap.manualState = RobotMap.MANUAL_DEFAULT_STATE;
@@ -239,10 +246,10 @@ public class Robot extends IterativeRobot {
 		if ((Math.abs(joyThrottle.getY()) > .2 || Math.abs(joyWheel.getX()) > .2) 
 				&& !joyThrottle.getRawButton(2)){
 			if (isMinimize){
-				robotDrive.arcadeDrive(joyThrottle.getY()*.6, joyWheel.getX()* .6);
+				robotDrive.arcadeDrive(joyThrottle.getY()*.6, -joyWheel.getX()* .6);
 			}
 			else{
-				robotDrive.arcadeDrive(joyThrottle.getY(), joyWheel.getX());
+				robotDrive.arcadeDrive(joyThrottle.getY(), -joyWheel.getX());
 			}
 		}
 
