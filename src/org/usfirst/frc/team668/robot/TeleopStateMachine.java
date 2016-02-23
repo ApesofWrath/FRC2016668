@@ -18,7 +18,8 @@ public class TeleopStateMachine {
 		boolean isClose = false;
 		boolean isFar = false;
 		boolean fromFar = false;
-	
+		boolean isSameState = false;
+		
 		if(isFar = true){
 			SmartDashboard.putBoolean("Ready For Far Shot", Vision.isShotPossible());
 		}
@@ -41,8 +42,10 @@ public class TeleopStateMachine {
 		//System.out.print(" TARGET: " + RobotMap.CLOSE_ANGLE_VALUE);
 		//System.out.print(" POWER: " + Robot.canTalonFlyWheel.getOutputVoltage());
 		//System.out.println(" VAL: " + Robot.canTalonFlyWheel.get());
+
 		System.out.print( " RPM: " + Robot.canTalonFlyWheel.getSpeed());
 		System.out.println(" POT: " + Robot.pot.getValue());
+	
 		
 		//teleop state machine 
 		switch (RobotMap.currentState){
@@ -200,6 +203,11 @@ public class TeleopStateMachine {
 				RobotMap.currentState = RobotMap.SHOOT_TIMER_STATE;
 				
 			}
+			else if (isReturn){
+				Intake.stop();
+				RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
+				RobotMap.currentState = RobotMap.SET_CLOSE_PID_STATE;
+			}
 			break;	
 			
 		case RobotMap.FAR_FIRE_INIT_STATE:
@@ -209,6 +217,11 @@ public class TeleopStateMachine {
 					&& ( Math.abs(Shooter.angle - Robot.pot.getValue()) <= RobotMap.ACCEPTABLE_HOOD_RANGE)){ 
 				shootTime = System.currentTimeMillis();
 				RobotMap.currentState = RobotMap.SHOOT_TIMER_STATE;
+			}
+			else if (isReturn){
+				Intake.stop();
+				RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
+				RobotMap.currentState = RobotMap.SET_CLOSE_PID_STATE;
 			}
 			break;
 			
@@ -241,6 +254,7 @@ public class TeleopStateMachine {
 			SmartDashboard.putString("State: ", "Close Angle State");
 			isFar = false;
 			isClose = true;
+			//
 //			boolean reached = Shooter.moveHoodBang(RobotMap.CLOSE_ANGLE_VALUE); //starts moving the hood
 //			if(reached){ //checks if the hood has made it to the target
 //				Shooter.stopAngle(); //stops the hood

@@ -111,7 +111,7 @@ public class RobotMap {
 	public static final double ACCEPTABLE_HOOD_RANGE = 2;
 	
 	public static final int FAR_ANGLE_VALUE = 1200;
-	public static final int CLOSE_ANGLE_VALUE = 3210;
+	public static final int CLOSE_ANGLE_VALUE = 3207;
 	public static final int COLLAPSE_ANGLE_VALUE = 0;
 	public static final int MAX_HOOD_POSITION = 0;
 	public static final int MIN_HOOD_POSITION = 0;

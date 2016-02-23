@@ -230,7 +230,7 @@ public class Robot extends IterativeRobot {
 		
 		if ((Math.abs(joyThrottle.getY()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE 
 				&& Math.abs(joyWheel.getX()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE) && aim){
-			DriveController.aim(-.15);
+			DriveController.aim(.2);
 		}
 		
 		//System.out.println("AZIMUTH: " + azimuth);
@@ -268,6 +268,15 @@ public class Robot extends IterativeRobot {
 			SmartDashboard.putBoolean("Intake Position ", false);
 		}
 
+		System.out.print("  Intake Speed: " + canTalonIntake.get());
+		
+//		if (isReverse){
+//			System.out.print(" HELLO WORLD");
+//		}
+		
+		if (joyOp.getRawButton(4)){
+			canTalonIntake.set(.8);
+		}
 		
 		//INTAKE SPEED
 		//If none of these are true the teleop state machine can take over and use the intake for fire state. 
@@ -276,7 +285,8 @@ public class Robot extends IterativeRobot {
 			Intake.spin(.8);
 		}
 		else if (isReverse  && TeleopStateMachine.canReverse){
-			Intake.spit(.8);
+		//	Intake.spit(.8);
+			canTalonIntake.set(.8);
 		}
 		else if((RobotMap.currentState != RobotMap.LOWER_INTAKE_STATE) 
 				&& (RobotMap.currentState != RobotMap.FAR_FIRE_STATE)
@@ -393,10 +403,10 @@ public class Robot extends IterativeRobot {
 		//SmartDashboard.putNumber("RPM: ", canTalonFlyWheel.getSpeed());
 		System.out.print("RPM: " + canTalonFlyWheel.getSpeed());
 		System.out.print(" OUTPUT: " + canTalonFlyWheel.getOutputVoltage());
-		System.out.print(" SPEED: " + Shooter.speed);
-		System.out.println(" Error: " + Shooter.error);
-	//	SmartDashboard.putNumber("ANGLE: ", pot.getValue());
-	//	SmartDashboard.putNumber("Target: ", target);
+		//System.out.print(" SPEED: " + Shooter.speed);
+		//System.out.println(" Error: " + Shooter.error);
+		System.out.print(" ANGLE: " + pot.getValue());
+		System.out.println(" Target: " + target);
 		
 		
 		if ( Math.abs(joyThrottle.getY()) < .1 && Math.abs(joyWheel.getX()) < .1 && joyThrottle.getRawButton(7)){
