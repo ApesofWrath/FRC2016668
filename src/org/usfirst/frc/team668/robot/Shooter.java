@@ -1,6 +1,7 @@
 package org.usfirst.frc.team668.robot;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Shooter {
 	//i
@@ -196,20 +197,24 @@ public class Shooter {
 		switch(RobotMap.hoodState){
 		
 		case RobotMap.HOOD_CLOSE_SHOT_STATE:
+			SmartDashboard.putString("HOOD: " , "CLOSE");
 			movePotPID(RobotMap.CLOSE_ANGLE_VALUE);
 			break;
 		
 		case RobotMap.HOOD_GET_STATE:
+			SmartDashboard.putString("HOOD: " , "ZERO");
 			angle = Vision.getAngle();
 			RobotMap.hoodState = RobotMap.HOOD_SET_FAR_ANGLE_STATE;
 			break;
 			
 		case RobotMap.HOOD_SET_FAR_ANGLE_STATE:
+			SmartDashboard.putString("HOOD: " , "FAR");
 			System.out.println("ANGLE: " + angle);
 			movePotPID(angle);
 			break;
 		
 		case RobotMap.HOOD_ZERO_STATE:
+			SmartDashboard.putString("HOOD: " , "ZERO");
 			Robot.canTalonShooterAngle.set(0);
 			i = 0.0;
 			d = 0.0;
@@ -219,10 +224,12 @@ public class Shooter {
 			break;
 		
 		case RobotMap.HOOD_MANUAL_FAR_STATE:
+			SmartDashboard.putString("HOOD: " , "MANUAL FAr");
 			movePotPID(RobotMap.FAR_ANGLE_VALUE);
 			break;
 		
 		case RobotMap.HOOD_MANUAL_STATE:
+			SmartDashboard.putString("HOOD: " , "MANUAL CLOSE");
 			if (manualHood){
 				Shooter.moveHood(-Robot.joyOp.getY()/3);
 			}

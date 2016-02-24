@@ -224,13 +224,15 @@ public class Robot extends IterativeRobot {
 		boolean isFire = joyOp.getRawButton(RobotMap.FIRE_BUTTON);
 		boolean aim = joyThrottle.getRawButton(RobotMap.AIM_BUTTON);
 		TeleopStateMachine.stateMachine(optic, isCloseFire, isFarFire, isIntakeLower, 
-				isCollapse, isManual, isReturn, closeAngle, farAngle, isFire, isReverse, manualHood);
+				isCollapse, isManual, isReturn, farAngle, closeAngle, isFire, isReverse, manualHood);
+		
+		
 		Shooter.hoodStateMachine(manualHood);
 		//gear shifting code 
 		
 		if ((Math.abs(joyThrottle.getY()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE 
 				&& Math.abs(joyWheel.getX()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE) && aim){
-			DriveController.aim(.2);
+			DriveController.aim(.25);
 		}
 		
 		//System.out.println("AZIMUTH: " + azimuth);
@@ -249,7 +251,7 @@ public class Robot extends IterativeRobot {
 				robotDrive.arcadeDrive(joyThrottle.getY()*.6, -joyWheel.getX()* .6);
 			}
 			else{
-				robotDrive.arcadeDrive(joyThrottle.getY(), -joyWheel.getX());
+				robotDrive.arcadeDrive(joyThrottle.getY()*1.3, -joyWheel.getX()*1.3);
 			}
 		}
 
@@ -268,7 +270,7 @@ public class Robot extends IterativeRobot {
 			SmartDashboard.putBoolean("Intake Position ", false);
 		}
 
-		System.out.print("  Intake Speed: " + canTalonIntake.get());
+	// 	System.out.print("  Intake Speed: " + canTalonIntake.get());
 		
 //		if (isReverse){
 //			System.out.print(" HELLO WORLD");
@@ -495,7 +497,7 @@ public class Robot extends IterativeRobot {
 		
 		
 		if(joyOp.getRawButton(4)){
-			Shooter.setPID(7000);
+			Shooter.setPID(10000);
 			
 		}
 		else if (joyOp.getRawButton(6)){

@@ -10,22 +10,20 @@ public class TeleopStateMachine {
 	public static long time;
 	public static long shootTime;
 	
+	public static boolean isClose = false;
+	public static boolean isFar = false;
+	
+	public static boolean fromFar = false;
+	public static boolean isSameState = false;
+	
 	public static void stateMachine(boolean optic, boolean isCloseFire, 
 			boolean isFarFire, boolean isIntakeLower, boolean isCollapse, boolean isManual,
 			boolean isReturn, boolean farAngle, boolean closeAngle, boolean isFire, 
 			boolean isReverse, boolean manualHood ){
-			
-		boolean isClose = false;
-		boolean isFar = false;
-		boolean fromFar = false;
-		boolean isSameState = false;
 		
-		if(isFar = true){
+		
+		
 			SmartDashboard.putBoolean("Ready For Far Shot", Vision.isShotPossible());
-		}
-		else{
-			SmartDashboard.putBoolean("Ready For Far Shot", false);
-		}
 		
 		
 		if(isManual && RobotMap.currentState != RobotMap.MANUAL_OVERRIDE_STATE){
@@ -113,8 +111,7 @@ public class TeleopStateMachine {
 			SmartDashboard.putString("State: ", "Lower Intake State");
 			
 			SmartDashboard.putBoolean("Intake Position ", true);
-		
-			
+	
 			if (optic && !isReverse){ //runs until one of the sensors are false. Inverted for that reason
 				Intake.spin(.8);
 			}
@@ -144,11 +141,9 @@ public class TeleopStateMachine {
 			if (isFar == true && Vision.isShotPossible()){
 				RobotMap.currentState = RobotMap.SET_FAR_PID_STATE; // begins the far firing sequence
 			}
-
-			else {
+			else if (isClose){
 				RobotMap.currentState = RobotMap.CLOSE_ANGLE_STATE; // begins the close firing sequence
 			}
-
 //			else {
 //				RobotMap.currentState = RobotMap.WAIT_FOR_BUTTON_STATE;
 //			}
