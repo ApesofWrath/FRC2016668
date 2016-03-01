@@ -16,6 +16,8 @@ public class TeleopStateMachine {
 	public static boolean fromFar = false;
 	public static boolean isSameState = false;
 	
+	public static boolean ballInPlace = false;
+	
 	public static void stateMachine(boolean optic, boolean isCloseFire, 
 			boolean isFarFire, boolean isIntakeLower, boolean isCollapse, boolean isManual,
 			boolean isReturn, boolean farAngle, boolean closeAngle, boolean isFire, 
@@ -25,6 +27,15 @@ public class TeleopStateMachine {
 		
 			SmartDashboard.putBoolean("Ready For Far Shot", Vision.isShotPossible());
 		
+	//TODO: make sure this works and im[lement it
+	/*	 
+		if (!optic){
+			Shooter.setPID(RobotMap.FAR_FIRE_SPEED_RANGE);
+		}
+		else{
+			Shooter.setPID(0);
+		}
+	*/
 		
 		if(isManual && RobotMap.currentState != RobotMap.MANUAL_OVERRIDE_STATE){
 			Intake.stop();

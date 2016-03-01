@@ -36,7 +36,7 @@ public class Autonomous {
 		
 		while(r.isAutonomous() && r.isEnabled() && (Robot.azimuth > RobotMap.AZIMUTH_RANGE)
 				&& (Robot.azimuth < 360 - RobotMap.AZIMUTH_RANGE) && (Robot.azimuth !=400) ){
-			DriveController.aim(RobotMap.DRIVE_AND_SHOOT_TURN_SPEED);
+			DriveController.aim(RobotMap.AIM_SPEED);
 		}
 		
 		int ref = RobotMap.FAR_FIRE_SPEED;
@@ -53,7 +53,7 @@ public class Autonomous {
 				if (Robot.opticSensor.get()){
 					long time = System.currentTimeMillis();
 					if (System.currentTimeMillis() - time >= RobotMap.BALL_WAIT_TIME){
-						Robot.canTalonFlyWheel.disable();
+						Robot.canTalonFlyWheel.disable(); //this might not allow the flywheel to start back up
 						Intake.stop();
 						fired = true;
 					}
@@ -101,7 +101,7 @@ public class Autonomous {
 				if (Robot.opticSensor.get()){
 					long time = System.currentTimeMillis();
 					if ( System.currentTimeMillis() - time >= RobotMap.BALL_WAIT_TIME){
-						Robot.canTalonFlyWheel.disable();
+						//Robot.canTalonFlyWheel.disable();
 						Intake.stop();
 						fired = true;
 					}
@@ -159,7 +159,48 @@ public class Autonomous {
 		
 		DriveController.stop();
 
+	}
+	
+	public static void spyBotShotAutonomous(Robot r){
 		
+		boolean completeRight = DriveController.rightPID(0);
+		boolean completeLeft = DriveController.leftPID(0);
+		
+		while(r.isAutonomous() && r.isEnabled() && (!completeRight || !completeLeft)){
+			completeRight = DriveController.rightPID(0);
+			completeLeft = DriveController.leftPID(0);
+		}
+		
+		while (r.isAutonomous() && r.isEnabled() && (Robot.azimuth > RobotMap.AZIMUTH_RANGE)
+				&& (Robot.azimuth < 360 - RobotMap.AZIMUTH_RANGE) && (Robot.azimuth !=400) ){
+			DriveController.aim(RobotMap.AIM_SPEED);
+		}
+		
+		DriveController.stop();
+		
+		int ref = RobotMap.FAR_FIRE_SPEED;
+		Shooter.setPID(ref);
+		
+		RobotMap.hoodState = RobotMap.HOOD_GET_STATE;
+		while ( Math.abs(Shooter.angle - Robot.pot.getValue()) <= RobotMap.ACCEPTABLE_HOOD_RANGE){
+			RobotMap.hoodState = RobotMap.HOOD_GET_STATE;
+		}
+		
+		while (r.isEnabled() && r.isAutonomous() && !fired){
+			if (Math.abs(ref - Robot.canTalonFlyWheel.getSpeed()) <= RobotMap.FAR_FIRE_SPEED_RANGE){ //waits for the speed of the motor to be correct 
+				Intake.spin(RobotMap.FIRE_INTAKE_SPEED);
+				if (Robot.opticSensor.get()){
+					long time = System.currentTimeMillis();
+					if ( System.currentTimeMillis() - time >= RobotMap.BALL_WAIT_TIME){
+						Robot.canTalonFlyWheel.disable(); //this might not allow the flywheel to start back up try adding .enable()
+						Intake.stop();
+						fired = true;
+					}
+				}
+			}
+		}
+		
+		return;
 		
 	}
 	

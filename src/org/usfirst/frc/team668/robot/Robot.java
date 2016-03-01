@@ -108,7 +108,7 @@ public class Robot extends IterativeRobot {
 		autonChooser = new SendableChooser();
 		
 		autonChooser.addDefault("Drive and Shoot Camera Autonomous", new Integer(RobotMap.DRIVE_AND_SHOOT_CAMERA_AUTON));
-		autonChooser.addObject("Drive Autonomous", new Integer(RobotMap.DRIVE_UNDER_BAR_AUTON));
+		autonChooser.addObject("Drive Under Bar Autonomous", new Integer(RobotMap.DRIVE_UNDER_BAR_AUTON));
 		autonChooser.addObject("Stop Autonomous", new Integer(RobotMap.STOP_AUTON));
 		autonChooser.addObject("Drive to Defense Autonomous", new Integer(RobotMap.DRIVE_TO_DEFENSE_AUTON));
 		autonChooser.addObject("Drive and shoot PID Autonomous", new Integer(RobotMap.DRIVE_AND_SHOOT_PID_AUTON));

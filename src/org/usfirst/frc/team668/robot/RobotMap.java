@@ -125,6 +125,7 @@ public class RobotMap {
 	public static final double ACCEPTABLE_JOYSTICK_RANGE = .2;
 	public static final double AZIMUTH_RANGE = .5;
 	
+	public static final double AIM_SPEED = 0;
 	public static final double DRIVE_AND_SHOOT_TURN_SPEED = 0;
 	
 	public static final double FIRE_DISTANCE_1 = 0;
