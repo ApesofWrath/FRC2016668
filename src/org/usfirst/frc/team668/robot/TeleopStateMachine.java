@@ -16,7 +16,7 @@ public class TeleopStateMachine {
 	public static boolean fromFar = false;
 	public static boolean isSameState = false;
 	
-	public static boolean ballInPlace = false;
+	public static boolean ballCleared = true;
 	
 	public static void stateMachine(boolean optic, boolean isCloseFire, 
 			boolean isFarFire, boolean isIntakeLower, boolean isCollapse, boolean isManual,
@@ -27,15 +27,16 @@ public class TeleopStateMachine {
 		
 			SmartDashboard.putBoolean("Ready For Far Shot", Vision.isShotPossible());
 		
-	//TODO: make sure this works and im[lement it
-	/*	 
-		if (!optic){
+		 
+		if (!optic && !ballCleared){
 			Shooter.setPID(RobotMap.FAR_FIRE_SPEED_RANGE);
+		
 		}
+		
 		else{
 			Shooter.setPID(0);
 		}
-	*/
+		
 		
 		if(isManual && RobotMap.currentState != RobotMap.MANUAL_OVERRIDE_STATE){
 			Intake.stop();
@@ -77,12 +78,13 @@ public class TeleopStateMachine {
 //				RobotMap.currentState = RobotMap.SET_CLOSE_PID_STATE;
 //			}
 			RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
-			RobotMap.currentState = RobotMap.SET_CLOSE_PID_STATE;
+			RobotMap.currentState = RobotMap.WAIT_FOR_BUTTON_STATE;
 			break;
 
 		case RobotMap.WAIT_FOR_BUTTON_STATE:
 			SmartDashboard.putString("State: ", "Wait For Button State");
 			canReverse = true;
+			ballCleared = true;
 			//Prints whether a ball is ready to shoot
 			if (!optic){
 				SmartDashboard.putBoolean("BALL IN PLACE:", true);
@@ -150,7 +152,7 @@ public class TeleopStateMachine {
 			canReverse = false;
 			Robot.intakePiston.set(DoubleSolenoid.Value.kForward);
 			if (isFar == true && Vision.isShotPossible()){
-				RobotMap.currentState = RobotMap.SET_FAR_PID_STATE; // begins the far firing sequence
+				RobotMap.currentState = RobotMap.FAR_ANGLE_STATE; // begins the far firing sequence
 			}
 			else if (isClose){
 				RobotMap.currentState = RobotMap.CLOSE_ANGLE_STATE; // begins the close firing sequence
@@ -186,7 +188,7 @@ public class TeleopStateMachine {
 			else if (isReturn){
 				Intake.stop();
 				RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
-				RobotMap.currentState = RobotMap.SET_CLOSE_PID_STATE;
+				RobotMap.currentState = RobotMap.WAIT_FOR_BUTTON_STATE;
 			}
 			break;
 			
@@ -198,7 +200,8 @@ public class TeleopStateMachine {
 				//Robot.canTalonFlyWheel.disable(); //TODO:Check if this line will hurt the code (i think so)
 				Robot.canTalonFlyWheel.clearIAccum();
 				RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
-				RobotMap.currentState = RobotMap.SET_CLOSE_PID_STATE;
+				RobotMap.currentState = RobotMap.WAIT_FOR_BUTTON_STATE;
+				ballCleared = true;
 			}
 			break;
 
@@ -212,7 +215,7 @@ public class TeleopStateMachine {
 			else if (isReturn){
 				Intake.stop();
 				RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
-				RobotMap.currentState = RobotMap.SET_CLOSE_PID_STATE;
+				RobotMap.currentState = RobotMap.WAIT_FOR_BUTTON_STATE;
 			}
 			break;	
 			
@@ -227,7 +230,7 @@ public class TeleopStateMachine {
 			else if (isReturn){
 				Intake.stop();
 				RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
-				RobotMap.currentState = RobotMap.SET_CLOSE_PID_STATE;
+				RobotMap.currentState = RobotMap.WAIT_FOR_BUTTON_STATE;
 			}
 			break;
 			
@@ -329,6 +332,7 @@ public class TeleopStateMachine {
 				canReverse = true;
 				//Robot.canTalonFlyWheel.disable();
 				//Shooter.stopFlyWheel();
+				ballCleared = false;
 				isClose = false;
 				SmartDashboard.putString("State: ", "Manual Wait For Button State");
 				if (closeAngle){
@@ -337,9 +341,9 @@ public class TeleopStateMachine {
 				else if (farAngle){
 					RobotMap.manualState = RobotMap.MANUAL_FAR_ANGLE_STATE;
 				}
-				else if (isCloseFire){
-					RobotMap.manualState = RobotMap.MANUAL_FIRE_STATE;
-				}
+//				else if (isCloseFire){
+//					RobotMap.manualState = RobotMap.MANUAL_FIRE_STATE;
+//				}
 				else if (isCollapse){
 					RobotMap.manualState = RobotMap.MANUAL_COLLAPSE_ANGLE_STATE;
 				}
@@ -363,16 +367,11 @@ public class TeleopStateMachine {
 			case RobotMap.MANUAL_FIRE_STATE:
 				canReverse = false;
 				SmartDashboard.putString("State: ", "Manual Fire State");
-				if (isFire && !optic){ //checks if the angle is set to "close" and that there is a ball in the firing position
-				//	Shooter.setPID(RobotMap.CLOSE_FIRE_SPEED);// sets the flywheel to a speed for close fire (does not use a PID)
+				if (!optic && (Math.abs(reference - Robot.canTalonFlyWheel.getSpeed()) <= RobotMap.FAR_FIRE_SPEED_RANGE)){
 					Shooter.fire(RobotMap.FIRE_INTAKE_SPEED); //spins the intake which puts the ball into the flywheel
 				}
-//				else if (!optic){ //we did not have to check if it was in far angle because of the else-if but we still check for a ball being in position
-//				//	Shooter.setPID(RobotMap.FAR_FIRE_SPEED); //sets the speed of the ball to the far fire speed
-//					Shooter.fire(RobotMap.FIRE_INTAKE_SPEED); //spins the ball into the flywheel using the intake
-//				}
+				
 				else{
-				//	Shooter.stopFlyWheel(); //stops the flywheel either because it is collapsed or because the ball has been fired
 					time = System.currentTimeMillis(); //starts the timer for the ball clear state
 					RobotMap.manualState = RobotMap.MANUAL_BALL_CLEAR_STATE;
 				}
@@ -384,6 +383,7 @@ public class TeleopStateMachine {
 				if (System.currentTimeMillis() >= time + RobotMap.BALL_WAIT_TIME){
 					Intake.stop();
 					RobotMap.manualState = RobotMap.MANUAL_WAIT_FOR_BUTTON_STATE;
+					ballCleared = true;
 				}
 				break;
 				

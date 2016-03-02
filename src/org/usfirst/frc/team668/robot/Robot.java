@@ -48,6 +48,7 @@ public class Robot extends IterativeRobot {
 	public static int ref = 0;
 	public static int lastRef = 100000;
 	public static boolean canIntake = true;
+	public static boolean ballInPlace = false;
 	
 	public int target = 3210;
 
@@ -212,7 +213,8 @@ public class Robot extends IterativeRobot {
 
 		
 		boolean isReturn = joyOp.getRawButton(RobotMap.RETURN_BUTTON);
-		boolean optic = opticSensor.get();
+		//boolean optic = opticSensor.get();
+		boolean optic;
 		boolean limit1 = limitSwitch.get();
 		boolean limit2 = limitSwitchTwo.get();
 		
@@ -223,6 +225,15 @@ public class Robot extends IterativeRobot {
 		boolean closeAngle = joyOp.getRawButton(RobotMap.CLOSE_ANGLE_BUTTON);
 		boolean isFire = joyOp.getRawButton(RobotMap.FIRE_BUTTON);
 		boolean aim = joyThrottle.getRawButton(RobotMap.AIM_BUTTON);
+		
+		if ((RobotMap.currentState != RobotMap.CLOSE_FIRE_STATE) && (RobotMap.currentState != RobotMap.FAR_FIRE_STATE) 
+				&& (RobotMap.currentState != RobotMap.BALL_CLEAR_STATE) && (RobotMap.currentState != RobotMap.MANUAL_FIRE_STATE)){
+			optic = opticSensor.get();
+		}
+		else{
+			optic = false;
+		}
+			
 		TeleopStateMachine.stateMachine(optic, isCloseFire, isFarFire, isIntakeLower, 
 				isCollapse, isManual, isReturn, farAngle, closeAngle, isFire, isReverse, manualHood);
 		
@@ -256,8 +267,7 @@ public class Robot extends IterativeRobot {
 		}
 
 		//System.out.println(RobotMap.currentState);
-		
-		
+	
 		
 		
 		//controls the state of the intake pistons 
@@ -306,7 +316,7 @@ public class Robot extends IterativeRobot {
 		
 		azimuth = table.getNumber("Azimuth", 400);
 		//System.out.println(azimuth);
-	}
+	}//end of periodic
 		
 		
 		
