@@ -198,7 +198,13 @@ public class Shooter {
 		
 		case RobotMap.HOOD_CLOSE_SHOT_STATE:
 			SmartDashboard.putString("HOOD: " , "CLOSE");
-			movePotPID(RobotMap.CLOSE_ANGLE_VALUE);
+			if (Robot.isBrightEyes){
+				angle = RobotMap.BRIGHT_CLOSE_ANGLE_VALUE;
+			}
+			else{
+				angle = RobotMap.CLOSE_ANGLE_VALUE;
+			}
+			movePotPID(angle);
 			break;
 		
 		case RobotMap.HOOD_GET_STATE:
@@ -221,11 +227,29 @@ public class Shooter {
 			I = 0.0;
 			D = 0.0;
 			lastError = 0; //TODO: make a constant
+			lastTime = ((double)System.currentTimeMillis())/1000.0;
 			break;
 		
+		case RobotMap.HOOD_LOW_GOAL_SHOT_STATE:
+			SmartDashboard.putString("HOOD: ", "Low Goal Shot");
+			if(Robot.isBrightEyes){
+				angle = RobotMap.BRIGHT_LOW_GOAL_ANGLE;
+			}
+			else{
+				angle = RobotMap.LOW_GOAL_ANGLE;
+			}
+			movePotPID(angle);
+			break;
+			
 		case RobotMap.HOOD_MANUAL_FAR_STATE:
-			SmartDashboard.putString("HOOD: " , "MANUAL FAr");
-			movePotPID(RobotMap.FAR_ANGLE_VALUE);
+			SmartDashboard.putString("HOOD: " , "MANUAL FAR");
+			if(Robot.isBrightEyes){
+				angle = RobotMap.BRIGHT_FAR_ANGLE_VALUE;
+			}
+			else{
+				angle = RobotMap.FAR_ANGLE_VALUE;
+			}
+			movePotPID(angle);
 			break;
 		
 		case RobotMap.HOOD_MANUAL_STATE:

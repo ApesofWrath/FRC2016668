@@ -46,7 +46,8 @@ public class RobotMap {
 	public static final int RETURN_BUTTON = 11;
 	public static final int LOW_GEAR_BUTTON = 7; //throttle
 	public static final int HIGH_GEAR_BUTTON = 6; //throttle
-	public static final int AIM_BUTTON = 9;
+	public static final int AIM_BUTTON = 9; //throttle
+	public static final int LOW_GOAL_BUTTON = 9;
 	
 	public static final boolean OPTIC_SENSOR_VALUE = Robot.opticSensor.get();
 	
@@ -67,6 +68,7 @@ public class RobotMap {
 	public static final int CLOSE_FIRE_INIT_STATE = 14;
 	public static final int SHOOT_TIMER_STATE = 15;
 	public static final int FAR_FIRE_INIT_STATE = 16;
+	public static final int LOW_GOAL_SHOT_STATE = 17;
 	public static final int DEFAULT_STATE = INIT_STATE;
 	public static int currentState = DEFAULT_STATE;
 	
@@ -88,6 +90,7 @@ public class RobotMap {
 	public static final int HOOD_MANUAL_FAR_STATE = 3;
 	public static final int HOOD_MANUAL_STATE = 4;
 	public static final int HOOD_SET_FAR_ANGLE_STATE = 5;
+	public static final int HOOD_LOW_GOAL_SHOT_STATE = 6;
 	public static final int HOOD_DEFAULT_STATE = HOOD_ZERO_STATE;
 	public static int hoodState = HOOD_DEFAULT_STATE;
 	
@@ -108,11 +111,20 @@ public class RobotMap {
 	public static final double CONSTANT_SPEED = 10000;
 	public static final double HOOD_SPEED = .3;
 	
+	//HOOD
 	public static final double ACCEPTABLE_HOOD_RANGE = 2;
 	
 	public static final int FAR_ANGLE_VALUE = 1200;
 	public static final int CLOSE_ANGLE_VALUE = 3208;
+	
+	public static final int BRIGHT_FAR_ANGLE_VALUE = 0;
+	public static final int BRIGHT_CLOSE_ANGLE_VALUE = 0;
+	
 	public static final int COLLAPSE_ANGLE_VALUE = 0;
+	
+	public static final int LOW_GOAL_ANGLE = 3200;
+	public static final int BRIGHT_LOW_GOAL_ANGLE = 0;
+	
 	public static final int MAX_HOOD_POSITION = 0;
 	public static final int MIN_HOOD_POSITION = 0;
 	

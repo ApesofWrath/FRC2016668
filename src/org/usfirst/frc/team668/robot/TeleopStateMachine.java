@@ -21,7 +21,7 @@ public class TeleopStateMachine {
 	public static void stateMachine(boolean optic, boolean isCloseFire, 
 			boolean isFarFire, boolean isIntakeLower, boolean isCollapse, boolean isManual,
 			boolean isReturn, boolean farAngle, boolean closeAngle, boolean isFire, 
-			boolean isReverse, boolean manualHood ){
+			boolean isReverse, boolean manualHood, boolean lowGoal ){
 		
 		
 		
@@ -40,8 +40,9 @@ public class TeleopStateMachine {
 		
 		if(isManual && RobotMap.currentState != RobotMap.MANUAL_OVERRIDE_STATE){
 			Intake.stop();
+			RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
 		//	Shooter.stopAngle();
-			Shooter.stopFlyWheel();
+		//	Shooter.stopFlyWheel();
 			RobotMap.currentState = RobotMap.MANUAL_OVERRIDE_STATE;
 		}
 //		
@@ -118,6 +119,25 @@ public class TeleopStateMachine {
 				RobotMap.currentState = RobotMap.COLLAPSE_STATE;
 			}
 
+			break;
+			
+		case RobotMap.LOW_GOAL_SHOT_STATE:
+			SmartDashboard.putString("State: ", "Low Goal Shot State");
+
+			if(lowGoal){
+				RobotMap.currentState = RobotMap.LOW_GOAL_SHOT_STATE;
+				if(Math.abs((RobotMap.BRIGHT_LOW_GOAL_ANGLE)-(Robot.pot.getValue())) <= RobotMap.ACCEPTABLE_HOOD_RANGE ){
+					Intake.spit(.8);
+				}
+				else {
+					Intake.stop();
+				}
+			}
+			else{
+				Intake.stop();
+				RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
+				RobotMap.currentState = RobotMap.WAIT_FOR_BUTTON_STATE;
+			}
 			break;
 
 		case RobotMap.LOWER_INTAKE_STATE:
@@ -207,7 +227,7 @@ public class TeleopStateMachine {
 
 		case RobotMap.CLOSE_FIRE_INIT_STATE:
 			SmartDashboard.putString("State: ", "CLose Fire State");
-			if (Math.abs(RobotMap.CLOSE_ANGLE_VALUE - Robot.pot.getValue()) <= RobotMap.ACCEPTABLE_HOOD_RANGE){
+			if (Math.abs(Shooter.angle - Robot.pot.getValue()) <= RobotMap.ACCEPTABLE_HOOD_RANGE){
 				shootTime = System.currentTimeMillis();
 				RobotMap.currentState = RobotMap.SHOOT_TIMER_STATE;
 				

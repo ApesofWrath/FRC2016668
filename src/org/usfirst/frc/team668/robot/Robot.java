@@ -189,6 +189,7 @@ public class Robot extends IterativeRobot {
 		Shooter.I = 0.0;
 		Shooter.D = 0.0;
 		Shooter.lastError = 0; //TODO: make a constant
+		Shooter.lastTime = ((double)System.currentTimeMillis())/1000.0;
 
 		
 		RobotMap.hoodState = RobotMap.HOOD_DEFAULT_STATE;
@@ -209,6 +210,7 @@ public class Robot extends IterativeRobot {
 		boolean isIntakeLower = joyOp.getRawButton(RobotMap.LOWER_INTAKE_BUTTON);
 		boolean isIntakeRise = joyOp.getRawButton(RobotMap.RISE_INTAKE_BUTTON);
 		boolean stopFlyWheel = joyOp.getRawButton(RobotMap.STOP_FLYWHEEL_BUTTON); //we dont use this button
+		boolean lowGoal = joyOp.getRawButton(RobotMap.LOW_GOAL_BUTTON);
 		//boolean isLower = joyOp.getRawButton(RobotMap.LOWER_BUTTON);
 
 		
@@ -235,7 +237,7 @@ public class Robot extends IterativeRobot {
 		}
 			
 		TeleopStateMachine.stateMachine(optic, isCloseFire, isFarFire, isIntakeLower, 
-				isCollapse, isManual, isReturn, farAngle, closeAngle, isFire, isReverse, manualHood);
+				isCollapse, isManual, isReturn, farAngle, closeAngle, isFire, isReverse, manualHood, lowGoal);
 		
 		
 		Shooter.hoodStateMachine(manualHood);
