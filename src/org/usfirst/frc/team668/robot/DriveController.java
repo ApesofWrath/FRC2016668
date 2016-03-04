@@ -4,8 +4,8 @@ package org.usfirst.frc.team668.robot;
 public class DriveController {
 	
 	public static int errorRight;
-	public static long currentTimeRight = 0;
-	public static long lastTimeRight = System.currentTimeMillis();
+	public static double currentTimeRight = 0;
+	public static double lastTimeRight = ((double)System.currentTimeMillis())/1000.0;
 	public static double lastErrorRight = 0;
 	public static double Kir;
 	public static double Kdr;
@@ -16,8 +16,8 @@ public class DriveController {
 	public static double speedRight;
 
 	public static int errorLeft;
-	public static long currentTimeLeft = 0;
-	public static long lastTimeLeft = System.currentTimeMillis();
+	public static double currentTimeLeft = 0;
+	public static double lastTimeLeft = ((double)System.currentTimeMillis())/1000.0;
 	public static double lastErrorLeft = 0;
 	public static double Kil;
 	public static double Kdl;
@@ -41,7 +41,7 @@ public class DriveController {
 		}
 		errorRight= ref - Robot.canTalonRearRight.getEncPosition();
 		
-		currentTimeRight = System.currentTimeMillis();
+		currentTimeRight = ((double)System.currentTimeMillis())/1000.0;
 		
 		iR = iR + (currentTimeRight - lastTimeRight)*(errorRight-lastErrorRight);
 		
@@ -94,7 +94,7 @@ public class DriveController {
 		
 		errorLeft= ref - Robot.canTalonRearLeft.getEncPosition();
 		
-		currentTimeLeft = System.currentTimeMillis();
+		currentTimeLeft = ((double)System.currentTimeMillis())/1000.0;
 		
 		iL = iL + (currentTimeLeft - lastTimeLeft)*(errorLeft-lastErrorLeft);
 		

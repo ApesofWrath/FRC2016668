@@ -43,6 +43,7 @@ public class TeleopStateMachine {
 			RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
 		//	Shooter.stopAngle();
 		//	Shooter.stopFlyWheel();
+			RobotMap.manualState = RobotMap.MANUAL_WAIT_FOR_BUTTON_STATE;
 			RobotMap.currentState = RobotMap.MANUAL_OVERRIDE_STATE;
 		}
 //		

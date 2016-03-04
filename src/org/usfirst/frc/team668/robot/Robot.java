@@ -52,7 +52,7 @@ public class Robot extends IterativeRobot {
 	
 	public int target = 3210;
 
-	public static boolean isBrightEyes = false;
+	public static boolean isBrightEyes = true;
 	// public static USBCamera camFront = new USBCamera("cam1");
 	// public static USBCamera camRear = new USBCamera("cam2");
 	public void robotInit() {
@@ -130,7 +130,7 @@ public class Robot extends IterativeRobot {
 		
 		
 		if (isBrightEyes){
-			target = 950;
+			target = 750;
 		}
 		else{
 			target = 3210;
@@ -403,7 +403,7 @@ public class Robot extends IterativeRobot {
 		
 		if((Math.abs(joyThrottle.getY()) > .2 || Math.abs(joyWheel.getX()) > .2) 
 				&& !joyThrottle.getRawButton(2) && !joyThrottle.getRawButton(1)){
-			robotDrive.arcadeDrive(joyThrottle.getY(), joyWheel.getX());
+			robotDrive.arcadeDrive(joyThrottle.getY(), -joyWheel.getX());
 		}
 		
 //		robotDrive.arcadeDrive(joyThrottle.getY(), joyWheel.getX());
@@ -414,13 +414,15 @@ public class Robot extends IterativeRobot {
 //		System.out.println(pdp.getCurrent(2));
 //		System.out.println(pdp.getCurrent(3));
 		
+		
 		//SmartDashboard.putNumber("RPM: ", canTalonFlyWheel.getSpeed());
-		System.out.print("RPM: " + canTalonFlyWheel.getSpeed());
-		System.out.print(" OUTPUT: " + canTalonFlyWheel.getOutputVoltage());
+		System.out.print("isBrightEyes: " + isBrightEyes);
+		System.out.print(" RPM: " + canTalonFlyWheel.getSpeed());
+		//System.out.print(" OUTPUT: " + canTalonFlyWheel.getOutputVoltage());
 		//System.out.print(" SPEED: " + Shooter.speed);
 		//System.out.println(" Error: " + Shooter.error);
-		System.out.print(" ANGLE: " + pot.getValue());
-		System.out.println(" Target: " + target);
+		//System.out.print(" ANGLE: " + pot.getValue());
+		//System.out.println(" Target: " + target);
 		
 		
 		if ( Math.abs(joyThrottle.getY()) < .1 && Math.abs(joyWheel.getX()) < .1 && joyThrottle.getRawButton(7)){
@@ -457,10 +459,12 @@ public class Robot extends IterativeRobot {
 		
 		if (!joyOp.getRawButton(11)){
 			Shooter.i = 0.0;
-			Shooter.d = 0.0; 
+			Shooter.d = 0.0;
+			Shooter.P = 0.0;
 			Shooter.I = 0.0;
 			Shooter.D = 0.0; 
 			Shooter.lastError = 0;
+			Shooter.lastTime = ((double)System.currentTimeMillis())/1000.0;
 		}
 		
 		
@@ -475,7 +479,7 @@ public class Robot extends IterativeRobot {
 			canTalonIntake.set(0);
 		}
 		
-		//canTalonFlyWheel.set(((joyOp.getRawAxis(3)/2)+.5));
+		canTalonFlyWheel.set(((joyOp.getRawAxis(3)/2)+.5));
 		
 	//	System.out.println(pot.getValue());
 		
@@ -504,20 +508,19 @@ public class Robot extends IterativeRobot {
 //		SmartDashboard.putNumber("I", Shooter.I);
 //		SmartDashboard.putNumber("D", Shooter.D);
 		
-		//System.out.printf("P: %2.2f I: %2.2f D: %2.2f Speed: %2.2f Target: %2.2f Angle: %2.2f\n" 
-		//		, Shooter.P, Shooter.I, Shooter.D, Shooter.speed, (double)target, (double)pot.getValue());
+		System.out.printf("P: %2.2f I: %2.2f D: %2.2f Speed: %2.2f Target: %2.2f Angle: %2.2f\n" 
+				, Shooter.P, Shooter.I, Shooter.D, Shooter.speed, (double)target, (double)pot.getValue());
 		
-		
-		if(joyOp.getRawButton(4)){
-			Shooter.setPID(10000);
-			
-		}
-		else if (joyOp.getRawButton(6)){
-			Shooter.setPID(6500);
-		}
-		else if (joyOp.getRawButton(5)){
-			canTalonFlyWheel.disable();
-		}
+//		if(joyOp.getRawButton(4)){
+//			Shooter.setPID(10000);
+//			
+//		}
+//		else if (joyOp.getRawButton(6)){
+//			Shooter.setPID(6500);
+//		}
+//		else if (joyOp.getRawButton(5)){
+//			canTalonFlyWheel.disable();
+//		}
 	}
 
 }

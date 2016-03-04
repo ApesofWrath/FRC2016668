@@ -49,9 +49,9 @@ public class Shooter {
 	public static void movePotPID(int ref){
 		
 		if (Robot.isBrightEyes){
-			Ki = 0.0000007;//38
+			Ki = 0.01;//38
 			Kd = 0.000;//8
-			Kp = .003;
+			Kp = .03;
 		}
 		else {
 			Ki = 0.0002;
@@ -133,12 +133,12 @@ public class Shooter {
 			return true;
 		}
 		else if(Robot.pot.getValue() > ref){
-			Robot.canTalonShooterAngle.set(-RobotMap.HOOD_SPEED);
+			Robot.canTalonShooterAngle.set(RobotMap.HOOD_SPEED);
 			//Robot.canTalonShooterAngleTwo.set(-RobotMap.HOOD_SPEED);
 			return false;
 		}
 		else{
-			Robot.canTalonShooterAngle.set(RobotMap.HOOD_SPEED);
+			Robot.canTalonShooterAngle.set(-RobotMap.HOOD_SPEED);
 		//	Robot.canTalonShooterAngleTwo.set(RobotMap.HOOD_SPEED);
 			return false;
 		}
