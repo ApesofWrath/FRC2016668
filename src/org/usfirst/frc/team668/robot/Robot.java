@@ -211,6 +211,7 @@ public class Robot extends IterativeRobot {
 		boolean isIntakeRise = joyOp.getRawButton(RobotMap.RISE_INTAKE_BUTTON);
 		boolean stopFlyWheel = joyOp.getRawButton(RobotMap.STOP_FLYWHEEL_BUTTON); //we dont use this button
 		boolean lowGoal = joyOp.getRawButton(RobotMap.LOW_GOAL_BUTTON);
+		boolean isLob = joyOp.getRawButton(RobotMap.LOB_SHOT_BUTTON);
 		//boolean isLower = joyOp.getRawButton(RobotMap.LOWER_BUTTON);
 
 		
@@ -237,7 +238,8 @@ public class Robot extends IterativeRobot {
 //		}
 			
 		TeleopStateMachine.stateMachine(optic, isCloseFire, isFarFire, isIntakeLower, 
-				isCollapse, isManual, isReturn, farAngle, closeAngle, isFire, isReverse, manualHood, lowGoal);
+				isCollapse, isManual, isReturn, farAngle, closeAngle, isFire, isReverse, manualHood, lowGoal
+				, isLob);
 		
 		
 		Shooter.hoodStateMachine(manualHood);
@@ -508,11 +510,14 @@ public class Robot extends IterativeRobot {
 //		SmartDashboard.putNumber("I", Shooter.I);
 //		SmartDashboard.putNumber("D", Shooter.D);
 		
-		System.out.printf("P: %2.2f I: %2.2f D: %2.2f Speed: %2.2f Target: %2.2f Angle: %2.2f\n" 
-				, Shooter.P, Shooter.I, Shooter.D, Shooter.speed, (double)target, (double)pot.getValue());
+	
+		int ref = (int)(((joyOp.getRawAxis(3)/2)+.5)*11000);
+		
+		System.out.printf("P: %2.2f I: %2.2f D: %2.2f Speed: %2.2f Target: %2.2f TargetAng: %2.2f Angle: %2.2f\n" 
+				, Shooter.P, Shooter.I, Shooter.D, Shooter.speed, (double)ref, (double)target, (double)pot.getValue());
 		
 		if(joyOp.getRawButton(4)){
-			Shooter.setPID(10000);
+			Shooter.setPID(ref);
 		}
 //		else if (joyOp.getRawButton(6)){
 //			Shooter.setPID(6500);
@@ -520,6 +525,8 @@ public class Robot extends IterativeRobot {
 //		else if (joyOp.getRawButton(5)){
 //			canTalonFlyWheel.disable();
 //		}
+		//5700
+		//671
 	}
 
 }

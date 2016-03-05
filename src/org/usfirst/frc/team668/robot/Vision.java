@@ -23,20 +23,33 @@ public class Vision {
 	public static int getAngle(){
 		int angle;
 		int yInt;
+		int slope; 
 		if (Robot.isBrightEyes){
-			angle = 688;
-			yInt = 670;
+			angle = 691;
+			yInt = 678;
+			slope = 10;
 		}
 		else{
 			angle = 3222;
 			yInt = 3204;
+			slope = 20;
 		}
 		
 		if (Robot.distance < 132){
-			angle =  (int)(((Robot.distance - 84)/(48))*(20))+ yInt;
+			angle =  (int)(((Robot.distance - 84)/(48))*(slope))+ yInt;
 		}
 		System.out.println("Target " + angle);
 		return angle;
+	}
+	
+	public static boolean isAzimuthReady(){
+		
+		if ((Robot.azimuth < .5 || Robot.azimuth > 359.5) && (Robot.azimuth != 400)){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	
 	public static boolean isShotPossible(){

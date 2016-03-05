@@ -219,6 +219,12 @@ public class Shooter {
 			movePotPID(angle);
 			break;
 		
+		case RobotMap.HOOD_LOB_ANGLE_STATE:
+			SmartDashboard.putString("HOOD: ", "LOB");
+			angle = 671;
+			movePotPID(angle);
+			break;
+			
 		case RobotMap.HOOD_ZERO_STATE:
 			SmartDashboard.putString("HOOD: " , "ZERO");
 			Robot.canTalonShooterAngle.set(0);

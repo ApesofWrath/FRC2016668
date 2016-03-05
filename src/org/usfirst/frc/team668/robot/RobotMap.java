@@ -30,6 +30,7 @@ public class RobotMap {
 	
 	public static final int MINIMIZE_BUTTON = 2; // throttle
 	public static final int INTAKE_BUTTON = 2; //4
+	public static final int LOB_SHOT_BUTTON = 3;
 	public static final int REVERSE_BUTTON = 6; 
 	public static final int FIRE_BUTTON = 1; // manual
 	public static final int FAR_FIRE_BUTTON = 1;
@@ -69,6 +70,8 @@ public class RobotMap {
 	public static final int SHOOT_TIMER_STATE = 15;
 	public static final int FAR_FIRE_INIT_STATE = 16;
 	public static final int LOW_GOAL_SHOT_STATE = 17;
+	public static final int LOB_SHOT_STATE = 18;
+	public static final int LOB_SHOT_ANGLE_STATE = 19;
 	public static final int DEFAULT_STATE = INIT_STATE;
 	public static int currentState = DEFAULT_STATE;
 	
@@ -91,6 +94,7 @@ public class RobotMap {
 	public static final int HOOD_MANUAL_STATE = 4;
 	public static final int HOOD_SET_FAR_ANGLE_STATE = 5;
 	public static final int HOOD_LOW_GOAL_SHOT_STATE = 6;
+	public static final int HOOD_LOB_ANGLE_STATE = 7;
 	public static final int HOOD_DEFAULT_STATE = HOOD_ZERO_STATE;
 	public static int hoodState = HOOD_DEFAULT_STATE;
 	
@@ -108,11 +112,11 @@ public class RobotMap {
 	public static final int DRIVE_AND_SHOOT_PID_AUTON = 4;
 	
 	//CONSTANTS
-	public static final double CONSTANT_SPEED = 7000;
+	public static final int CONSTANT_SPEED = 7000;
 	public static final double HOOD_SPEED = .3;
 	
 	//HOOD
-	public static final double ACCEPTABLE_HOOD_RANGE = 2;
+	public static final double ACCEPTABLE_HOOD_RANGE = 1;
 	
 	public static final int FAR_ANGLE_VALUE = 3200;
 	public static final int CLOSE_ANGLE_VALUE = 3208;
@@ -133,6 +137,7 @@ public class RobotMap {
 	public static final double BALL_WAIT_TIME = 1000;
 	public static final int CLOSE_FIRE_SPEED = 10000;
 	public static final int FAR_FIRE_SPEED = 7000;
+	public static final int LOB_SPEED = 5900;
 	
 	public static final double ACCEPTABLE_JOYSTICK_RANGE = .2;
 	public static final double AZIMUTH_RANGE = .5;
