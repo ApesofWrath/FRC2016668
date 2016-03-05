@@ -49,9 +49,9 @@ public class Shooter {
 	public static void movePotPID(int ref){
 		
 		if (Robot.isBrightEyes){
-			Ki = 0.01;//38
-			Kd = 0.000;//8
-			Kp = .03;
+			Ki = 0.0095;//38
+			Kd = 0.0003;//8
+			Kp = .039;
 		}
 		else {
 			Ki = 0.0002;

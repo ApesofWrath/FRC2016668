@@ -16,7 +16,7 @@ public class TeleopStateMachine {
 	public static boolean fromFar = false;
 	public static boolean isSameState = false;
 	
-	public static boolean ballCleared = true;
+	public static boolean ballCleared = false;
 	
 	public static void stateMachine(boolean optic, boolean isCloseFire, 
 			boolean isFarFire, boolean isIntakeLower, boolean isCollapse, boolean isManual,
@@ -28,15 +28,18 @@ public class TeleopStateMachine {
 			SmartDashboard.putBoolean("Ready For Far Shot", Vision.isShotPossible());
 		
 		 
-		if (!optic && !ballCleared){
-			Shooter.setPID(RobotMap.FAR_FIRE_SPEED_RANGE);
+		if ((!optic || (RobotMap.currentState == RobotMap.BALL_CLEAR_STATE) || (RobotMap.currentState == RobotMap.FAR_FIRE_STATE) 
+				|| (RobotMap.currentState == RobotMap.CLOSE_FIRE_STATE)) && (!ballCleared)){
+	
+			System.out.println("SPINNING");
+			Shooter.setPID(RobotMap.FAR_FIRE_SPEED);
 		
 		}
 		
 		else{
+			System.out.println("NOT");
 			Shooter.setPID(0);
 		}
-		
 		
 		if(isManual && RobotMap.currentState != RobotMap.MANUAL_OVERRIDE_STATE){
 			Intake.stop();
@@ -86,7 +89,7 @@ public class TeleopStateMachine {
 		case RobotMap.WAIT_FOR_BUTTON_STATE:
 			SmartDashboard.putString("State: ", "Wait For Button State");
 			canReverse = true;
-			ballCleared = true;
+			ballCleared = false;
 			//Prints whether a ball is ready to shoot
 			if (!optic){
 				SmartDashboard.putBoolean("BALL IN PLACE:", true);

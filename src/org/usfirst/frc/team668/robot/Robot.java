@@ -216,7 +216,7 @@ public class Robot extends IterativeRobot {
 		
 		boolean isReturn = joyOp.getRawButton(RobotMap.RETURN_BUTTON);
 		//boolean optic = opticSensor.get();
-		boolean optic;
+		boolean optic = opticSensor.get();
 		boolean limit1 = limitSwitch.get();
 		boolean limit2 = limitSwitchTwo.get();
 		
@@ -228,13 +228,13 @@ public class Robot extends IterativeRobot {
 		boolean isFire = joyOp.getRawButton(RobotMap.FIRE_BUTTON);
 		boolean aim = joyThrottle.getRawButton(RobotMap.AIM_BUTTON);
 		
-		if ((RobotMap.currentState != RobotMap.CLOSE_FIRE_STATE) && (RobotMap.currentState != RobotMap.FAR_FIRE_STATE) 
-				&& (RobotMap.currentState != RobotMap.BALL_CLEAR_STATE) && (RobotMap.currentState != RobotMap.MANUAL_FIRE_STATE)){
-			optic = opticSensor.get();
-		}
-		else{
-			optic = false;
-		}
+//		if ((RobotMap.currentState != RobotMap.CLOSE_FIRE_STATE) && (RobotMap.currentState != RobotMap.FAR_FIRE_STATE) 
+//				&& (RobotMap.currentState != RobotMap.BALL_CLEAR_STATE) && (RobotMap.currentState != RobotMap.MANUAL_FIRE_STATE)){
+//			optic = opticSensor.get();
+//		}
+//		else{
+//			optic = true;
+//		}
 			
 		TeleopStateMachine.stateMachine(optic, isCloseFire, isFarFire, isIntakeLower, 
 				isCollapse, isManual, isReturn, farAngle, closeAngle, isFire, isReverse, manualHood, lowGoal);
@@ -479,7 +479,7 @@ public class Robot extends IterativeRobot {
 			canTalonIntake.set(0);
 		}
 		
-		canTalonFlyWheel.set(((joyOp.getRawAxis(3)/2)+.5));
+	//	canTalonFlyWheel.set(((joyOp.getRawAxis(3)/2)+.5));
 		
 	//	System.out.println(pot.getValue());
 		
@@ -511,10 +511,9 @@ public class Robot extends IterativeRobot {
 		System.out.printf("P: %2.2f I: %2.2f D: %2.2f Speed: %2.2f Target: %2.2f Angle: %2.2f\n" 
 				, Shooter.P, Shooter.I, Shooter.D, Shooter.speed, (double)target, (double)pot.getValue());
 		
-//		if(joyOp.getRawButton(4)){
-//			Shooter.setPID(10000);
-//			
-//		}
+		if(joyOp.getRawButton(4)){
+			Shooter.setPID(10000);
+		}
 //		else if (joyOp.getRawButton(6)){
 //			Shooter.setPID(6500);
 //		}

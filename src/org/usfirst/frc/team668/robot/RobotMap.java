@@ -108,17 +108,17 @@ public class RobotMap {
 	public static final int DRIVE_AND_SHOOT_PID_AUTON = 4;
 	
 	//CONSTANTS
-	public static final double CONSTANT_SPEED = 10000;
+	public static final double CONSTANT_SPEED = 7000;
 	public static final double HOOD_SPEED = .3;
 	
 	//HOOD
 	public static final double ACCEPTABLE_HOOD_RANGE = 2;
 	
-	public static final int FAR_ANGLE_VALUE = 1200;
+	public static final int FAR_ANGLE_VALUE = 3200;
 	public static final int CLOSE_ANGLE_VALUE = 3208;
 	
 	public static final int BRIGHT_FAR_ANGLE_VALUE = 0;
-	public static final int BRIGHT_CLOSE_ANGLE_VALUE = 0;
+	public static final int BRIGHT_CLOSE_ANGLE_VALUE = 680;
 	
 	public static final int COLLAPSE_ANGLE_VALUE = 0;
 	
@@ -132,7 +132,7 @@ public class RobotMap {
 	public static final double FIRE_INTAKE_SPEED = 1;
 	public static final double BALL_WAIT_TIME = 1000;
 	public static final int CLOSE_FIRE_SPEED = 10000;
-	public static final int FAR_FIRE_SPEED = 10000;
+	public static final int FAR_FIRE_SPEED = 7000;
 	
 	public static final double ACCEPTABLE_JOYSTICK_RANGE = .2;
 	public static final double AZIMUTH_RANGE = .5;

@@ -21,9 +21,19 @@ public class Vision {
 //	}
 	
 	public static int getAngle(){
-		int angle = 3222;
+		int angle;
+		int yInt;
+		if (Robot.isBrightEyes){
+			angle = 688;
+			yInt = 670;
+		}
+		else{
+			angle = 3222;
+			yInt = 3204;
+		}
+		
 		if (Robot.distance < 132){
-			angle =  (int)(((Robot.distance - 84)/(48))*(20))+3204;
+			angle =  (int)(((Robot.distance - 84)/(48))*(20))+ yInt;
 		}
 		System.out.println("Target " + angle);
 		return angle;
