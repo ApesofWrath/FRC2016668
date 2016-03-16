@@ -246,8 +246,18 @@ public class Robot extends IterativeRobot {
 		//gear shifting code 
 		
 		if ((Math.abs(joyThrottle.getY()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE 
-				&& Math.abs(joyWheel.getX()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE) && aim){
-			DriveController.aim(.25);
+				&& Math.abs(joyWheel.getX()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE) && aim && azimuth != 400){
+			DriveController.aimP();
+		}
+//		if ((Math.abs(joyThrottle.getY()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE ) && aim && azimuth != 400){
+//			DriveController.aimP();
+//			System.out.println("HI");
+//		}
+		
+		if(!aim){
+			DriveController.i = 0;
+			DriveController.I = 0;
+			DriveController.lastTime = ((double)System.currentTimeMillis())/1000.0; 
 		}
 		
 		//System.out.println("AZIMUTH: " + azimuth);
@@ -261,7 +271,7 @@ public class Robot extends IterativeRobot {
 		
 		//Drive Code
 		if ((Math.abs(joyThrottle.getY()) > .2 || Math.abs(joyWheel.getX()) > .2) 
-				&& !joyThrottle.getRawButton(2)){
+				&& !joyThrottle.getRawButton(3)){
 			if (isMinimize){
 				robotDrive.arcadeDrive(joyThrottle.getY()*.6, -joyWheel.getX()* .6);
 			}
@@ -320,16 +330,10 @@ public class Robot extends IterativeRobot {
 		
 		azimuth = table.getNumber("Azimuth", 400);
 		//System.out.println(azimuth);
+		
+		System.out.print("Azimuth: " + azimuth);
+		System.out.println(" Distance: " + distance);
 	}//end of periodic
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		
 		
@@ -481,7 +485,7 @@ public class Robot extends IterativeRobot {
 			canTalonIntake.set(0);
 		}
 		
-	//	canTalonFlyWheel.set(((joyOp.getRawAxis(3)/2)+.5));
+		canTalonFlyWheel.set(((joyOp.getRawAxis(3)/2)+.5));
 		
 	//	System.out.println(pot.getValue());
 		
@@ -511,14 +515,14 @@ public class Robot extends IterativeRobot {
 //		SmartDashboard.putNumber("D", Shooter.D);
 		
 	
-		int ref = (int)(((joyOp.getRawAxis(3)/2)+.5)*11000);
+	//	int ref = (int)(((joyOp.getRawAxis(3)/2)+.5)*11000);
 		
 		System.out.printf("P: %2.2f I: %2.2f D: %2.2f Speed: %2.2f Target: %2.2f TargetAng: %2.2f Angle: %2.2f\n" 
 				, Shooter.P, Shooter.I, Shooter.D, Shooter.speed, (double)ref, (double)target, (double)pot.getValue());
 		
-		if(joyOp.getRawButton(4)){
-			Shooter.setPID(ref);
-		}
+//		if(joyOp.getRawButton(4)){
+//			Shooter.setPID(ref);
+//		}
 //		else if (joyOp.getRawButton(6)){
 //			Shooter.setPID(6500);
 //		}

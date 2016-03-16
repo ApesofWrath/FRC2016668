@@ -37,6 +37,7 @@ public class TeleopStateMachine {
 			System.out.println("SPINNING");
 			
 			Shooter.setPID(flyWheelSpeed);
+			System.out.println("FlyWheel Speed: " + flyWheelSpeed);
 		}
 		
 		else{
@@ -257,7 +258,7 @@ public class TeleopStateMachine {
 			System.out.print(" Speed Target: " + reference);
 			System.out.print(" Speed Range: " + RobotMap.FAR_FIRE_SPEED_RANGE);
 			System.out.println(" Hood Range: " + RobotMap.ACCEPTABLE_HOOD_RANGE);
-			if ((Math.abs(flyWheelSpeed - Robot.canTalonFlyWheel.getSpeed()) <= RobotMap.FAR_FIRE_SPEED_RANGE) 
+			if ((Math.abs(flyWheelSpeed - Robot.canTalonFlyWheel.getSpeed()) <= RobotMap.FAR_FIRE_SPEED_RANGE) //far fire speed rang ei used for both close and far shots
 					&& Math.abs(Shooter.angle - Robot.pot.getValue()) <= RobotMap.ACCEPTABLE_HOOD_RANGE){
 				shootTime = System.currentTimeMillis();
 				RobotMap.currentState = RobotMap.SHOOT_TIMER_STATE;

@@ -31,7 +31,7 @@ public class RobotMap {
 	public static final int MINIMIZE_BUTTON = 2; // throttle
 	public static final int INTAKE_BUTTON = 2; //4
 	public static final int LOB_SHOT_BUTTON = 3;
-	public static final int REVERSE_BUTTON = 6; 
+	public static final int REVERSE_BUTTON = 6;
 	public static final int FIRE_BUTTON = 1; // manual
 	public static final int FAR_FIRE_BUTTON = 1;
 	public static final int LOWER_INTAKE_BUTTON = 7;

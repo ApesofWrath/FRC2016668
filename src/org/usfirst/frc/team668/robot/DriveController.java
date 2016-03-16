@@ -3,6 +3,15 @@ package org.usfirst.frc.team668.robot;
 
 public class DriveController {
 	
+	public static double Kp, Ki;
+	public static double error;
+	public static double currentTime = 0;
+	public static double lastTime = ((double)System.currentTimeMillis())/1000.0;
+	public static double lastError = 0;
+	public static double P, I;
+	public static double i;
+	public static double speed;
+	
 	public static int errorRight;
 	public static double currentTimeRight = 0;
 	public static double lastTimeRight = ((double)System.currentTimeMillis())/1000.0;
@@ -27,6 +36,50 @@ public class DriveController {
 	public static double Pl, Il, Dl;
 	public static double speedLeft;
 
+	
+	public static void aimP(){
+		
+		if (Robot.isBrightEyes){
+			Kp = 1.7;
+			Ki = 2.3;
+		}
+		else{
+			Kp = 0;
+		}
+		error = Math.sin((Robot.azimuth*Math.PI)/180);
+
+		
+		currentTime = ((double)System.currentTimeMillis())/1000.0;
+		
+		if(Robot.azimuth > 355 || Robot.azimuth < 5){
+			i = i + (currentTime-lastTime)*(error);
+		}
+		
+		P = Kp * error;
+		I = i*Ki;
+		
+		speed = P + I;
+		
+		if (Math.abs(speed) > 1){
+			if ( speed > 0 ){
+				speed = 1;
+			}
+			else {
+				speed = -1;
+			}
+		}
+		
+		Robot.canTalonFrontRight.set(speed);
+		Robot.canTalonRearRight.set(speed);
+		Robot.canTalonFrontLeft.set(speed);
+		Robot.canTalonRearLeft.set(speed);
+	
+		lastTime = currentTime;
+		lastError = error;
+		
+		
+		
+	}
 	public static boolean rightPID(int ref){
 		
 		if (Robot.isBrightEyes){
