@@ -25,8 +25,8 @@ public class Vision {
 		int yInt;
 		int slope; 
 		if (Robot.isBrightEyes){
-			angle = 657;
-			yInt = 644;
+			angle = 377;
+			yInt = 364;
 			slope = 10;
 		}
 		else{
