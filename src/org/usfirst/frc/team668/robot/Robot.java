@@ -247,7 +247,7 @@ public class Robot extends IterativeRobot {
 		
 		if ((Math.abs(joyThrottle.getY()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE 
 				&& Math.abs(joyWheel.getX()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE) && aim && azimuth != 400){
-			DriveController.aimP();
+			DriveController.aimPI();
 		}
 //		if ((Math.abs(joyThrottle.getY()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE ) && aim && azimuth != 400){
 //			DriveController.aimP();

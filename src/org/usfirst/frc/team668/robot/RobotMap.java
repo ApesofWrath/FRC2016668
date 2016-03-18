@@ -115,6 +115,10 @@ public class RobotMap {
 	public static final int CONSTANT_SPEED = 7000;
 	public static final double HOOD_SPEED = .3;
 	
+	public static final int BANG_DRIVE_RANGE = 100;
+	
+	public static final double BANG_DRIVE_OUTPUT = .5;
+	
 	//HOOD
 	public static final double ACCEPTABLE_HOOD_RANGE = 1;
 	
@@ -135,7 +139,7 @@ public class RobotMap {
 	public static final double FAR_FIRE_SPEED_RANGE = 100;
 	public static final double FIRE_INTAKE_SPEED = 1;
 	public static final double BALL_WAIT_TIME = 1000;
-	public static final int CLOSE_FIRE_SPEED = 10000;
+	public static final int CLOSE_FIRE_SPEED = 7000;
 	public static final int FAR_FIRE_SPEED = 7000;
 	public static final int LOB_SPEED = 5900;
 	

@@ -37,7 +37,7 @@ public class DriveController {
 	public static double speedLeft;
 
 	
-	public static void aimP(){
+	public static void aimPI(){
 		
 		if (Robot.isBrightEyes){
 			Kp = 1.7;
@@ -183,7 +183,40 @@ public class DriveController {
 			return false;
 		}
 	}
-	
+	public static boolean rightMove(int ref){
+		
+		if (Math.abs(ref - Robot.canTalonFrontRight.getEncPosition()) <= RobotMap.BANG_DRIVE_RANGE){
+			return true;
+		}
+		else{
+			if (ref > Robot.canTalonFrontRight.getEncPosition()){
+				Robot.canTalonFrontRight.set(RobotMap.BANG_DRIVE_OUTPUT);
+				Robot.canTalonRearRight.set(RobotMap.BANG_DRIVE_OUTPUT);
+			}
+			else{
+				Robot.canTalonFrontRight.set(-RobotMap.BANG_DRIVE_OUTPUT);
+				Robot.canTalonRearRight.set(-RobotMap.BANG_DRIVE_OUTPUT);
+			}
+			return false;
+		}
+	}
+	public static boolean leftMove(int ref){
+		
+		if (Math.abs(ref - Robot.canTalonFrontLeft.getEncPosition()) <= RobotMap.BANG_DRIVE_RANGE){
+			return true;
+		}
+		else{
+			if (ref > Robot.canTalonFrontLeft.getEncPosition()){
+				Robot.canTalonFrontLeft.set(RobotMap.BANG_DRIVE_OUTPUT);
+				Robot.canTalonRearLeft.set(RobotMap.BANG_DRIVE_OUTPUT);
+			}
+			else{
+				Robot.canTalonFrontLeft.set(-RobotMap.BANG_DRIVE_OUTPUT);
+				Robot.canTalonRearLeft.set(-RobotMap.BANG_DRIVE_OUTPUT);
+			}
+			return false;
+		}
+	}
 	public static void stop(){
 		Robot.robotDrive.drive(0.0, 0.0);
 //		Robot.canTalonFrontLeft.set(0);

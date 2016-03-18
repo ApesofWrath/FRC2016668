@@ -95,6 +95,9 @@ public class TeleopStateMachine {
 			canReverse = true;
 			ballCleared = false;
 			flyWheelSpeed = 7000;
+			
+			RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
+			
 			//Prints whether a ball is ready to shoot
 			if (!optic){
 				SmartDashboard.putBoolean("BALL IN PLACE:", true);
@@ -145,13 +148,16 @@ public class TeleopStateMachine {
 			SmartDashboard.putString("State: ", "Low Goal Shot State");
 
 			if(lowGoal){
-				RobotMap.currentState = RobotMap.LOW_GOAL_SHOT_STATE;
-				if(Math.abs((RobotMap.BRIGHT_LOW_GOAL_ANGLE)-(Robot.pot.getValue())) <= RobotMap.ACCEPTABLE_HOOD_RANGE ){
+				RobotMap.hoodState = RobotMap.HOOD_LOW_GOAL_SHOT_STATE;
+				Intake.spit(.8);
+				/*
+				if(Math.abs((Shooter.angle)-(Robot.pot.getValue())) <= RobotMap.ACCEPTABLE_HOOD_RANGE ){
 					Intake.spit(.8);
 				}
 				else {
 					Intake.stop();
 				}
+				*/
 			}
 			else{
 				Intake.stop();
@@ -258,7 +264,7 @@ public class TeleopStateMachine {
 			System.out.print(" Speed Target: " + reference);
 			System.out.print(" Speed Range: " + RobotMap.FAR_FIRE_SPEED_RANGE);
 			System.out.println(" Hood Range: " + RobotMap.ACCEPTABLE_HOOD_RANGE);
-			if ((Math.abs(flyWheelSpeed - Robot.canTalonFlyWheel.getSpeed()) <= RobotMap.FAR_FIRE_SPEED_RANGE) //far fire speed rang ei used for both close and far shots
+			if ((Math.abs(RobotMap.CLOSE_FIRE_SPEED - Robot.canTalonFlyWheel.getSpeed()) <= RobotMap.FAR_FIRE_SPEED_RANGE) //far fire speed rang ei used for both close and far shots
 					&& Math.abs(Shooter.angle - Robot.pot.getValue()) <= RobotMap.ACCEPTABLE_HOOD_RANGE){
 				shootTime = System.currentTimeMillis();
 				RobotMap.currentState = RobotMap.SHOOT_TIMER_STATE;
