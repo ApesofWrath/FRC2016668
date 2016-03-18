@@ -98,6 +98,9 @@ public class RobotMap {
 	public static final int HOOD_DEFAULT_STATE = HOOD_ZERO_STATE;
 	public static int hoodState = HOOD_DEFAULT_STATE;
 	
+	//ARM STATE MACHINE
+	//public static final int ARM_
+	
 	
 	public static final int POT_ANALOG_INPUT_PORT = 0;
 	public static final int LIMIT_SWITCH_DIGITAL_INPUT = 2;

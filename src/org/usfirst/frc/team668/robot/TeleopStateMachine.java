@@ -45,6 +45,7 @@ public class TeleopStateMachine {
 			Shooter.setPID(0);
 		}
 		
+		/*
 		if(isManual && RobotMap.currentState != RobotMap.MANUAL_OVERRIDE_STATE){
 			Intake.stop();
 			RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
@@ -53,6 +54,7 @@ public class TeleopStateMachine {
 			RobotMap.manualState = RobotMap.MANUAL_WAIT_FOR_BUTTON_STATE;
 			RobotMap.currentState = RobotMap.MANUAL_OVERRIDE_STATE;
 		}
+		*/
 //		
 //		if (Robot.pot.getValue() > 3225){
 //			System.out.println("pot: "+ Robot.pot.getValue());

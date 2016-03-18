@@ -210,6 +210,7 @@ public class Shooter {
 		
 		case RobotMap.HOOD_GET_STATE:
 			SmartDashboard.putString("HOOD: " , "GET");
+		
 			Robot.distance = dist;
 			angle = Vision.getAngle();
 			RobotMap.hoodState = RobotMap.HOOD_SET_FAR_ANGLE_STATE;
