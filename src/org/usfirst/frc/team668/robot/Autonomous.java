@@ -80,7 +80,7 @@ public class Autonomous {
 		
 		DriveController.stop();
 		
-		boolean turnRight = DriveController.rightMove(RobotMap.TURN_RIGHT_AUTON_DISTANCE);
+		boolean turnRight = DriveController.rightMove(-RobotMap.TURN_RIGHT_AUTON_DISTANCE);
 		boolean turnLeft = DriveController.leftMove(RobotMap.TURN_LEFT_AUTON_DISTANCE);
 		
 		while (r.isEnabled() && r.isAutonomous() && (!turnRight || !turnLeft)){
@@ -124,6 +124,7 @@ public class Autonomous {
 		while(r.isAutonomous() && r.isEnabled() && (!doneRight || !doneLeft)){
 			doneRight = DriveController.rightMove(RobotMap.DRIVE_TO_DEFENSE_RIGHT_DISTANCE);
 			doneLeft = DriveController.leftMove(RobotMap.DRIVE_TO_DEFENSE_LEFT_DISTANCE);
+			System.out.println("Forward");
 		}
 		
 		DriveController.stop();

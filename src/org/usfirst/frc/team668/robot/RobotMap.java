@@ -13,7 +13,7 @@ public class RobotMap {
 	
 	public static final int SHOOTER_ANGLE_CAN_ID = 28;
 //	public static final int SHOOTER_ANGLE_TWO_CAN_ID = 2;
-	
+	public static final int ARM_CAN_ID = 29;
 	public static final int OPTIC_SENSOR_DIGITAL_INPUT_PORT = 0;
 	
 	public static final int PCM_CAN_ID = 4;
@@ -99,10 +99,16 @@ public class RobotMap {
 	public static int hoodState = HOOD_DEFAULT_STATE;
 	
 	//ARM STATE MACHINE
-	//public static final int ARM_
+	
+	public static final int ARM_WAIT_FOR_BUTTON_STATE = 0;
+	public static final int ARM_PORT_STATE = 1;
+	public static final int ARM_GROUND_STATE = 2;
+	public static final int ARM_DEFAULT_STATE = ARM_WAIT_FOR_BUTTON_STATE;
+	public static int armState = ARM_DEFAULT_STATE;
 	
 	
 	public static final int POT_ANALOG_INPUT_PORT = 0;
+	public static final int ARM_POT_ANALOG_INPUT_PORT = 1;
 	public static final int LIMIT_SWITCH_DIGITAL_INPUT = 2;
 	public static final int LIMIT_SWITCH_TWO_DIGITAL_INPUT = 3;
 	
@@ -112,18 +118,23 @@ public class RobotMap {
 	public static final int DRIVE_UNDER_BAR_AUTON = 1;
 	public static final int STOP_AUTON = 2;
 	public static final int DRIVE_TO_DEFENSE_AUTON = 3;
-	public static final int DRIVE_AND_SHOOT_PID_AUTON = 4;
+	public static final int SPYBOT_SHOT_AUTON = 4;
 	
 	//CONSTANTS
 	public static final int CONSTANT_SPEED = 7000;
 	public static final double HOOD_SPEED = .3;
+	public static final int PORT_HEIGHT = 0;
+	public static final int GROUND_HEIGHT = 0;
+	public static final int ARM_ZERO_HEIGHT = 0;
+	
 	
 	public static final int BANG_DRIVE_RANGE = 100;
 	
-	public static final double BANG_DRIVE_OUTPUT = .5;
+	public static final double BANG_DRIVE_OUTPUT = .3;
 	
-	//HOOD
+	//RANGES
 	public static final double ACCEPTABLE_HOOD_RANGE = 1;
+	public static final double ACCEPTABLE_ARM_RANGE = 5;
 	
 	public static final int FAR_ANGLE_VALUE = 3200;
 	public static final int CLOSE_ANGLE_VALUE = 3208;
@@ -150,7 +161,7 @@ public class RobotMap {
 	public static final double AZIMUTH_RANGE = .5;
 	
 	public static final double AIM_SPEED = 0;
-	public static final double DRIVE_AND_SHOOT_TURN_SPEED = 0;
+	public static final double DRIVE_AND_SHOOT_TURN_SPEED = 0.4;
 	
 	public static final double FIRE_DISTANCE_1 = 0;
 	public static final double FIRE_DISTANCE_2 = 0;
@@ -162,8 +173,8 @@ public class RobotMap {
 	public static final int DRIVE_TO_DEFENSE_RIGHT_DISTANCE = 0;
 	public static final int DRIVE_TO_DEFENSE_LEFT_DISTANCE = 0;
 	
-	public static final int DRIVE_AND_SHOOT_LEFT_DISTANCE = 0;
-	public static final int DRIVE_AND_SHOOT_RIGHT_DISTANCE = 0;
+	public static final int DRIVE_AND_SHOOT_LEFT_DISTANCE = 5869;
+	public static final int DRIVE_AND_SHOOT_RIGHT_DISTANCE = 5869;
 	
 	public static final int TURN_RIGHT_AUTON_DISTANCE = 0;
 	public static final int TURN_LEFT_AUTON_DISTANCE = 0;

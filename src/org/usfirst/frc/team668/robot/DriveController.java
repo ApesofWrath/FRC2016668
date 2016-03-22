@@ -186,6 +186,8 @@ public class DriveController {
 	public static boolean rightMove(int ref){
 		
 		if (Math.abs(ref - Robot.canTalonFrontRight.getEncPosition()) <= RobotMap.BANG_DRIVE_RANGE){
+			Robot.canTalonFrontRight.set(0);
+			Robot.canTalonRearRight.set(0);
 			return true;
 		}
 		else{
@@ -203,6 +205,8 @@ public class DriveController {
 	public static boolean leftMove(int ref){
 		
 		if (Math.abs(ref - Robot.canTalonFrontLeft.getEncPosition()) <= RobotMap.BANG_DRIVE_RANGE){
+			Robot.canTalonFrontLeft.set(0);
+			Robot.canTalonRearLeft.set(0);
 			return true;
 		}
 		else{

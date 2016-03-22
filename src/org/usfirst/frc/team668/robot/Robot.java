@@ -29,14 +29,14 @@ public class Robot extends IterativeRobot {
 	public static Joystick joyWheel, joyThrottle, joyOp;
 	public static CANTalon canTalonFlyWheel, canTalonIntake, 
 	canTalonFrontLeft, canTalonFrontRight, canTalonRearLeft, canTalonRearRight,
-	canTalonIntakeAngle, canTalonShooterAngle, canTalonShooterAngleTwo;
+	canTalonIntakeAngle, canTalonShooterAngle, canTalonShooterAngleTwo, canTalonArm;
 	public static RobotDrive robotDrive;
 	public static DigitalInput opticSensor, limitSwitch, limitSwitchTwo;
 	public static CameraServer server;
 	public static PrintWriter system;
 	public static DoubleSolenoid intakePiston, shiftPiston;
 	public static Compressor compressor;
-	public static AnalogInput pot;
+	public static AnalogInput pot, armPot;
 	public static NetworkTable table;
 	public static SendableChooser autonChooser;
 	public static PowerDistributionPanel pdp;
@@ -55,6 +55,9 @@ public class Robot extends IterativeRobot {
 	public static boolean isBrightEyes = true;
 	// public static USBCamera camFront = new USBCamera("cam1");
 	// public static USBCamera camRear = new USBCamera("cam2");
+	
+	
+	
 	public void robotInit() {
 
 		server = CameraServer.getInstance();
@@ -82,6 +85,7 @@ public class Robot extends IterativeRobot {
 		canTalonRearRight = new CANTalon(RobotMap.REAR_RIGHT_CAN_ID);
 
 		canTalonShooterAngle = new CANTalon(RobotMap.SHOOTER_ANGLE_CAN_ID);
+		canTalonArm = new CANTalon(RobotMap.ARM_CAN_ID);
 
 		robotDrive = new RobotDrive(canTalonFrontLeft, canTalonRearLeft, canTalonFrontRight, canTalonRearRight);
 		robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, false);
@@ -99,6 +103,7 @@ public class Robot extends IterativeRobot {
 		pdp = new PowerDistributionPanel(20);
 		
 		pot = new AnalogInput(RobotMap.POT_ANALOG_INPUT_PORT);
+		armPot = new AnalogInput(RobotMap.ARM_POT_ANALOG_INPUT_PORT);
 		
 		compressor = new Compressor(RobotMap.PCM_CAN_ID);
 
@@ -112,7 +117,7 @@ public class Robot extends IterativeRobot {
 		autonChooser.addObject("Drive Under Bar Autonomous", new Integer(RobotMap.DRIVE_UNDER_BAR_AUTON));
 		autonChooser.addObject("Stop Autonomous", new Integer(RobotMap.STOP_AUTON));
 		autonChooser.addObject("Drive to Defense Autonomous", new Integer(RobotMap.DRIVE_TO_DEFENSE_AUTON));
-		autonChooser.addObject("Drive and shoot PID Autonomous", new Integer(RobotMap.DRIVE_AND_SHOOT_PID_AUTON));
+		autonChooser.addObject("Spy Bot Shoot", new Integer(RobotMap.SPYBOT_SHOT_AUTON));
 		
 		SmartDashboard.putData("Autonomous Selection: ", autonChooser);
 		
@@ -163,8 +168,8 @@ public class Robot extends IterativeRobot {
 		else if (RobotMap.autonMode == RobotMap.DRIVE_TO_DEFENSE_AUTON){
 			Autonomous.driveToDefenseAuton(this);
 		}
-		else if (RobotMap.autonMode == RobotMap.DRIVE_AND_SHOOT_PID_AUTON){
-			Autonomous.driveAndShootPIDAuton(this);
+		else if (RobotMap.autonMode == RobotMap.SPYBOT_SHOT_AUTON){
+			Autonomous.spyBotShotAutonomous(this);
 		}
 	}
 
@@ -244,6 +249,8 @@ public class Robot extends IterativeRobot {
 		
 		Shooter.hoodStateMachine(manualHood);
 		//gear shifting code 
+		
+		SmartDashboard.putNumber("Encoder", canTalonFrontRight.getEncPosition());
 		
 		if ((Math.abs(joyThrottle.getY()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE 
 				&& Math.abs(joyWheel.getX()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE) && aim && azimuth != 400){
