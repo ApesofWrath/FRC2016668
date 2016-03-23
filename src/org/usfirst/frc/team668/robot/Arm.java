@@ -44,10 +44,10 @@ public class Arm {
 			Robot.canTalonArm.set(0);
 		}
 		else if( ref >= Robot.armPot.getValue()){
-			Robot.canTalonArm.set(.6);
+			Robot.canTalonArm.set(-.35);
 		}
 		else if( ref < Robot.armPot.getValue()){
-			Robot.canTalonArm.set(-.6);
+			Robot.canTalonArm.set(.35);
 		}
 			
 	}

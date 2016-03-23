@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Shooter {
 	//i
-	public static int dist = 0;
+	public static double dist = 0;
 	public static int angle;
 	
 	public static int error;
@@ -211,7 +211,7 @@ public class Shooter {
 		case RobotMap.HOOD_GET_STATE:
 			SmartDashboard.putString("HOOD: " , "GET");
 		
-			Robot.distance = dist;
+			dist = Robot.distance;
 			angle = Vision.getAngle();
 			RobotMap.hoodState = RobotMap.HOOD_SET_FAR_ANGLE_STATE;
 			break;
@@ -221,9 +221,9 @@ public class Shooter {
 			System.out.println("ANGLE: " + angle);
 			movePotPID(angle);
 			
-			if (Math.abs(Robot.distance - dist) > 10){
-				RobotMap.hoodState = RobotMap.HOOD_GET_STATE;
-			}
+//			if (Math.abs(Robot.distance - dist) > 10){
+//				RobotMap.hoodState = RobotMap.HOOD_GET_STATE;
+//			}
 			break;
 		
 		case RobotMap.HOOD_LOB_ANGLE_STATE:

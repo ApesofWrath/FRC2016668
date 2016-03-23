@@ -186,8 +186,8 @@ public class DriveController {
 	public static boolean rightMove(int ref){
 		
 		if (Math.abs(ref - Robot.canTalonFrontRight.getEncPosition()) <= RobotMap.BANG_DRIVE_RANGE){
-			Robot.canTalonFrontRight.set(0);
-			Robot.canTalonRearRight.set(0);
+			//Robot.canTalonFrontRight.set(0);
+			//Robot.canTalonRearRight.set(0);
 			return true;
 		}
 		else{
@@ -205,28 +205,28 @@ public class DriveController {
 	public static boolean leftMove(int ref){
 		
 		if (Math.abs(ref - Robot.canTalonFrontLeft.getEncPosition()) <= RobotMap.BANG_DRIVE_RANGE){
-			Robot.canTalonFrontLeft.set(0);
-			Robot.canTalonRearLeft.set(0);
+		//	Robot.canTalonFrontLeft.set(0);
+		//	Robot.canTalonRearLeft.set(0);
 			return true;
 		}
 		else{
 			if (ref > Robot.canTalonFrontLeft.getEncPosition()){
-				Robot.canTalonFrontLeft.set(RobotMap.BANG_DRIVE_OUTPUT);
-				Robot.canTalonRearLeft.set(RobotMap.BANG_DRIVE_OUTPUT);
-			}
-			else{
 				Robot.canTalonFrontLeft.set(-RobotMap.BANG_DRIVE_OUTPUT);
 				Robot.canTalonRearLeft.set(-RobotMap.BANG_DRIVE_OUTPUT);
+			}
+			else{
+				Robot.canTalonFrontLeft.set(RobotMap.BANG_DRIVE_OUTPUT);
+				Robot.canTalonRearLeft.set(RobotMap.BANG_DRIVE_OUTPUT);
 			}
 			return false;
 		}
 	}
 	public static void stop(){
-		Robot.robotDrive.drive(0.0, 0.0);
-//		Robot.canTalonFrontLeft.set(0);
-//		Robot.canTalonFrontRight.set(0);
-//		Robot.canTalonRearLeft.set(0);
-//		Robot.canTalonRearRight.set(0);
+//		Robot.robotDrive.drive(0.0, 0.0);
+		Robot.canTalonFrontLeft.set(0);
+		Robot.canTalonFrontRight.set(0);
+		Robot.canTalonRearLeft.set(0);
+		Robot.canTalonRearRight.set(0);
 		
 	}
 	public static void turnInPlace(double speed){

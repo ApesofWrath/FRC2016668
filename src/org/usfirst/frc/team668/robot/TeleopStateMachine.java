@@ -19,10 +19,10 @@ public class TeleopStateMachine {
 	
 	public static boolean ballCleared = false;
 	
-	public static int flyWheelSpeed = 7000;
+	public static int flyWheelSpeed = 7800;
 	
 	public static void stateMachine(boolean optic, boolean isCloseFire, 
-			boolean isFarFire, boolean isIntakeLower, boolean isCollapse, boolean isManual,
+			boolean isFarFire, boolean isIntakeLower,
 			boolean isReturn, boolean farAngle, boolean closeAngle, boolean isFire, 
 			boolean isReverse, boolean manualHood, boolean lowGoal, boolean isLob ){
 		
@@ -96,7 +96,7 @@ public class TeleopStateMachine {
 			SmartDashboard.putString("State: ", "Wait For Button State");
 			canReverse = true;
 			ballCleared = false;
-			flyWheelSpeed = 7000;
+			flyWheelSpeed = RobotMap.FAR_FIRE_SPEED;
 			
 			RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
 			
@@ -139,11 +139,11 @@ public class TeleopStateMachine {
 			else if (isIntakeLower){
 				RobotMap.currentState = RobotMap.LOWER_INTAKE_STATE;
 			}
-			 
+			/*
 			else if (isCollapse){
 				RobotMap.currentState = RobotMap.COLLAPSE_STATE;
 			}
-
+			*/
 			break;
 			
 		case RobotMap.LOW_GOAL_SHOT_STATE:
@@ -183,11 +183,12 @@ public class TeleopStateMachine {
 			else{
 				Intake.spit(.8);
 			}
-			
+		/*	
 			 if (isCollapse){ //TODO: consider putting this outside the switch
 				Intake.stop();//
 				RobotMap.currentState = RobotMap.COLLAPSE_STATE;//
 			}//
+			*/
 			 if (isReturn){
 				Intake.stop();
 				RobotMap.currentState = RobotMap.WAIT_FOR_BUTTON_STATE;
@@ -424,9 +425,11 @@ public class TeleopStateMachine {
 //				else if (isCloseFire){
 //					RobotMap.manualState = RobotMap.MANUAL_FIRE_STATE;
 //				}
+				/*
 				else if (isCollapse){
 					RobotMap.manualState = RobotMap.MANUAL_COLLAPSE_ANGLE_STATE;
 				}
+				*/
 //				else if (isFarFire){
 //					isClose = false;
 //					RobotMap.manualState = RobotMap.MANUAL_FIRE_STATE;
