@@ -108,6 +108,7 @@ public class RobotMap {
 	
 	
 	public static final int DRIVE_FORWARD_STATE = 0;
+	public static final int DRIVE_MORE_STATE = 2;
 	public static final int STOP_STATE = 1;
 	public static int autonStateForward = DRIVE_FORWARD_STATE;
 	
@@ -117,8 +118,17 @@ public class RobotMap {
 	public static final int SPIN_STATE = 3;
 	public static final int FIRE_SHOOT_STATE = 4;
 	public static final int DONE_STATE = 5;
+	public static final int ANGLE_SET_SHOOT_STATE = 7;
 	public static final int DRIVE_FORWARD_COMPLETE_STATE = 6;
 	public static int autonStateShoot = DRIVE_FORWARD_SHOOT_STATE;
+	
+	public static final int DRIVE_FORWARD_SPY_STATE = 0;
+	public static final int AIM_SPY_STATE = 1;
+	public static final int SPIN_SPY_STATE = 2;
+	public static final int ANGLE_SET_SPY_STATE = 3;
+	public static final int FIRE_SPY_STATE = 4;
+	public static final int SPY_DONE_STATE = 5;
+	public static int autonSpyState = DRIVE_FORWARD_SPY_STATE;
 	
 	public static final int POT_ANALOG_INPUT_PORT = 0;
 	public static final int ARM_POT_ANALOG_INPUT_PORT = 2;
@@ -153,7 +163,7 @@ public class RobotMap {
 	public static final int CLOSE_ANGLE_VALUE = 3208;
 	
 	public static final int BRIGHT_FAR_ANGLE_VALUE = 0;
-	public static final int BRIGHT_CLOSE_ANGLE_VALUE = 680;
+	public static final int BRIGHT_CLOSE_ANGLE_VALUE = 362;
 	
 	public static final int COLLAPSE_ANGLE_VALUE = 0;
 	
@@ -185,6 +195,8 @@ public class RobotMap {
 	
 	public static final int DRIVE_TO_DEFENSE_RIGHT_DISTANCE = 30000;
 	public static final int DRIVE_TO_DEFENSE_LEFT_DISTANCE = 30000;
+	
+	public static final int DRIVE_SPY_DISTANCE = 5000;
 	
 	public static final int DRIVE_AND_CLOSE_DISTANCE = 2000;
 	

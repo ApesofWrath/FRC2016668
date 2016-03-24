@@ -52,7 +52,7 @@ public class Robot extends IterativeRobot {
 	
 	public int target = 3210;
 
-	public static boolean isBrightEyes = true;
+	public static boolean isBrightEyes = false;
 	// public static USBCamera camFront = new USBCamera("cam1");
 	// public static USBCamera camRear = new USBCamera("cam2");
 	
@@ -116,9 +116,9 @@ public class Robot extends IterativeRobot {
 		autonChooser.addDefault("Drive and Shoot Camera Autonomous", new Integer(RobotMap.DRIVE_AND_SHOOT_CAMERA_AUTON));
 		autonChooser.addObject("Drive Under Bar Autonomous", new Integer(RobotMap.DRIVE_UNDER_BAR_AUTON));
 		autonChooser.addObject("Stop Autonomous", new Integer(RobotMap.STOP_AUTON));
-		autonChooser.addObject("Drive to Defense Autonomous", new Integer(RobotMap.DRIVE_TO_DEFENSE_AUTON));
+		/*autonChooser.addObject("Drive to Defense Autonomous", new Integer(RobotMap.DRIVE_TO_DEFENSE_AUTON));
 		autonChooser.addObject("Spy Bot Shoot", new Integer(RobotMap.SPYBOT_SHOT_AUTON));
-		
+		*/
 		SmartDashboard.putData("Autonomous Selection: ", autonChooser);
 		
 //		canTalonFlyWheel.setClosedLoopOutputDirection(true);
@@ -151,10 +151,11 @@ public class Robot extends IterativeRobot {
 		
 		Intake.stop();
 		Shooter.stopAngle();
-		//Shooter.stopFlyWheel();
-		
+		Shooter.stopFlyWheel();
+		RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
 		RobotMap.autonStateShoot = RobotMap.DRIVE_FORWARD_SHOOT_STATE;
-		
+		RobotMap.autonSpyState = RobotMap.DRIVE_FORWARD_SPY_STATE;
+		RobotMap.autonStateForward = RobotMap.DRIVE_FORWARD_STATE;
 		
 	}
 
@@ -177,13 +178,13 @@ public class Robot extends IterativeRobot {
 		else if (RobotMap.autonMode == RobotMap.STOP_AUTON){
 			Autonomous.stopAuton();
 		}
-		else if (RobotMap.autonMode == RobotMap.DRIVE_TO_DEFENSE_AUTON){
+		/*else if (RobotMap.autonMode == RobotMap.DRIVE_TO_DEFENSE_AUTON){
 			Autonomous.driveToDefenseAuton(this);
 		}
 		else if (RobotMap.autonMode == RobotMap.SPYBOT_SHOT_AUTON){
 			Autonomous.spyBotShotAutonomous(this);
 		}
-		
+		*/
 		System.out.println("ENC: " + canTalonFrontRight.getEncPosition());
 	}
 

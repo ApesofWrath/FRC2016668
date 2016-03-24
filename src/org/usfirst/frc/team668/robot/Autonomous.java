@@ -26,12 +26,21 @@ public class Autonomous {
 			boolean doneRight = DriveController.rightMove(RobotMap.DRIVE_UNDER_BAR_RIGHT_DISTANCE);
 			boolean doneLeft = DriveController.leftMove(RobotMap.DRIVE_UNDER_BAR_LEFT_DISTANCE);
 			if (doneRight || doneLeft){
-				RobotMap.autonStateForward = RobotMap.STOP_STATE;
+				Robot.intakePiston.set(DoubleSolenoid.Value.kReverse);
+				RobotMap.autonStateForward = RobotMap.DRIVE_MORE_STATE;
 			}
 			break;
-			
+		
+		case RobotMap.DRIVE_MORE_STATE:
+			boolean finishedRight = DriveController.rightMove(RobotMap.DRIVE_UNDER_BAR_RIGHT_DISTANCE);
+			boolean finishedLeft =  DriveController.leftMove(RobotMap.DRIVE_UNDER_BAR_LEFT_DISTANCE);
+			if (finishedRight || finishedRight){
+				Robot.intakePiston.set(DoubleSolenoid.Value.kForward);
+				RobotMap.autonStateForward = RobotMap.STOP_STATE;
+			}
 		case RobotMap.STOP_STATE:
 			DriveController.stop();
+			break;
 		}
 	}
 	
@@ -95,7 +104,7 @@ public class Autonomous {
 			System.out.println("DF");
 			boolean doneRight = DriveController.rightMove(RobotMap.DRIVE_AND_CLOSE_DISTANCE);
 			boolean doneLeft = DriveController.leftMove(RobotMap.DRIVE_AND_CLOSE_DISTANCE);
-			if (doneRight || doneLeft){
+			if (doneRight && doneLeft){
 				DriveController.stop();
 				Robot.intakePiston.set(DoubleSolenoid.Value.kReverse);
 				RobotMap.autonStateShoot = RobotMap.DRIVE_FORWARD_COMPLETE_STATE;
@@ -106,8 +115,8 @@ public class Autonomous {
 		System.out.println("DC");
 			boolean finishedRight = DriveController.rightMove(RobotMap.DRIVE_AND_SHOOT_DISTANCE);
 			boolean finishedLeft = DriveController.leftMove(RobotMap.DRIVE_AND_SHOOT_DISTANCE);
-			if (finishedRight || finishedLeft){
-				DriveController.stop();
+			if (finishedRight && finishedLeft){
+			//	DriveController.stop();
 				Robot.intakePiston.set(DoubleSolenoid.Value.kForward);
 				RobotMap.autonStateShoot = RobotMap.TURN_STATE;
 			}
@@ -116,13 +125,13 @@ public class Autonomous {
 			
 		case RobotMap.TURN_STATE:
 			
-			System.out.print("TURN");
+			System.out.print("TURN");   
 			System.out.print(" Azimuth: "  + Robot.azimuth);
 			System.out.println(" Distance: " + Robot.distance);
 			DriveController.turnInPlace(RobotMap.DRIVE_AND_SHOOT_TURN_SPEED);
 			
 			if (Robot.distance != 0.0 && (Robot.azimuth < 10 || Robot.azimuth > 350) && Robot.azimuth != 400){
-				DriveController.stop();
+				 DriveController.stop();
 				RobotMap.autonStateShoot = RobotMap.AIM_STATE;
 			}
 			break;
@@ -133,15 +142,16 @@ public class Autonomous {
 			if ((Robot.azimuth < RobotMap.AZIMUTH_RANGE)
 				|| (Robot.azimuth > (360 - RobotMap.AZIMUTH_RANGE)) && (Robot.azimuth !=400)){
 				DriveController.stop();
-				RobotMap.autonStateShoot = 9;
+				RobotMap.autonStateShoot = RobotMap.ANGLE_SET_SHOOT_STATE;
 			}
 			break;
 			
-		case 9:
+		case RobotMap.ANGLE_SET_SHOOT_STATE:
 			RobotMap.hoodState = RobotMap.HOOD_GET_STATE;
 			if (Math.abs(Shooter.angle - Robot.pot.getValue()) < RobotMap.ACCEPTABLE_HOOD_RANGE){
 				RobotMap.autonStateShoot = RobotMap.SPIN_STATE;
 			}
+			break;
 			
 		case RobotMap.SPIN_STATE:
 			int ref = RobotMap.FAR_FIRE_SPEED;
@@ -163,7 +173,9 @@ public class Autonomous {
 			
 		case RobotMap.DONE_STATE:
 			DriveController.stop();
+			break;
 		}
+		
 	}
 	
 	public static void driveAndShootPIDAuton(Robot r){
@@ -264,7 +276,7 @@ public class Autonomous {
 	}
 	
 	public static void spyBotShotAutonomous(Robot r){
-		
+		/*
 		boolean completeRight = DriveController.rightMove(0);
 		boolean completeLeft = DriveController.leftMove(0);
 		
@@ -303,7 +315,59 @@ public class Autonomous {
 		}
 		
 		return;
+		*/
 		
+		switch (RobotMap.autonSpyState){
+		case RobotMap.DRIVE_FORWARD_SPY_STATE:
+			boolean doneRight = DriveController.rightMove(RobotMap.DRIVE_SPY_DISTANCE);
+			boolean doneLeft = DriveController.leftMove(RobotMap.DRIVE_SPY_DISTANCE);
+			
+			if (doneRight || doneLeft){
+				DriveController.stop();
+				RobotMap.autonSpyState = RobotMap.AIM_SPY_STATE;
+			}
+			break;
+			
+		case RobotMap.AIM_SPY_STATE:
+			DriveController.aimPI();
+			
+			if ((Robot.azimuth < RobotMap.AZIMUTH_RANGE)
+					|| (Robot.azimuth > (360 - RobotMap.AZIMUTH_RANGE)) && (Robot.azimuth !=400)){
+					DriveController.stop();
+					RobotMap.autonSpyState = RobotMap.ANGLE_SET_SPY_STATE;
+				}
+			break;
+			
+		case RobotMap.ANGLE_SET_SPY_STATE:
+			
+			RobotMap.hoodState = RobotMap.HOOD_GET_STATE;
+			if (Math.abs(Shooter.angle - Robot.pot.getValue()) < RobotMap.ACCEPTABLE_HOOD_RANGE){
+				RobotMap.autonSpyState = RobotMap.SPIN_STATE;
+			}
+			break;
+		
+		case RobotMap.SPIN_SPY_STATE:
+			int ref = RobotMap.FAR_FIRE_SPEED;
+			Shooter.setPID(ref);
+			RobotMap.autonSpyState = RobotMap.FIRE_SPY_STATE;
+			break;
+			
+		case RobotMap.FIRE_SPY_STATE:
+			System.out.println("RPM: " + Robot.canTalonFlyWheel.getSpeed());
+			if (Math.abs(Robot.canTalonFlyWheel.getSpeed() - RobotMap.FAR_FIRE_SPEED) < RobotMap.FAR_FIRE_SPEED_RANGE){
+				Shooter.fire(-RobotMap.FIRE_INTAKE_SPEED);
+				long time = System.currentTimeMillis(); //wait for the ball to be completely out of the firing chamber
+				if (System.currentTimeMillis() - time >= RobotMap.BALL_WAIT_TIME){
+					Intake.stop();
+					RobotMap.autonSpyState = RobotMap.SPY_DONE_STATE;
+				}
+			}
+			break;
+			
+		case RobotMap.SPY_DONE_STATE:
+			DriveController.stop();
+			break;
+		}
 	}
 	
 	

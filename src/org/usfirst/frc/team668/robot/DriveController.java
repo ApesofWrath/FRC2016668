@@ -222,7 +222,7 @@ public class DriveController {
 		}
 	}
 	public static void stop(){
-//		Robot.robotDrive.drive(0.0, 0.0);
+		Robot.robotDrive.drive(0.0, 0.0);
 		Robot.canTalonFrontLeft.set(0);
 		Robot.canTalonFrontRight.set(0);
 		Robot.canTalonRearLeft.set(0);

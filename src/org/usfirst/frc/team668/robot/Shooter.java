@@ -175,7 +175,7 @@ public class Shooter {
 	
 	public static void stopFlyWheel(){
 		
-		Robot.canTalonFlyWheel.set(0);
+		setPID(0);
 		//Robot.canTalonFlyWheelTwo.set(0);
 	
 	}
@@ -228,7 +228,12 @@ public class Shooter {
 		
 		case RobotMap.HOOD_LOB_ANGLE_STATE:
 			SmartDashboard.putString("HOOD: ", "LOB");
-			angle = 671;
+			if (Robot.isBrightEyes){
+				angle = 371;
+			}
+			else{
+				angle = 3204;
+			}
 			movePotPID(angle);
 			break;
 			
