@@ -503,9 +503,9 @@ public class Robot extends IterativeRobot {
 		else{
 			canTalonIntake.set(0);
 		}
-		
-		canTalonFlyWheel.set(((joyOp.getRawAxis(3)/2)+.5));
 		*/
+	//	canTalonFlyWheel.set(((joyOp.getRawAxis(3)/2)+.5));
+		
 	//	System.out.println(pot.getValue());
 		
 		if (joyThrottle.getRawButton(3)){
@@ -537,28 +537,29 @@ public class Robot extends IterativeRobot {
 	//	int ref = (int)(((joyOp.getRawAxis(3)/2)+.5)*11000);
 		
 		System.out.printf("P: %2.2f I: %2.2f D: %2.2f Speed: %2.2f Target: %2.2f TargetAng: %2.2f Angle: %2.2f\n" 
-				, Shooter.P, Shooter.I, Shooter.D, Shooter.speed, (double)ref, (double)target, (double)armPot.getValue());
+				, Shooter.P, Shooter.I, Shooter.D, Shooter.speed, (double)ref, (double)target, (double)pot.getValue());
 		
-//		if(joyOp.getRawButton(4)){
-//			Shooter.setPID(ref);
-//		}
-//		else if (joyOp.getRawButton(6)){
-//			Shooter.setPID(6500);
-//		}
-//		else if (joyOp.getRawButton(5)){
-//			canTalonFlyWheel.disable();
-//		}
+		if(joyOp.getRawButton(4)){
+			Shooter.setPID(7000);
+		}
+		else if (joyOp.getRawButton(6)){
+			Shooter.setPID(6500);
+		}
+		else if (joyOp.getRawButton(5)){
+			canTalonFlyWheel.disable();
+		}
 		//5700
 		//671
 		
 		if ( joyOp.getRawButton(5)){
-			canTalonArm.set(.3);
+			//canTalonArm.set(.3);
+			Shooter.movePotPID(RobotMap.CLOSE_ANGLE_VALUE);
 		}
-		else if (joyOp.getRawButton(3)){
-			canTalonArm.set(-.3);
-		}
+		//else if (joyOp.getRawButton(3)){
+			//canTalonArm.set(-.3);
+		//}
 		else{
-			canTalonArm.set(0);
+			canTalonShooterAngle.set(0);
 		}
 	}
 

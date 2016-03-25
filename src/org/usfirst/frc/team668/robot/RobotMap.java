@@ -130,6 +130,13 @@ public class RobotMap {
 	public static final int SPY_DONE_STATE = 5;
 	public static int autonSpyState = DRIVE_FORWARD_SPY_STATE;
 	
+	public static final int SET_ANGLE_STATE = 0;
+	public static final int SET_SPEED_STATE = 1;
+	public static final int FIRE_BALL_STATE = 2;
+	public static final int IM_DONE_STATE = 3;
+	public static int noCamSpyState = SET_ANGLE_STATE;
+	
+	
 	public static final int POT_ANALOG_INPUT_PORT = 0;
 	public static final int ARM_POT_ANALOG_INPUT_PORT = 2;
 	public static final int LIMIT_SWITCH_DIGITAL_INPUT = 2;
@@ -190,8 +197,8 @@ public class RobotMap {
 	public static final double FIRE_DISTANCE_2 = 0;
 	public static final double FIRE_DISTANCE_3 = 0;
 	
-	public static final int DRIVE_UNDER_BAR_RIGHT_DISTANCE = 31000;
-	public static final int DRIVE_UNDER_BAR_LEFT_DISTANCE = 31000;
+	public static final int DRIVE_UNDER_BAR_RIGHT_DISTANCE = 51000;
+	public static final int DRIVE_UNDER_BAR_LEFT_DISTANCE = 51000;
 	
 	public static final int DRIVE_TO_DEFENSE_RIGHT_DISTANCE = 30000;
 	public static final int DRIVE_TO_DEFENSE_LEFT_DISTANCE = 30000;
@@ -200,7 +207,7 @@ public class RobotMap {
 	
 	public static final int DRIVE_AND_CLOSE_DISTANCE = 2000;
 	
-	public static final int DRIVE_AND_SHOOT_DISTANCE = 30089;
+	public static final int DRIVE_AND_SHOOT_DISTANCE = 51000;
 	
 	public static final int TURN_RIGHT_AUTON_DISTANCE = 0;
 	public static final int TURN_LEFT_AUTON_DISTANCE = 0;

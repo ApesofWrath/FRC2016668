@@ -272,7 +272,7 @@ public class TeleopStateMachine {
 				shootTime = System.currentTimeMillis();
 				RobotMap.currentState = RobotMap.SHOOT_TIMER_STATE;
 				
-			}
+			} 
 			else if (isReturn){
 				Intake.stop();
 				RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
