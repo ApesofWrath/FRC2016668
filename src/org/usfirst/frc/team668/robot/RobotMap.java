@@ -45,6 +45,7 @@ public class RobotMap {
 	public static final int GROUND_BUTTON = 4; //kkk
 	public static final int MANUAL_HOOD_BUTTON = 9; //manuAL
 	public static final int RETURN_BUTTON = 11;
+
 	public static final int LOW_GEAR_BUTTON = 4; //throttle
 	public static final int HIGH_GEAR_BUTTON = 5; //throttle
 	public static final int AIM_BUTTON = 3; //throttle
@@ -95,6 +96,7 @@ public class RobotMap {
 	public static final int HOOD_SET_FAR_ANGLE_STATE = 5;
 	public static final int HOOD_LOW_GOAL_SHOT_STATE = 6;
 	public static final int HOOD_LOB_ANGLE_STATE = 7;
+	public static final int HOOD_SPY_DISTANCE = 8;
 	public static final int HOOD_DEFAULT_STATE = HOOD_ZERO_STATE;
 	public static int hoodState = HOOD_DEFAULT_STATE;
 	
@@ -147,7 +149,7 @@ public class RobotMap {
 	public static final int DRIVE_AND_SHOOT_CAMERA_AUTON = 0;
 	public static final int DRIVE_UNDER_BAR_AUTON = 1;
 	public static final int STOP_AUTON = 2;
-	public static final int DRIVE_TO_DEFENSE_AUTON = 3;
+	public static final int SPYBOT_NO_AIM = 3;
 	public static final int SPYBOT_SHOT_AUTON = 4;
 	
 	//CONSTANTS
@@ -166,7 +168,7 @@ public class RobotMap {
 	public static final double ACCEPTABLE_HOOD_RANGE = 1;
 	public static final double ACCEPTABLE_ARM_RANGE = 20;
 	
-	public static final int FAR_ANGLE_VALUE = 3200;
+	public static final int FAR_ANGLE_VALUE = 3232;
 	public static final int CLOSE_ANGLE_VALUE = 3208;
 	
 	public static final int BRIGHT_FAR_ANGLE_VALUE = 0;

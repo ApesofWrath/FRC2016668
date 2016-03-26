@@ -30,8 +30,8 @@ public class Vision {
 			slope = 10;
 		}
 		else{
-			angle = 3222;
-			yInt = 3204;
+			angle = 3232;
+			yInt = 3210;
 			slope = 20;
 		}
 		

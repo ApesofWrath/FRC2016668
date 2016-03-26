@@ -44,7 +44,18 @@ public class DriveController {
 			Ki = 2.3;
 		}
 		else{
-			Kp = 0;
+			if ((Robot.azimuth > 345 && Robot.azimuth < 355) || (Robot.azimuth < 15 && Robot.azimuth > 5)){
+			Kp = 2.0;
+			Ki = 0;
+			}
+			else if (Robot.azimuth == 400){
+				Kp = 0;
+				Ki = 0;
+			}
+			else{
+				Kp = 5;
+				Ki = 0;
+			}
 		}
 		error = Math.sin((Robot.azimuth*Math.PI)/180);
 

@@ -117,8 +117,10 @@ public class Robot extends IterativeRobot {
 		autonChooser.addObject("Drive Under Bar Autonomous", new Integer(RobotMap.DRIVE_UNDER_BAR_AUTON));
 		autonChooser.addObject("Stop Autonomous", new Integer(RobotMap.STOP_AUTON));
 		/*autonChooser.addObject("Drive to Defense Autonomous", new Integer(RobotMap.DRIVE_TO_DEFENSE_AUTON));
+		 */
 		autonChooser.addObject("Spy Bot Shoot", new Integer(RobotMap.SPYBOT_SHOT_AUTON));
-		*/
+		autonChooser.addObject("Spy Bot no auto aim", RobotMap.SPYBOT_NO_AIM);
+		
 		SmartDashboard.putData("Autonomous Selection: ", autonChooser);
 		
 //		canTalonFlyWheel.setClosedLoopOutputDirection(true);
@@ -165,7 +167,7 @@ public class Robot extends IterativeRobot {
 		
 		distance = table.getNumber("Distance", 0);
 		
-		azimuth = table.getNumber("Azimuth", 400);
+		azimuth = table.getNumber("Azimuth", 666);
 		
 		RobotMap.autonMode = ((Integer) (autonChooser.getSelected())).intValue();
 		
@@ -181,10 +183,14 @@ public class Robot extends IterativeRobot {
 		/*else if (RobotMap.autonMode == RobotMap.DRIVE_TO_DEFENSE_AUTON){
 			Autonomous.driveToDefenseAuton(this);
 		}
+		*/
 		else if (RobotMap.autonMode == RobotMap.SPYBOT_SHOT_AUTON){
 			Autonomous.spyBotShotAutonomous(this);
 		}
-		*/
+		else if (RobotMap.autonMode == RobotMap.SPYBOT_NO_AIM){
+			Autonomous.spyBotNoCamera();
+		}
+		
 		System.out.println("ENC: " + canTalonFrontRight.getEncPosition());
 	}
 
@@ -265,9 +271,10 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Encoder", canTalonFrontRight.getEncPosition());
 		
 		if ((Math.abs(joyThrottle.getY()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE 
-				&& Math.abs(joyWheel.getX()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE) && aim && azimuth != 400){
+				&& Math.abs(joyWheel.getX()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE) && aim && (azimuth != 400 || azimuth != 666)){
 			DriveController.aimPI();
 		}
+		
 //		if ((Math.abs(joyThrottle.getY()) < RobotMap.ACCEPTABLE_JOYSTICK_RANGE ) && aim && azimuth != 400){
 //			DriveController.aimP();
 //			System.out.println("HI");
@@ -346,7 +353,7 @@ public class Robot extends IterativeRobot {
 		
 		distance = table.getNumber("Distance", 0);
 		
-		azimuth = table.getNumber("Azimuth", 400);
+		azimuth = table.getNumber("Azimuth", 666);
 		//System.out.println(azimuth);
 		
 		System.out.print("Azimuth: " + azimuth);
@@ -526,7 +533,7 @@ public class Robot extends IterativeRobot {
 		distance = table.getNumber("Distance" , 0);
 		SmartDashboard.putNumber("Distance: ", distance);
 			
-		azimuth = table.getNumber("Azimuth", 400);
+		azimuth = table.getNumber("Azimuth", 666);
 		SmartDashboard.putNumber("AZIMUTH: ", azimuth);
 		
 //		SmartDashboard.putNumber("P", Shooter.P);

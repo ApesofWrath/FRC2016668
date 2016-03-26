@@ -374,7 +374,7 @@ public class Autonomous {
 		
 		switch(RobotMap.noCamSpyState){
 		case RobotMap.SET_ANGLE_STATE:
-			RobotMap.hoodState = RobotMap.HOOD_GET_STATE;
+			RobotMap.hoodState = RobotMap.HOOD_SPY_DISTANCE;
 			if (Math.abs(Shooter.angle - Robot.pot.getValue()) < RobotMap.ACCEPTABLE_HOOD_RANGE){
 				RobotMap.noCamSpyState = RobotMap.SET_SPEED_STATE;
 			}
