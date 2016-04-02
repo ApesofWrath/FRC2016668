@@ -21,7 +21,7 @@ public class TeleopStateMachine {
 	
 	public static int flyWheelSpeed = 7800;
 	
-	public static void stateMachine(boolean optic, boolean isCloseFire, 
+	public static void stateMachine(boolean optic, boolean isFlashFire, 
 			boolean isFarFire, boolean isIntakeLower,
 			boolean isReturn, boolean farAngle, boolean closeAngle, boolean isFire, 
 			boolean isReverse, boolean manualHood, boolean lowGoal, boolean isLob ){
@@ -118,12 +118,12 @@ public class TeleopStateMachine {
 				}
 			}
 			 
-		    else if (isCloseFire){
+		    else if (isFlashFire){
 				if (!optic){
 					isFar = false;
 					isClose = true;
 					isLobShot = false;
-					flyWheelSpeed = RobotMap.CLOSE_FIRE_SPEED;
+					flyWheelSpeed = RobotMap.FLASH_FIRE_SPEED;
 					RobotMap.currentState = RobotMap.INIT_FIRE_STATE;
 				 }
 			}
@@ -205,15 +205,15 @@ public class TeleopStateMachine {
 			}
 			else if (isClose){
 				if (!isLobShot){
-					RobotMap.currentState = RobotMap.CLOSE_ANGLE_STATE; // begins the close firing sequence
+					RobotMap.currentState = RobotMap.FLASH_ANGLE_STATE; // begins the close firing sequence
 				}
 				else{
 					RobotMap.currentState = RobotMap.LOB_SHOT_ANGLE_STATE;
 				}
 			}
-//			else {
-//				RobotMap.currentState = RobotMap.WAIT_FOR_BUTTON_STATE;
-//			}
+			else {
+				RobotMap.currentState = RobotMap.WAIT_FOR_BUTTON_STATE;
+			}
 
 			break;
 			
@@ -244,6 +244,11 @@ public class TeleopStateMachine {
 				RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
 				RobotMap.currentState = RobotMap.WAIT_FOR_BUTTON_STATE;
 			}
+			else if (isFlashFire){
+				flyWheelSpeed = RobotMap.FLASH_FIRE_SPEED;
+				RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
+				RobotMap.currentState = RobotMap.FLASH_ANGLE_STATE;
+			}
 			break;
 			
 		case RobotMap.BALL_CLEAR_STATE: //we have both fire states come here for continuity even though close fire state doesn't need to
@@ -259,15 +264,16 @@ public class TeleopStateMachine {
 			}
 			break;
 
-		case RobotMap.CLOSE_FIRE_INIT_STATE:
+		case RobotMap.FLASH_FIRE_INIT_STATE:
 			SmartDashboard.putString("State: ", "CLose Fire State");
+			Robot.intakePiston.set(DoubleSolenoid.Value.kForward);
 			System.out.print("Speed: " + Robot.canTalonFlyWheel.getSpeed());
 			System.out.print(" Angle: " + Robot.pot.getValue());
 			System.out.print(" Target Anlge: " + Shooter.angle);
 			System.out.print(" Speed Target: " + reference);
 			System.out.print(" Speed Range: " + RobotMap.FAR_FIRE_SPEED_RANGE);
 			System.out.println(" Hood Range: " + RobotMap.ACCEPTABLE_HOOD_RANGE);
-			if ((Math.abs(RobotMap.CLOSE_FIRE_SPEED - Robot.canTalonFlyWheel.getSpeed()) <= RobotMap.FAR_FIRE_SPEED_RANGE) //far fire speed rang ei used for both close and far shots
+			if ((Math.abs(RobotMap.FLASH_FIRE_SPEED - Robot.canTalonFlyWheel.getSpeed()) <= RobotMap.FAR_FIRE_SPEED_RANGE) //far fire speed rang ei used for both close and far shots
 					&& Math.abs(Shooter.angle - Robot.pot.getValue()) <= RobotMap.ACCEPTABLE_HOOD_RANGE){
 				shootTime = System.currentTimeMillis();
 				RobotMap.currentState = RobotMap.SHOOT_TIMER_STATE;
@@ -300,6 +306,11 @@ public class TeleopStateMachine {
 				RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
 				RobotMap.currentState = RobotMap.WAIT_FOR_BUTTON_STATE;
 			}
+			else if (isFlashFire){
+				flyWheelSpeed = RobotMap.FLASH_FIRE_SPEED;
+				RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
+				RobotMap.currentState = RobotMap.FLASH_ANGLE_STATE;
+			}
 			break;
 			
 		case RobotMap.SHOOT_TIMER_STATE:
@@ -328,8 +339,8 @@ public class TeleopStateMachine {
 			}
 			break;
 			
-		case RobotMap.CLOSE_ANGLE_STATE:
-			SmartDashboard.putString("State: ", "Close Angle State");
+		case RobotMap.FLASH_ANGLE_STATE:
+			SmartDashboard.putString("State: ", "Flash Angle State");
 			isFar = false;
 			isClose = true;
 			isLobShot = false;
@@ -339,8 +350,8 @@ public class TeleopStateMachine {
 //				Shooter.stopAngle(); //stops the hood
 //				RobotMap.currentState = RobotMap.WAIT_FOR_BUTTON_STATE;
 //			}
-			RobotMap.hoodState = RobotMap.HOOD_CLOSE_SHOT_STATE;
-			RobotMap.currentState = RobotMap.CLOSE_FIRE_INIT_STATE;
+			RobotMap.hoodState = RobotMap.HOOD_FLASH_SHOT_STATE;
+			RobotMap.currentState = RobotMap.FLASH_FIRE_INIT_STATE;
 			break;
 
 		case RobotMap.FAR_ANGLE_STATE:
@@ -364,7 +375,7 @@ public class TeleopStateMachine {
 			isClose = true;
 			isLobShot = true;
 			RobotMap.hoodState = RobotMap.HOOD_LOB_ANGLE_STATE;
-			RobotMap.currentState = RobotMap.CLOSE_FIRE_INIT_STATE;
+			RobotMap.currentState = RobotMap.FLASH_FIRE_INIT_STATE;
 			
 			break;
 		case RobotMap.COLLAPSE_STATE:
@@ -479,7 +490,7 @@ public class TeleopStateMachine {
 //					Shooter.stopAngle();
 //					RobotMap.manualState = RobotMap.MANUAL_WAIT_FOR_BUTTON_STATE;
 //				}
-				RobotMap.hoodState = RobotMap.HOOD_CLOSE_SHOT_STATE;
+				RobotMap.hoodState = RobotMap.HOOD_FLASH_SHOT_STATE;
 				break;
 			
 			case RobotMap.MANUAL_COLLAPSE_ANGLE_STATE:

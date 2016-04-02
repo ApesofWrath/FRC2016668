@@ -2,27 +2,27 @@ package org.usfirst.frc.team668.robot;
 
 public class Arm {
 	
-	public static void armStateMachine(boolean portButton, boolean groundButton){
+	public static void armStateMachine(boolean groundButton, boolean sallyButton){
 		
 		
 		switch(RobotMap.armState){
 		case RobotMap.ARM_WAIT_FOR_BUTTON_STATE:
+			//armBang(RobotMap.ARM_ZERO_HEIGHT);
 			armBang(RobotMap.ARM_ZERO_HEIGHT);
-			if(portButton){
-				RobotMap.armState = RobotMap.ARM_PORT_STATE;
-			}
-			
-			else if (groundButton){
+			if (groundButton){
 				RobotMap.armState = RobotMap.ARM_GROUND_STATE;
+			}
+			else if (sallyButton){
+				RobotMap.armState = RobotMap.ARM_SALLY_STATE;
 			}
 			break;
 			
-		case RobotMap.ARM_PORT_STATE:
-			if(portButton){
-				armBang(RobotMap.PORT_HEIGHT);
+		case RobotMap.ARM_SALLY_STATE:
+			if (sallyButton){
+				armBang(RobotMap.SALLY_HEIGHT);
 			}
 			else{
-				RobotMap.armState = RobotMap.ARM_WAIT_FOR_BUTTON_STATE ;
+				RobotMap.armState = RobotMap.ARM_WAIT_FOR_BUTTON_STATE;
 			}
 			break;
 			
@@ -34,6 +34,8 @@ public class Arm {
 				RobotMap.armState = RobotMap.ARM_WAIT_FOR_BUTTON_STATE;
 			}
 			break;
+		
+			
 		}
 			
 		
@@ -50,6 +52,14 @@ public class Arm {
 			Robot.canTalonArm.set(.35);
 		}
 			
+	}
+	
+	public static void armMove(){
+		Robot.canTalonArm.set(Robot.joyOp.getY()*.25);
+	}
+	
+	public static void armStop(){
+		Robot.canTalonArm.set(0.0);
 	}
 
 }

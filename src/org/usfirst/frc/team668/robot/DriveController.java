@@ -40,8 +40,18 @@ public class DriveController {
 	public static void aimPI(){
 		
 		if (Robot.isBrightEyes){
+			if ((Robot.azimuth > 345 && Robot.azimuth < 355) || (Robot.azimuth < 15 && Robot.azimuth > 5)){
 			Kp = 1.7;
-			Ki = 2.3;
+			Ki = 0;
+			}
+			else if (Robot.azimuth == 400){
+				Kp = 0;
+				Ki = 0;
+			}
+			else{
+				Kp = 1.7;
+				Ki = 2.3;
+			}
 		}
 		else{
 			if ((Robot.azimuth > 345 && Robot.azimuth < 355) || (Robot.azimuth < 15 && Robot.azimuth > 5)){

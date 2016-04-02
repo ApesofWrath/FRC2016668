@@ -5,6 +5,8 @@ package org.usfirst.frc.team668.robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.Timer;
@@ -40,6 +42,7 @@ public class Robot extends IterativeRobot {
 	public static NetworkTable table;
 	public static SendableChooser autonChooser;
 	public static PowerDistributionPanel pdp;
+	public static Relay light;
 	
 	public static double distance; //get from network table
 	public static double azimuth; //get from network table
@@ -52,7 +55,7 @@ public class Robot extends IterativeRobot {
 	
 	public int target = 3210;
 
-	public static boolean isBrightEyes = false;
+	public static boolean isBrightEyes = true;
 	// public static USBCamera camFront = new USBCamera("cam1");
 	// public static USBCamera camRear = new USBCamera("cam2");
 	
@@ -102,6 +105,8 @@ public class Robot extends IterativeRobot {
 		
 		pdp = new PowerDistributionPanel(20);
 		
+		light = new Relay(0);
+		
 		pot = new AnalogInput(RobotMap.POT_ANALOG_INPUT_PORT);
 		armPot = new AnalogInput(RobotMap.ARM_POT_ANALOG_INPUT_PORT);
 		
@@ -113,13 +118,13 @@ public class Robot extends IterativeRobot {
 		
 		autonChooser = new SendableChooser();
 		
-		autonChooser.addDefault("Drive and Shoot Camera Autonomous", new Integer(RobotMap.DRIVE_AND_SHOOT_CAMERA_AUTON));
+		autonChooser.addObject("Drive and Shoot Camera Autonomous", new Integer(RobotMap.DRIVE_AND_SHOOT_CAMERA_AUTON));
 		autonChooser.addObject("Drive Under Bar Autonomous", new Integer(RobotMap.DRIVE_UNDER_BAR_AUTON));
 		autonChooser.addObject("Stop Autonomous", new Integer(RobotMap.STOP_AUTON));
 		/*autonChooser.addObject("Drive to Defense Autonomous", new Integer(RobotMap.DRIVE_TO_DEFENSE_AUTON));
 		 */
 		autonChooser.addObject("Spy Bot Shoot", new Integer(RobotMap.SPYBOT_SHOT_AUTON));
-		autonChooser.addObject("Spy Bot no auto aim", RobotMap.SPYBOT_NO_AIM);
+		autonChooser.addDefault("Spy Bot no auto aim", RobotMap.SPYBOT_NO_AIM);
 		
 		SmartDashboard.putData("Autonomous Selection: ", autonChooser);
 		
@@ -156,8 +161,14 @@ public class Robot extends IterativeRobot {
 		Shooter.stopFlyWheel();
 		RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
 		RobotMap.autonStateShoot = RobotMap.DRIVE_FORWARD_SHOOT_STATE;
-		RobotMap.autonSpyState = RobotMap.DRIVE_FORWARD_SPY_STATE;
+		RobotMap.autonSpyState = RobotMap.AIM_SPY_STATE;
 		RobotMap.autonStateForward = RobotMap.DRIVE_FORWARD_STATE;
+		RobotMap.noCamSpyState = RobotMap.SET_ANGLE_STATE;
+		
+		DriveController.I = 0;
+		DriveController.i = 0;
+		DriveController.lastTime = ((double)System.currentTimeMillis())/1000.0;
+		DriveController.lastError = 0;
 		
 	}
 
@@ -169,15 +180,23 @@ public class Robot extends IterativeRobot {
 		
 		azimuth = table.getNumber("Azimuth", 666);
 		
+		Shooter.hoodStateMachine();
+		
+		System.out.println("I: " + DriveController.I);
+		
+		System.out.println("RPM: " + canTalonFlyWheel.getSpeed());
+		
 		RobotMap.autonMode = ((Integer) (autonChooser.getSelected())).intValue();
 		
 		if (RobotMap.autonMode == RobotMap.DRIVE_AND_SHOOT_CAMERA_AUTON){
+			System.out.println("DRIVE_AND SHOOT");
 			Autonomous.driveAndShootCameraAuton(this);
 		}
 		else if (RobotMap.autonMode == RobotMap.DRIVE_UNDER_BAR_AUTON){
 			Autonomous.driveUnderBarAuton(this);
 		}
 		else if (RobotMap.autonMode == RobotMap.STOP_AUTON){
+			System.out.println("HAH");
 			Autonomous.stopAuton();
 		}
 		/*else if (RobotMap.autonMode == RobotMap.DRIVE_TO_DEFENSE_AUTON){
@@ -212,6 +231,9 @@ public class Robot extends IterativeRobot {
 		Shooter.lastError = 0; //TODO: make a constant
 		Shooter.lastTime = ((double)System.currentTimeMillis())/1000.0;
 
+		DriveController.I = 0;
+		DriveController.i = 0;
+		DriveController.lastTime = ((double)System.currentTimeMillis())/1000.0;
 		
 		RobotMap.hoodState = RobotMap.HOOD_DEFAULT_STATE;
 		RobotMap.currentState = RobotMap.DEFAULT_STATE;
@@ -227,7 +249,7 @@ public class Robot extends IterativeRobot {
 		boolean isIntaking = joyOp.getRawButton(RobotMap.INTAKE_BUTTON);
 		boolean isReverse = joyOp.getRawButton(RobotMap.REVERSE_BUTTON);
 		boolean isFarFire = joyOp.getRawButton(RobotMap.FAR_FIRE_BUTTON);
-		boolean isCloseFire = joyOp.getRawButton(RobotMap.CLOSE_FIRE_BUTTON);
+		boolean isFlashFire = joyOp.getRawButton(RobotMap.CLOSE_FIRE_BUTTON);
 		boolean isIntakeLower = joyOp.getRawButton(RobotMap.LOWER_INTAKE_BUTTON);
 		boolean isIntakeRise = joyOp.getRawButton(RobotMap.RISE_INTAKE_BUTTON);
 		boolean stopFlyWheel = joyOp.getRawButton(RobotMap.STOP_FLYWHEEL_BUTTON); //we dont use this button
@@ -243,12 +265,15 @@ public class Robot extends IterativeRobot {
 		boolean limit2 = limitSwitchTwo.get();
 		
 		boolean farAngle = joyOp.getRawButton(RobotMap.FAR_ANGLE_BUTTON);
-		boolean isPort = joyOp.getRawButton(RobotMap.PORT_BUTTON);
+		boolean isSally = joyOp.getRawButton(RobotMap.SALLY_BUTTON);
 		boolean isGround = joyOp.getRawButton(RobotMap.GROUND_BUTTON);
 		boolean manualHood = joyOp.getRawButton(RobotMap.MANUAL_HOOD_BUTTON);
 		boolean closeAngle = joyOp.getRawButton(RobotMap.CLOSE_ANGLE_BUTTON);
 		boolean isFire = joyOp.getRawButton(RobotMap.FIRE_BUTTON);
+		
 		boolean aim = joyThrottle.getRawButton(RobotMap.AIM_BUTTON);
+		boolean flash = joyThrottle.getRawButton(RobotMap.FLASH_ON_BUTTON);
+		boolean flashOff = joyThrottle.getRawButton(RobotMap.FLASH_OFF_BUTTON);
 		
 //		if ((RobotMap.currentState != RobotMap.CLOSE_FIRE_STATE) && (RobotMap.currentState != RobotMap.FAR_FIRE_STATE) 
 //				&& (RobotMap.currentState != RobotMap.BALL_CLEAR_STATE) && (RobotMap.currentState != RobotMap.MANUAL_FIRE_STATE)){
@@ -257,13 +282,15 @@ public class Robot extends IterativeRobot {
 //		else{
 //			optic = true;
 //		}
+		
+		//Arm.armStateMachine(isGround, isSally);
 			
-		TeleopStateMachine.stateMachine(optic, isCloseFire, isFarFire, isIntakeLower
+		TeleopStateMachine.stateMachine(optic, isFlashFire, isFarFire, isIntakeLower
 				, isReturn, farAngle, closeAngle, isFire, isReverse, manualHood, lowGoal
 				, isLob);
 		
 		
-		Shooter.hoodStateMachine(manualHood);
+		Shooter.hoodStateMachine();
 		
 		//Arm.armStateMachine(isPort, isGround);
 		//gear shifting code 
@@ -308,7 +335,12 @@ public class Robot extends IterativeRobot {
 
 		//System.out.println(RobotMap.currentState);
 	
-		
+		if (flash){
+			light.set(Value.kOn);
+		}
+		else{
+			light.set(Value.kOff);
+		}
 		
 		//controls the state of the intake pistons 
 		if (isIntakeLower){
@@ -326,9 +358,9 @@ public class Robot extends IterativeRobot {
 //			System.out.print(" HELLO WORLD");
 //		}
 		
-		if (joyOp.getRawButton(4)){
-			canTalonIntake.set(.8);
-		}
+//		if (joyOp.getRawButton(4)){
+//			canTalonIntake.set(.8);
+//		}
 		
 		//INTAKE SPEED
 		//If none of these are true the teleop state machine can take over and use the intake for fire state. 
@@ -560,7 +592,7 @@ public class Robot extends IterativeRobot {
 		
 		if ( joyOp.getRawButton(5)){
 			//canTalonArm.set(.3);
-			Shooter.movePotPID(RobotMap.CLOSE_ANGLE_VALUE);
+			Shooter.movePotPID(RobotMap.FLASH_ANGLE_VALUE);
 		}
 		//else if (joyOp.getRawButton(3)){
 			//canTalonArm.set(-.3);

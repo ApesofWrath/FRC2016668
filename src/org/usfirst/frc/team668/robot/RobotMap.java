@@ -40,7 +40,7 @@ public class RobotMap {
 	public static final int CLOSE_ANGLE_BUTTON = 5; // manual
 	public static final int CLOSE_FIRE_BUTTON = 5;
 	public static final int FAR_ANGLE_BUTTON = 3; //manual
-	public static final int PORT_BUTTON = 10; //kkk
+	public static final int SALLY_BUTTON = 10; //kkk
 //	public static final int LOWER_BUTTON = 2;
 	public static final int GROUND_BUTTON = 4; //kkk
 	public static final int MANUAL_HOOD_BUTTON = 9; //manuAL
@@ -49,6 +49,9 @@ public class RobotMap {
 	public static final int LOW_GEAR_BUTTON = 4; //throttle
 	public static final int HIGH_GEAR_BUTTON = 5; //throttle
 	public static final int AIM_BUTTON = 3; //throttle
+	public static final int FLASH_ON_BUTTON = 1; //throttle
+	public static final int FLASH_OFF_BUTTON = 2; //throttle
+	
 	public static final int LOW_GOAL_BUTTON = 9;
 	
 	public static final boolean OPTIC_SENSOR_VALUE = Robot.opticSensor.get();
@@ -60,14 +63,14 @@ public class RobotMap {
 	public static final int INIT_FIRE_STATE = 4;
 	public static final int FAR_FIRE_STATE = 5;
 	public static final int CLOSE_FIRE_STATE = 6;
-	public static final int CLOSE_ANGLE_STATE = 7;
+	public static final int FLASH_ANGLE_STATE = 7;
 	public static final int FAR_ANGLE_STATE = 8;
 	public static final int COLLAPSE_STATE = 9;
 	public static final int MANUAL_OVERRIDE_STATE = 10;
 	public static final int SET_FAR_PID_STATE = 11;
 	public static final int SET_CLOSE_PID_STATE = 13;
 	public static final int BALL_CLEAR_STATE = 12;
-	public static final int CLOSE_FIRE_INIT_STATE = 14;
+	public static final int FLASH_FIRE_INIT_STATE = 14;
 	public static final int SHOOT_TIMER_STATE = 15;
 	public static final int FAR_FIRE_INIT_STATE = 16;
 	public static final int LOW_GOAL_SHOT_STATE = 17;
@@ -88,7 +91,7 @@ public class RobotMap {
 	public static int manualState = MANUAL_DEFAULT_STATE;
 	
 	//HOOD STATE MACHINE
-	public static final int HOOD_CLOSE_SHOT_STATE = 0;
+	public static final int HOOD_FLASH_SHOT_STATE = 0;
 	public static final int HOOD_GET_STATE = 1;
 	public static final int HOOD_ZERO_STATE = 2;
 	public static final int HOOD_MANUAL_FAR_STATE = 3;
@@ -103,8 +106,9 @@ public class RobotMap {
 	//ARM STATE MACHINE
 	
 	public static final int ARM_WAIT_FOR_BUTTON_STATE = 0;
-	public static final int ARM_PORT_STATE = 1;
+	public static final int ARM_SALLY_STATE = 1;
 	public static final int ARM_GROUND_STATE = 2;
+	public static final int ARM_MOVE_STATE = 3;
 	public static final int ARM_DEFAULT_STATE = ARM_WAIT_FOR_BUTTON_STATE;
 	public static int armState = ARM_DEFAULT_STATE;
 	
@@ -121,6 +125,7 @@ public class RobotMap {
 	public static final int FIRE_SHOOT_STATE = 4;
 	public static final int DONE_STATE = 5;
 	public static final int ANGLE_SET_SHOOT_STATE = 7;
+	public static final int ANGLE_MOVE_SHOOT_STATE = 9;
 	public static final int DRIVE_FORWARD_COMPLETE_STATE = 6;
 	public static int autonStateShoot = DRIVE_FORWARD_SHOOT_STATE;
 	
@@ -130,17 +135,19 @@ public class RobotMap {
 	public static final int ANGLE_SET_SPY_STATE = 3;
 	public static final int FIRE_SPY_STATE = 4;
 	public static final int SPY_DONE_STATE = 5;
+	public static final int ANGLE_MOVE_STATE = 6;
 	public static int autonSpyState = DRIVE_FORWARD_SPY_STATE;
 	
 	public static final int SET_ANGLE_STATE = 0;
 	public static final int SET_SPEED_STATE = 1;
 	public static final int FIRE_BALL_STATE = 2;
 	public static final int IM_DONE_STATE = 3;
+	public static final int BALL_TIMER_STATE = 4;
 	public static int noCamSpyState = SET_ANGLE_STATE;
 	
 	
 	public static final int POT_ANALOG_INPUT_PORT = 0;
-	public static final int ARM_POT_ANALOG_INPUT_PORT = 2;
+	public static final int ARM_POT_ANALOG_INPUT_PORT = 1;
 	public static final int LIMIT_SWITCH_DIGITAL_INPUT = 2;
 	public static final int LIMIT_SWITCH_TWO_DIGITAL_INPUT = 3;
 	
@@ -155,24 +162,24 @@ public class RobotMap {
 	//CONSTANTS
 	public static final int CONSTANT_SPEED = 7000;
 	public static final double HOOD_SPEED = .3;
-	public static final int PORT_HEIGHT = 1860;
+	public static final int SALLY_HEIGHT = 1860;
 	public static final int GROUND_HEIGHT = 1990;
 	public static final int ARM_ZERO_HEIGHT = 1770;
 	
 	
 	public static final int BANG_DRIVE_RANGE = 100;
 	
-	public static final double BANG_DRIVE_OUTPUT = .3;
+	public static final double BANG_DRIVE_OUTPUT = .6;
 	
 	//RANGES
 	public static final double ACCEPTABLE_HOOD_RANGE = 1;
 	public static final double ACCEPTABLE_ARM_RANGE = 20;
 	
 	public static final int FAR_ANGLE_VALUE = 3232;
-	public static final int CLOSE_ANGLE_VALUE = 3208;
+	public static final int FLASH_ANGLE_VALUE = 3208;
 	
 	public static final int BRIGHT_FAR_ANGLE_VALUE = 0;
-	public static final int BRIGHT_CLOSE_ANGLE_VALUE = 362;
+	public static final int BRIGHT_FLASH_ANGLE_VALUE = 370;
 	
 	public static final int COLLAPSE_ANGLE_VALUE = 0;
 	
@@ -184,8 +191,8 @@ public class RobotMap {
 	
 	public static final double FAR_FIRE_SPEED_RANGE = 100;
 	public static final double FIRE_INTAKE_SPEED = 1;
-	public static final double BALL_WAIT_TIME = 1000;
-	public static final int CLOSE_FIRE_SPEED = 7000;
+	public static final double BALL_WAIT_TIME = 800;
+	public static final int FLASH_FIRE_SPEED = 7000;
 	public static final int FAR_FIRE_SPEED = 7000;
 	public static final int LOB_SPEED = 5900;
 	

@@ -193,17 +193,17 @@ public class Shooter {
 	
 	}
 	
-	public static void hoodStateMachine(boolean manualHood){
+	public static void hoodStateMachine(){
 		
 		switch(RobotMap.hoodState){
 		
-		case RobotMap.HOOD_CLOSE_SHOT_STATE:
+		case RobotMap.HOOD_FLASH_SHOT_STATE:
 			SmartDashboard.putString("HOOD: " , "CLOSE");
 			if (Robot.isBrightEyes){
-				angle = RobotMap.BRIGHT_CLOSE_ANGLE_VALUE;
+				angle = RobotMap.BRIGHT_FLASH_ANGLE_VALUE;
 			}
 			else{
-				angle = RobotMap.CLOSE_ANGLE_VALUE;
+				angle = RobotMap.FLASH_ANGLE_VALUE;
 			}
 			movePotPID(angle);
 			break;
@@ -220,13 +220,14 @@ public class Shooter {
 			
 		case RobotMap.HOOD_GET_STATE:
 			SmartDashboard.putString("HOOD: " , "GET");
-		
+			System.out.println("Almost");
 			dist = Robot.distance;
 			angle = Vision.getAngle();
 			RobotMap.hoodState = RobotMap.HOOD_SET_FAR_ANGLE_STATE;
 			break;
 			
 		case RobotMap.HOOD_SET_FAR_ANGLE_STATE:
+			System.out.println("Lets go");
 			SmartDashboard.putString("HOOD: " , "FAR");
 			System.out.println("ANGLE: " + angle);
 			movePotPID(angle);
@@ -279,7 +280,7 @@ public class Shooter {
 			}
 			movePotPID(angle);
 			break;
-		
+		/*
 		case RobotMap.HOOD_MANUAL_STATE:
 			SmartDashboard.putString("HOOD: " , "MANUAL CLOSE");
 			if (manualHood){
@@ -290,6 +291,7 @@ public class Shooter {
 			}
 
 			break;
+			*/
 			}
 		
 		

@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 public class Autonomous {
 
 	public static boolean fired = false;
+	public static long time;
 	public static void driveUnderBarAuton(Robot r){
 		/*
 		boolean doneRight = DriveController.rightMove(RobotMap.DRIVE_UNDER_BAR_RIGHT_DISTANCE);
@@ -115,12 +116,18 @@ public class Autonomous {
 		System.out.println("DC");
 			boolean finishedRight = DriveController.rightMove(RobotMap.DRIVE_AND_SHOOT_DISTANCE);
 			boolean finishedLeft = DriveController.leftMove(RobotMap.DRIVE_AND_SHOOT_DISTANCE);
-			if (finishedRight && finishedLeft){
+			if (finishedRight || finishedLeft){
 			//	DriveController.stop();
 				Robot.intakePiston.set(DoubleSolenoid.Value.kForward);
-				RobotMap.autonStateShoot = RobotMap.TURN_STATE;
+				RobotMap.autonStateShoot = RobotMap.SPIN_STATE;
 			}
 			
+			break;
+			
+		case RobotMap.SPIN_STATE:
+			int ref = RobotMap.FAR_FIRE_SPEED;
+			Shooter.setPID(ref);
+			RobotMap.autonStateShoot = RobotMap.TURN_STATE;
 			break;
 			
 		case RobotMap.TURN_STATE:
@@ -148,15 +155,12 @@ public class Autonomous {
 			
 		case RobotMap.ANGLE_SET_SHOOT_STATE:
 			RobotMap.hoodState = RobotMap.HOOD_GET_STATE;
-			if (Math.abs(Shooter.angle - Robot.pot.getValue()) < RobotMap.ACCEPTABLE_HOOD_RANGE){
-				RobotMap.autonStateShoot = RobotMap.SPIN_STATE;
-			}
+			RobotMap.autonStateShoot = RobotMap.ANGLE_MOVE_SHOOT_STATE;
 			break;
-			
-		case RobotMap.SPIN_STATE:
-			int ref = RobotMap.FAR_FIRE_SPEED;
-			Shooter.setPID(ref);
-			RobotMap.autonStateShoot = RobotMap.FIRE_SHOOT_STATE;
+		case RobotMap.ANGLE_MOVE_SHOOT_STATE:
+			if (Math.abs(Shooter.angle - Robot.pot.getValue()) < RobotMap.ACCEPTABLE_HOOD_RANGE){
+				RobotMap.autonStateShoot = RobotMap.FIRE_SHOOT_STATE;
+			}
 			break;
 			
 		case RobotMap.FIRE_SHOOT_STATE:
@@ -243,6 +247,7 @@ public class Autonomous {
 	}
 	public static void stopAuton(){
 		
+		System.out.println("HA");
 		return;
 		
 	}
@@ -330,7 +335,9 @@ public class Autonomous {
 			
 		case RobotMap.AIM_SPY_STATE:
 			DriveController.aimPI();
-			
+			Robot.intakePiston.set(DoubleSolenoid.Value.kForward);
+			System.out.println("YOUR MOM");
+			System.out.println(Robot.azimuth);
 			if ((Robot.azimuth < RobotMap.AZIMUTH_RANGE)
 					|| (Robot.azimuth > (360 - RobotMap.AZIMUTH_RANGE)) && (Robot.azimuth !=400)){
 					DriveController.stop();
@@ -341,8 +348,14 @@ public class Autonomous {
 		case RobotMap.ANGLE_SET_SPY_STATE:
 			
 			RobotMap.hoodState = RobotMap.HOOD_GET_STATE;
-			if (Math.abs(Shooter.angle - Robot.pot.getValue()) < RobotMap.ACCEPTABLE_HOOD_RANGE){
-				RobotMap.autonSpyState = RobotMap.SPIN_STATE;
+			RobotMap.autonSpyState = RobotMap.ANGLE_MOVE_STATE;
+			break;
+			
+		case RobotMap.ANGLE_MOVE_STATE:
+			System.out.println("MOVE");
+			System.out.println(Robot.pot.getValue() - Shooter.angle);
+			if (Math.abs(Shooter.angle - Robot.pot.getValue()) <= RobotMap.ACCEPTABLE_HOOD_RANGE){
+				RobotMap.autonSpyState = RobotMap.SPIN_SPY_STATE;
 			}
 			break;
 		
@@ -372,8 +385,11 @@ public class Autonomous {
 	
 	public static void spyBotNoCamera(){
 		
+		System.out.println("NO CAM");
+		
 		switch(RobotMap.noCamSpyState){
 		case RobotMap.SET_ANGLE_STATE:
+			System.out.println("HERE");
 			RobotMap.hoodState = RobotMap.HOOD_SPY_DISTANCE;
 			if (Math.abs(Shooter.angle - Robot.pot.getValue()) < RobotMap.ACCEPTABLE_HOOD_RANGE){
 				RobotMap.noCamSpyState = RobotMap.SET_SPEED_STATE;
@@ -389,12 +405,21 @@ public class Autonomous {
 		case RobotMap.FIRE_BALL_STATE:
 			if (Math.abs(Robot.canTalonFlyWheel.getSpeed() - RobotMap.FAR_FIRE_SPEED) < RobotMap.FAR_FIRE_SPEED_RANGE){
 				Shooter.fire(-RobotMap.FIRE_INTAKE_SPEED);
-				long time = System.currentTimeMillis(); //wait for the ball to be completely out of the firing chamber
-				if (System.currentTimeMillis() - time >= RobotMap.BALL_WAIT_TIME){
-					Intake.stop();
-					RobotMap.noCamSpyState = RobotMap.IM_DONE_STATE;
-				}
+				time = System.currentTimeMillis(); //wait for the ball to be completely out of the firing chamber
+				RobotMap.noCamSpyState = RobotMap.BALL_TIMER_STATE;
 			}
+			break;
+			
+		case RobotMap.BALL_TIMER_STATE:
+			if (System.currentTimeMillis() - time >= RobotMap.BALL_WAIT_TIME){
+				Intake.stop();
+				RobotMap.noCamSpyState = RobotMap.IM_DONE_STATE;
+			}
+			break;
+			
+		case RobotMap.IM_DONE_STATE:
+			Shooter.stop();
+			RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
 			break;
 		}
 	}
