@@ -117,7 +117,7 @@ public class Autonomous {
 			boolean finishedRight = DriveController.rightMove(RobotMap.DRIVE_AND_SHOOT_DISTANCE);
 			boolean finishedLeft = DriveController.leftMove(RobotMap.DRIVE_AND_SHOOT_DISTANCE);
 			if (finishedRight || finishedLeft){
-			//	DriveController.stop();
+				DriveController.stop();
 				Robot.intakePiston.set(DoubleSolenoid.Value.kForward);
 				RobotMap.autonStateShoot = RobotMap.SPIN_STATE;
 			}

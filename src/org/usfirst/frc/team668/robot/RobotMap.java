@@ -148,8 +148,8 @@ public class RobotMap {
 	
 	public static final int POT_ANALOG_INPUT_PORT = 0;
 	public static final int ARM_POT_ANALOG_INPUT_PORT = 1;
-	public static final int LIMIT_SWITCH_DIGITAL_INPUT = 2;
-	public static final int LIMIT_SWITCH_TWO_DIGITAL_INPUT = 3;
+	//public static final int LIMIT_SWITCH_DIGITAL_INPUT = 2;
+	//public static final int LIMIT_SWITCH_TWO_DIGITAL_INPUT = 3;
 	
 	public static int autonState;
 	public static int autonMode;
@@ -162,9 +162,15 @@ public class RobotMap {
 	//CONSTANTS
 	public static final int CONSTANT_SPEED = 7000;
 	public static final double HOOD_SPEED = .3;
+	public static final int BRIGHT_SALLY_HEIGHT = 1860;
+	public static final int BRIGHT_GROUND_HEIGHT = 1990;
+	public static final int BRIGHT_ARM_ZERO_HEIGHT = 1770;
+	public static final int BRIGHT_ARM_SOFT_LIMIT = 1770;
+	
 	public static final int SALLY_HEIGHT = 1860;
 	public static final int GROUND_HEIGHT = 1990;
 	public static final int ARM_ZERO_HEIGHT = 1770;
+	public static final int ARM_SOFT_LIMIT = 1770;
 	
 	
 	public static final int BANG_DRIVE_RANGE = 100;

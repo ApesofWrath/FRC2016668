@@ -97,8 +97,8 @@ public class Robot extends IterativeRobot {
 		robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, false);
 
 		opticSensor = new DigitalInput(RobotMap.OPTIC_SENSOR_DIGITAL_INPUT_PORT);
-		limitSwitch = new DigitalInput(RobotMap.LIMIT_SWITCH_DIGITAL_INPUT);
-		limitSwitchTwo = new DigitalInput(RobotMap.LIMIT_SWITCH_TWO_DIGITAL_INPUT);
+		//limitSwitch = new DigitalInput(RobotMap.LIMIT_SWITCH_DIGITAL_INPUT);
+	//	limitSwitchTwo = new DigitalInput(RobotMap.LIMIT_SWITCH_TWO_DIGITAL_INPUT);
 		
 		intakePiston = new DoubleSolenoid(RobotMap.PCM_CAN_ID, RobotMap.INTAKE_PISTON_EXPAND_CHANNEL, RobotMap.INTAKE_PISTON_RETRACT_CHANNNEL);
 		shiftPiston = new DoubleSolenoid(RobotMap.PCM_CAN_ID, RobotMap.PISTON_SHIFT_EXPAND_CHANNEL, RobotMap.PISTON_SHIFT_RETRACT_CHANNEL);
@@ -238,6 +238,8 @@ public class Robot extends IterativeRobot {
 		RobotMap.hoodState = RobotMap.HOOD_DEFAULT_STATE;
 		RobotMap.currentState = RobotMap.DEFAULT_STATE;
 		RobotMap.manualState = RobotMap.MANUAL_DEFAULT_STATE;
+		
+		TeleopStateMachine.flyWheelSpeed = 7800;
 
 	}
 
@@ -261,8 +263,8 @@ public class Robot extends IterativeRobot {
 		boolean isReturn = joyOp.getRawButton(RobotMap.RETURN_BUTTON);
 		//boolean optic = opticSensor.get();
 		boolean optic = opticSensor.get();
-		boolean limit1 = limitSwitch.get();
-		boolean limit2 = limitSwitchTwo.get();
+//		boolean limit1 = limitSwitch.get();
+//		boolean limit2 = limitSwitchTwo.get();
 		
 		boolean farAngle = joyOp.getRawButton(RobotMap.FAR_ANGLE_BUTTON);
 		boolean isSally = joyOp.getRawButton(RobotMap.SALLY_BUTTON);
@@ -589,16 +591,26 @@ public class Robot extends IterativeRobot {
 		}
 		//5700
 		//671
+		if (joyOp.getRawButton(8)){
+			canTalonArm.set(.4);
+		}
+		else if (joyOp.getRawButton(7)){
+			canTalonArm.set(-.4);
+		}
+		else{
+			canTalonArm.set(0);
+		}
 		
 		if ( joyOp.getRawButton(5)){
 			//canTalonArm.set(.3);
-			Shooter.movePotPID(RobotMap.FLASH_ANGLE_VALUE);
+			Shooter.movePotPID(RobotMap.BRIGHT_FLASH_ANGLE_VALUE);
 		}
 		//else if (joyOp.getRawButton(3)){
 			//canTalonArm.set(-.3);
 		//}
 		else{
 			canTalonShooterAngle.set(0);
+			Shooter.lastTime = ((double)System.currentTimeMillis())/1000.0;
 		}
 	}
 
