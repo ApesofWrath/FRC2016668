@@ -586,31 +586,33 @@ public class Robot extends IterativeRobot {
 		else if (joyOp.getRawButton(6)){
 			Shooter.setPID(6500);
 		}
-		else if (joyOp.getRawButton(5)){
-			canTalonFlyWheel.disable();
-		}
+//		else if (joyOp.getRawButton(5)){
+//			canTalonFlyWheel.disable();
+//		}
 		//5700
 		//671
-		if (joyOp.getRawButton(8)){
-			canTalonArm.set(.4);
-		}
-		else if (joyOp.getRawButton(7)){
-			canTalonArm.set(-.4);
-		}
-		else{
-			canTalonArm.set(0);
-		}
+//		if (joyOp.getRawButton(8)){
+//			//canTalonArm.set(-.35);
+//			Arm.armBang(RobotMap.BRIGHT_SALLY_HEIGHT);
+//		}
+//		else if (joyOp.getRawButton(7)){
+//			//canTalonArm.set(.35);
+//			Arm.armBang(RobotMap.BRIGHT_GROUND_HEIGHT);
+//		}
+//		else{
+//			Arm.armBang(RobotMap.BRIGHT_ARM_ZERO_HEIGHT);
+//		}
 		
 		if ( joyOp.getRawButton(5)){
 			//canTalonArm.set(.3);
-			Shooter.movePotPID(RobotMap.BRIGHT_FLASH_ANGLE_VALUE);
+			Shooter.movePotPID(target);
 		}
 		//else if (joyOp.getRawButton(3)){
 			//canTalonArm.set(-.3);
 		//}
 		else{
 			canTalonShooterAngle.set(0);
-			Shooter.lastTime = ((double)System.currentTimeMillis())/1000.0;
+			//Shooter.lastTime = ((double)System.currentTimeMillis())/1000.0;
 		}
 	}
 

@@ -113,10 +113,17 @@ public class Autonomous {
 			break;
 		
 		case RobotMap.DRIVE_FORWARD_COMPLETE_STATE:
-		System.out.println("DC");
-			boolean finishedRight = DriveController.rightMove(RobotMap.DRIVE_AND_SHOOT_DISTANCE);
-			boolean finishedLeft = DriveController.leftMove(RobotMap.DRIVE_AND_SHOOT_DISTANCE);
-			if (finishedRight || finishedLeft){
+			System.out.println("DC");
+			//this method is shit
+//			boolean finishedRight = DriveController.rightMove(RobotMap.DRIVE_AND_SHOOT_DISTANCE);
+//			boolean finishedLeft = DriveController.leftMove(RobotMap.DRIVE_AND_SHOOT_DISTANCE);
+	//		if (finishedRight || finishedLeft){
+			Robot.canTalonFrontRight.set(RobotMap.BANG_DRIVE_OUTPUT);
+			Robot.canTalonRearRight.set(RobotMap.BANG_DRIVE_OUTPUT);
+			Robot.canTalonFrontLeft.set(-RobotMap.BANG_DRIVE_OUTPUT);
+			Robot.canTalonRearLeft.set(-RobotMap.BANG_DRIVE_OUTPUT);
+			if (Robot.canTalonFrontRight.getEncPosition() > RobotMap.DRIVE_AND_SHOOT_DISTANCE ||
+				(Robot.canTalonFrontLeft.getEncPosition() > RobotMap.DRIVE_AND_SHOOT_DISTANCE)){
 				DriveController.stop();
 				Robot.intakePiston.set(DoubleSolenoid.Value.kForward);
 				RobotMap.autonStateShoot = RobotMap.SPIN_STATE;
@@ -137,7 +144,7 @@ public class Autonomous {
 			System.out.println(" Distance: " + Robot.distance);
 			DriveController.turnInPlace(RobotMap.DRIVE_AND_SHOOT_TURN_SPEED);
 			
-			if (Robot.distance != 0.0 && (Robot.azimuth < 10 || Robot.azimuth > 350) && Robot.azimuth != 400){
+			if (Robot.distance != 0.0 && (Robot.azimuth < 13 || Robot.azimuth > 350) && Robot.azimuth != 400){
 				 DriveController.stop();
 				RobotMap.autonStateShoot = RobotMap.AIM_STATE;
 			}

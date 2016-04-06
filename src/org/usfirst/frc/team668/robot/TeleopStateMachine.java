@@ -31,8 +31,8 @@ public class TeleopStateMachine {
 			SmartDashboard.putBoolean("Ready For Far Shot", Vision.isShotPossible());
 		
 		 
-		if ((!optic || (RobotMap.currentState == RobotMap.BALL_CLEAR_STATE) || (RobotMap.currentState == RobotMap.FAR_FIRE_STATE) 
-				|| (RobotMap.currentState == RobotMap.CLOSE_FIRE_STATE)) && (!ballCleared)){
+		if (!optic ||(((RobotMap.currentState == RobotMap.BALL_CLEAR_STATE) || (RobotMap.currentState == RobotMap.FAR_FIRE_STATE) 
+				|| (RobotMap.currentState == RobotMap.CLOSE_FIRE_STATE)) && (!ballCleared))){
 	
 			System.out.println("SPINNING");
 			
@@ -82,7 +82,7 @@ public class TeleopStateMachine {
 			Intake.stop();
 //			isClose = false;
 //			isFar = false;
-			Robot.intakePiston.set(DoubleSolenoid.Value.kReverse);
+			//Robot.intakePiston.set(DoubleSolenoid.Value.kReverse);
 //			boolean completed = Shooter.moveHoodBang(RobotMap.CLOSE_ANGLE_VALUE);
 //			if(completed){
 //				Shooter.stopAngle();
@@ -254,7 +254,7 @@ public class TeleopStateMachine {
 		case RobotMap.BALL_CLEAR_STATE: //we have both fire states come here for continuity even though close fire state doesn't need to
 			
 			SmartDashboard.putString("State: ", "Ball Clear State");			
-			if (System.currentTimeMillis() - time  >= RobotMap.BALL_WAIT_TIME){//waits for the ball to be out of the firing area before slowing the motor down
+			if ((System.currentTimeMillis() - time)  >= RobotMap.BALL_WAIT_TIME){//waits for the ball to be out of the firing area before slowing the motor down
 				Intake.stop();
 				//Robot.canTalonFlyWheel.disable(); //TODO:Check if this line will hurt the code (i think so)
 				Robot.canTalonFlyWheel.clearIAccum();
@@ -330,6 +330,7 @@ public class TeleopStateMachine {
 			
 			Intake.spin(RobotMap.FIRE_INTAKE_SPEED); //spins the ball into the flywheel
 				if(optic){ //checks if the ball is gone (inversed logic)
+					time = System.currentTimeMillis();
 					RobotMap.currentState = RobotMap.BALL_CLEAR_STATE;
 				}
 		 if (isReturn){

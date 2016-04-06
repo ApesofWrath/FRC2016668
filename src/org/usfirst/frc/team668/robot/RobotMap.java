@@ -162,30 +162,30 @@ public class RobotMap {
 	//CONSTANTS
 	public static final int CONSTANT_SPEED = 7000;
 	public static final double HOOD_SPEED = .3;
-	public static final int BRIGHT_SALLY_HEIGHT = 1860;
-	public static final int BRIGHT_GROUND_HEIGHT = 1990;
-	public static final int BRIGHT_ARM_ZERO_HEIGHT = 1770;
-	public static final int BRIGHT_ARM_SOFT_LIMIT = 1770;
+	public static final int BRIGHT_SALLY_HEIGHT = 3692;
+	public static final int BRIGHT_GROUND_HEIGHT = 3795;
+	public static final int BRIGHT_ARM_ZERO_HEIGHT = 3544;
+	public static final int BRIGHT_ARM_SOFT_LIMIT = 3530;
 	
-	public static final int SALLY_HEIGHT = 1860;
-	public static final int GROUND_HEIGHT = 1990;
-	public static final int ARM_ZERO_HEIGHT = 1770;
-	public static final int ARM_SOFT_LIMIT = 1770;
+	public static final int SALLY_HEIGHT = 3692;
+	public static final int GROUND_HEIGHT = 3775;
+	public static final int ARM_ZERO_HEIGHT = 3530;
+	public static final int ARM_SOFT_LIMIT = 3530;
 	
 	
 	public static final int BANG_DRIVE_RANGE = 100;
 	
-	public static final double BANG_DRIVE_OUTPUT = .6;
+	public static final double BANG_DRIVE_OUTPUT = .5;
 	
 	//RANGES
 	public static final double ACCEPTABLE_HOOD_RANGE = 1;
-	public static final double ACCEPTABLE_ARM_RANGE = 20;
+	public static final double ACCEPTABLE_ARM_RANGE = 5;
 	
 	public static final int FAR_ANGLE_VALUE = 3232;
 	public static final int FLASH_ANGLE_VALUE = 3208;
 	
 	public static final int BRIGHT_FAR_ANGLE_VALUE = 0;
-	public static final int BRIGHT_FLASH_ANGLE_VALUE = 370;
+	public static final int BRIGHT_FLASH_ANGLE_VALUE = 375;
 	
 	public static final int COLLAPSE_ANGLE_VALUE = 0;
 	
@@ -197,7 +197,7 @@ public class RobotMap {
 	
 	public static final double FAR_FIRE_SPEED_RANGE = 100;
 	public static final double FIRE_INTAKE_SPEED = 1;
-	public static final double BALL_WAIT_TIME = 800;
+	public static final double BALL_WAIT_TIME = 500;
 	public static final int FLASH_FIRE_SPEED = 7000;
 	public static final int FAR_FIRE_SPEED = 7000;
 	public static final int LOB_SPEED = 5900;
@@ -206,7 +206,7 @@ public class RobotMap {
 	public static final double AZIMUTH_RANGE = .3;
 	
 	public static final double AIM_SPEED = 0;
-	public static final double DRIVE_AND_SHOOT_TURN_SPEED = 0.3;
+	public static final double DRIVE_AND_SHOOT_TURN_SPEED = 0.26;
 	
 	public static final double FIRE_DISTANCE_1 = 0;
 	public static final double FIRE_DISTANCE_2 = 0;
