@@ -210,7 +210,7 @@ public class Shooter {
 		case RobotMap.HOOD_SPY_DISTANCE:
 			SmartDashboard.putString("HOOD: ", "SPY");
 			if (Robot.isBrightEyes){
-				angle = 370;
+				angle = RobotMap.BRIGHT_FAR_ANGLE_VALUE;
 			}
 			else{
 				angle = RobotMap.FAR_ANGLE_VALUE;

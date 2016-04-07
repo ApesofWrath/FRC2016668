@@ -88,9 +88,9 @@ public class Arm {
 		}
 		else if( ref < Robot.armPot.getValue()){
 			if (error > 30){
-				speed = .25;
+				speed = .2;
 			}
-			else if (error > 12){
+			else if (error > 15){
 				speed = .1;
 			} 
 			else{

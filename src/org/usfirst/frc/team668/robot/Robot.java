@@ -161,7 +161,7 @@ public class Robot extends IterativeRobot {
 		Shooter.stopFlyWheel();
 		RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
 		RobotMap.autonStateShoot = RobotMap.DRIVE_FORWARD_SHOOT_STATE;
-		RobotMap.autonSpyState = RobotMap.AIM_SPY_STATE;
+		RobotMap.autonSpyState = RobotMap.DRIVE_FORWARD_SPY_STATE;
 		RobotMap.autonStateForward = RobotMap.DRIVE_FORWARD_STATE;
 		RobotMap.noCamSpyState = RobotMap.SET_ANGLE_STATE;
 		
@@ -284,6 +284,8 @@ public class Robot extends IterativeRobot {
 //		else{
 //			optic = true;
 //		}
+		
+		System.out.println("ap: " + armPot.getValue());
 		
 		//Arm.armStateMachine(isGround, isSally);
 			
@@ -578,7 +580,7 @@ public class Robot extends IterativeRobot {
 	//	int ref = (int)(((joyOp.getRawAxis(3)/2)+.5)*11000);
 		
 		System.out.printf("P: %2.2f I: %2.2f D: %2.2f Speed: %2.2f Target: %2.2f TargetAng: %2.2f Angle: %2.2f\n" 
-				, Shooter.P, Shooter.I, Shooter.D, Shooter.speed, (double)ref, (double)target, (double)pot.getValue());
+				, Shooter.P, Shooter.I, Shooter.D, Shooter.speed, (double)ref, (double)target, (double)armPot.getValue());
 		
 		if(joyOp.getRawButton(4)){
 			Shooter.setPID(7000);
@@ -591,17 +593,18 @@ public class Robot extends IterativeRobot {
 //		}
 		//5700
 		//671
-//		if (joyOp.getRawButton(8)){
-//			//canTalonArm.set(-.35);
-//			Arm.armBang(RobotMap.BRIGHT_SALLY_HEIGHT);
-//		}
-//		else if (joyOp.getRawButton(7)){
-//			//canTalonArm.set(.35);
-//			Arm.armBang(RobotMap.BRIGHT_GROUND_HEIGHT);
-//		}
-//		else{
-//			Arm.armBang(RobotMap.BRIGHT_ARM_ZERO_HEIGHT);
-//		}
+		if (joyOp.getRawButton(8)){
+			//canTalonArm.set(-.35);
+			Arm.armBang(RobotMap.BRIGHT_SALLY_HEIGHT);
+		}
+		else if (joyOp.getRawButton(7)){
+			//canTalonArm.set(.35);
+			Arm.armBang(RobotMap.BRIGHT_GROUND_HEIGHT);
+		}
+		else{
+			//canTalonArm.set(0);
+			Arm.armBang(RobotMap.BRIGHT_ARM_ZERO_HEIGHT);
+		}
 		
 		if ( joyOp.getRawButton(5)){
 			//canTalonArm.set(.3);

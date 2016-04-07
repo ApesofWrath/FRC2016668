@@ -33,12 +33,19 @@ public class Autonomous {
 			break;
 		
 		case RobotMap.DRIVE_MORE_STATE:
-			boolean finishedRight = DriveController.rightMove(RobotMap.DRIVE_UNDER_BAR_RIGHT_DISTANCE);
-			boolean finishedLeft =  DriveController.leftMove(RobotMap.DRIVE_UNDER_BAR_LEFT_DISTANCE);
-			if (finishedRight || finishedRight){
+//			boolean finishedRight = DriveController.rightMove(RobotMap.DRIVE_UNDER_BAR_RIGHT_DISTANCE);
+//			boolean finishedLeft =  DriveController.leftMove(RobotMap.DRIVE_UNDER_BAR_LEFT_DISTANCE);
+//			if (finishedRight || finishedRight){
+			Robot.canTalonFrontRight.set(RobotMap.BANG_DRIVE_OUTPUT);
+			Robot.canTalonRearRight.set(RobotMap.BANG_DRIVE_OUTPUT);
+			Robot.canTalonFrontLeft.set(-RobotMap.BANG_DRIVE_OUTPUT);
+			Robot.canTalonRearLeft.set(-RobotMap.BANG_DRIVE_OUTPUT);
+			if (Robot.canTalonFrontRight.getEncPosition() > (RobotMap.DRIVE_AND_SHOOT_DISTANCE - 12000) ||
+					(Robot.canTalonFrontLeft.getEncPosition() > (RobotMap.DRIVE_AND_SHOOT_DISTANCE - 12000))){
 				Robot.intakePiston.set(DoubleSolenoid.Value.kForward);
 				RobotMap.autonStateForward = RobotMap.STOP_STATE;
 			}
+			break;
 		case RobotMap.STOP_STATE:
 			DriveController.stop();
 			break;
@@ -144,6 +151,26 @@ public class Autonomous {
 			System.out.println(" Distance: " + Robot.distance);
 			DriveController.turnInPlace(RobotMap.DRIVE_AND_SHOOT_TURN_SPEED);
 			
+			if (Robot.distance != 0.0 && (Robot.azimuth < 13 || Robot.azimuth > 350) && Robot.azimuth != 400){
+				 DriveController.stop();
+				RobotMap.autonStateShoot = RobotMap.CLOSE_DISTANCE_STATE;
+			}
+			break;
+			
+		case RobotMap.CLOSE_DISTANCE_STATE:
+			Robot.canTalonFrontRight.set(RobotMap.BANG_DRIVE_OUTPUT);
+			Robot.canTalonRearRight.set(RobotMap.BANG_DRIVE_OUTPUT);
+			Robot.canTalonFrontLeft.set(-RobotMap.BANG_DRIVE_OUTPUT);
+			Robot.canTalonRearLeft.set(-RobotMap.BANG_DRIVE_OUTPUT);
+			if (Robot.canTalonFrontRight.getEncPosition() > RobotMap.DRIVE_AND_SHOOT_DISTANCE ||
+				(Robot.canTalonFrontLeft.getEncPosition() > RobotMap.DRIVE_AND_SHOOT_DISTANCE)){
+				DriveController.stop();
+				RobotMap.autonStateShoot = RobotMap.TURN_SECOND_STATE;
+			}
+			break;
+			
+		case RobotMap.TURN_SECOND_STATE:
+			DriveController.turnInPlace(RobotMap.DRIVE_AND_SHOOT_TURN_SPEED);
 			if (Robot.distance != 0.0 && (Robot.azimuth < 13 || Robot.azimuth > 350) && Robot.azimuth != 400){
 				 DriveController.stop();
 				RobotMap.autonStateShoot = RobotMap.AIM_STATE;
@@ -336,7 +363,15 @@ public class Autonomous {
 //			
 //			if (doneRight || doneLeft){
 //				DriveController.stop();
+			Robot.canTalonFrontRight.set(RobotMap.BANG_DRIVE_OUTPUT);
+			Robot.canTalonRearRight.set(RobotMap.BANG_DRIVE_OUTPUT);
+			Robot.canTalonFrontLeft.set(-RobotMap.BANG_DRIVE_OUTPUT);
+			Robot.canTalonRearLeft.set(-RobotMap.BANG_DRIVE_OUTPUT);
+			if (Robot.canTalonFrontRight.getEncPosition() > 4000 ||
+				(Robot.canTalonFrontLeft.getEncPosition() > 4000)){
+				DriveController.stop();
 				RobotMap.autonSpyState = RobotMap.AIM_SPY_STATE;
+			}
 		//	}
 			break;
 			
