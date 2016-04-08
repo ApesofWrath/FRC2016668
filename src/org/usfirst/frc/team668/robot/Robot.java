@@ -55,7 +55,7 @@ public class Robot extends IterativeRobot {
 	
 	public int target = 3210;
 
-	public static boolean isBrightEyes = true;
+	public static boolean isBrightEyes = false;
 	// public static USBCamera camFront = new USBCamera("cam1");
 	// public static USBCamera camRear = new USBCamera("cam2");
 	
@@ -163,7 +163,7 @@ public class Robot extends IterativeRobot {
 		RobotMap.autonStateShoot = RobotMap.DRIVE_FORWARD_SHOOT_STATE;
 		RobotMap.autonSpyState = RobotMap.DRIVE_FORWARD_SPY_STATE;
 		RobotMap.autonStateForward = RobotMap.DRIVE_FORWARD_STATE;
-		RobotMap.noCamSpyState = RobotMap.SET_ANGLE_STATE;
+		RobotMap.noCamSpyState = RobotMap.MOVE_FORWARD_NO_AIM;
 		
 		DriveController.I = 0;
 		DriveController.i = 0;
@@ -269,7 +269,7 @@ public class Robot extends IterativeRobot {
 		boolean farAngle = joyOp.getRawButton(RobotMap.FAR_ANGLE_BUTTON);
 		boolean isSally = joyOp.getRawButton(RobotMap.SALLY_BUTTON);
 		boolean isGround = joyOp.getRawButton(RobotMap.GROUND_BUTTON);
-		boolean manualHood = joyOp.getRawButton(RobotMap.MANUAL_HOOD_BUTTON);
+		boolean isPort = joyOp.getRawButton(RobotMap.PORT_BUTTON);
 		boolean closeAngle = joyOp.getRawButton(RobotMap.CLOSE_ANGLE_BUTTON);
 		boolean isFire = joyOp.getRawButton(RobotMap.FIRE_BUTTON);
 		
@@ -287,10 +287,10 @@ public class Robot extends IterativeRobot {
 		
 		System.out.println("ap: " + armPot.getValue());
 		
-		//Arm.armStateMachine(isGround, isSally);
+		Arm.armStateMachine(isGround, isSally, isPort);
 			
 		TeleopStateMachine.stateMachine(optic, isFlashFire, isFarFire, isIntakeLower
-				, isReturn, farAngle, closeAngle, isFire, isReverse, manualHood, lowGoal
+				, isReturn, farAngle, closeAngle, isFire, isReverse, lowGoal
 				, isLob);
 		
 		
@@ -580,7 +580,7 @@ public class Robot extends IterativeRobot {
 	//	int ref = (int)(((joyOp.getRawAxis(3)/2)+.5)*11000);
 		
 		System.out.printf("P: %2.2f I: %2.2f D: %2.2f Speed: %2.2f Target: %2.2f TargetAng: %2.2f Angle: %2.2f\n" 
-				, Shooter.P, Shooter.I, Shooter.D, Shooter.speed, (double)ref, (double)target, (double)armPot.getValue());
+				, Shooter.P, Shooter.I, Shooter.D, Shooter.speed, (double)ref, (double)target, (double)pot.getValue());
 		
 		if(joyOp.getRawButton(4)){
 			Shooter.setPID(7000);
@@ -595,15 +595,15 @@ public class Robot extends IterativeRobot {
 		//671
 		if (joyOp.getRawButton(8)){
 			//canTalonArm.set(-.35);
-			Arm.armBang(RobotMap.BRIGHT_SALLY_HEIGHT);
+			Arm.armBang(RobotMap.SALLY_HEIGHT);
 		}
 		else if (joyOp.getRawButton(7)){
 			//canTalonArm.set(.35);
-			Arm.armBang(RobotMap.BRIGHT_GROUND_HEIGHT);
+			Arm.armBang(RobotMap.GROUND_HEIGHT);
 		}
 		else{
 			//canTalonArm.set(0);
-			Arm.armBang(RobotMap.BRIGHT_ARM_ZERO_HEIGHT);
+			Arm.armBang(RobotMap.ARM_ZERO_HEIGHT);
 		}
 		
 		if ( joyOp.getRawButton(5)){

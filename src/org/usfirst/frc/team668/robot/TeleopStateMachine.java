@@ -24,7 +24,7 @@ public class TeleopStateMachine {
 	public static void stateMachine(boolean optic, boolean isFlashFire, 
 			boolean isFarFire, boolean isIntakeLower,
 			boolean isReturn, boolean farAngle, boolean closeAngle, boolean isFire, 
-			boolean isReverse, boolean manualHood, boolean lowGoal, boolean isLob ){
+			boolean isReverse, boolean lowGoal, boolean isLob ){
 		
 		
 		
@@ -450,9 +450,9 @@ public class TeleopStateMachine {
 //					isClose = true;
 //					RobotMap.manualState = RobotMap.MANUAL_FIRE_STATE;
 //				}
-				else if (manualHood){
-					RobotMap.manualState = RobotMap.MANUAL_CONTROLL_HOOD_ANGLE_STATE;
-				}
+//				else if (manualHood){
+//					RobotMap.manualState = RobotMap.MANUAL_CONTROLL_HOOD_ANGLE_STATE;
+//				}
 				else if (isFire){
 					RobotMap.manualState = RobotMap.MANUAL_FIRE_STATE;
 				}
@@ -507,13 +507,13 @@ public class TeleopStateMachine {
 				break;
 				
 			case RobotMap.MANUAL_CONTROLL_HOOD_ANGLE_STATE:
-				if (manualHood){
-					RobotMap.hoodState = RobotMap.HOOD_MANUAL_STATE;
-				}
-				else {
-					RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
-					RobotMap.manualState = RobotMap.MANUAL_WAIT_FOR_BUTTON_STATE;
-				}
+//				if (manualHood){
+//					RobotMap.hoodState = RobotMap.HOOD_MANUAL_STATE;
+//				}
+//				else {
+//					RobotMap.hoodState = RobotMap.HOOD_ZERO_STATE;
+//					RobotMap.manualState = RobotMap.MANUAL_WAIT_FOR_BUTTON_STATE;
+//				}
 				break;
 			} //end of manual switch
 			

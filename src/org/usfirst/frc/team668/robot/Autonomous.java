@@ -129,8 +129,8 @@ public class Autonomous {
 			Robot.canTalonRearRight.set(RobotMap.BANG_DRIVE_OUTPUT);
 			Robot.canTalonFrontLeft.set(-RobotMap.BANG_DRIVE_OUTPUT);
 			Robot.canTalonRearLeft.set(-RobotMap.BANG_DRIVE_OUTPUT);
-			if (Robot.canTalonFrontRight.getEncPosition() > RobotMap.DRIVE_AND_SHOOT_DISTANCE ||
-				(Robot.canTalonFrontLeft.getEncPosition() > RobotMap.DRIVE_AND_SHOOT_DISTANCE)){
+			if (Robot.canTalonFrontRight.getEncPosition() > RobotMap.DRIVE_AND_SHOOT_DISTANCE - 8000 ||
+				(Robot.canTalonFrontLeft.getEncPosition() > RobotMap.DRIVE_AND_SHOOT_DISTANCE - 8000)){
 				DriveController.stop();
 				Robot.intakePiston.set(DoubleSolenoid.Value.kForward);
 				RobotMap.autonStateShoot = RobotMap.SPIN_STATE;
@@ -162,8 +162,8 @@ public class Autonomous {
 			Robot.canTalonRearRight.set(RobotMap.BANG_DRIVE_OUTPUT);
 			Robot.canTalonFrontLeft.set(-RobotMap.BANG_DRIVE_OUTPUT);
 			Robot.canTalonRearLeft.set(-RobotMap.BANG_DRIVE_OUTPUT);
-			if (Robot.canTalonFrontRight.getEncPosition() > RobotMap.DRIVE_AND_SHOOT_DISTANCE ||
-				(Robot.canTalonFrontLeft.getEncPosition() > RobotMap.DRIVE_AND_SHOOT_DISTANCE)){
+			if (Robot.canTalonFrontRight.getEncPosition() > RobotMap.DRIVE_AND_SHOOT_DISTANCE - 4000 ||
+				(Robot.canTalonFrontLeft.getEncPosition() > RobotMap.DRIVE_AND_SHOOT_DISTANCE - 4000)){
 				DriveController.stop();
 				RobotMap.autonStateShoot = RobotMap.TURN_SECOND_STATE;
 			}
@@ -430,6 +430,19 @@ public class Autonomous {
 		System.out.println("NO CAM");
 		
 		switch(RobotMap.noCamSpyState){
+		
+		case RobotMap.MOVE_FORWARD_NO_AIM:
+			Robot.canTalonFrontRight.set(RobotMap.BANG_DRIVE_OUTPUT);
+			Robot.canTalonRearRight.set(RobotMap.BANG_DRIVE_OUTPUT);
+			Robot.canTalonFrontLeft.set(-RobotMap.BANG_DRIVE_OUTPUT);
+			Robot.canTalonRearLeft.set(-RobotMap.BANG_DRIVE_OUTPUT);
+			if (Robot.canTalonFrontRight.getEncPosition() > 8000 ||
+				(Robot.canTalonFrontLeft.getEncPosition() > 8000)){
+				DriveController.stop();
+				RobotMap.noCamSpyState = RobotMap.SET_ANGLE_STATE;
+			}
+			break;
+			
 		case RobotMap.SET_ANGLE_STATE:
 			System.out.println("HERE");
 			RobotMap.hoodState = RobotMap.HOOD_SPY_DISTANCE;

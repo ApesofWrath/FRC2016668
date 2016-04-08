@@ -30,9 +30,9 @@ public class Vision {
 			slope = 10;
 		}
 		else{
-			angle = 3232;
-			yInt = 3210;
-			slope = 20;
+			angle = 3224;
+			yInt = 3215;//3195;
+			slope = 8;
 		}
 		
 		if (Robot.distance < 132){

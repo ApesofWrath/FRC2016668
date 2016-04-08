@@ -40,15 +40,15 @@ public class RobotMap {
 	public static final int CLOSE_ANGLE_BUTTON = 5; // manual
 	public static final int CLOSE_FIRE_BUTTON = 5;
 	public static final int FAR_ANGLE_BUTTON = 3; //manual
-	public static final int SALLY_BUTTON = 10; //kkk
+	public static final int SALLY_BUTTON = 9; 
 //	public static final int LOWER_BUTTON = 2;
-	public static final int GROUND_BUTTON = 4; //kkk
-	public static final int MANUAL_HOOD_BUTTON = 9; //manuAL
+	public static final int GROUND_BUTTON = 4;
+	public static final int PORT_BUTTON = 10;
 	public static final int RETURN_BUTTON = 11;
 
 	public static final int LOW_GEAR_BUTTON = 4; //throttle
 	public static final int HIGH_GEAR_BUTTON = 5; //throttle
-	public static final int AIM_BUTTON = 3; //throttle
+	public static final int AIM_BUTTON = 9; //throttle
 	public static final int FLASH_ON_BUTTON = 1; //throttle
 	public static final int FLASH_OFF_BUTTON = 2; //throttle
 	
@@ -109,6 +109,8 @@ public class RobotMap {
 	public static final int ARM_SALLY_STATE = 1;
 	public static final int ARM_GROUND_STATE = 2;
 	public static final int ARM_MOVE_STATE = 3;
+	public static final int PORT_GROUND_STATE = 4;
+	public static final int PORT_UP_STATE = 5;
 	public static final int ARM_DEFAULT_STATE = ARM_WAIT_FOR_BUTTON_STATE;
 	public static int armState = ARM_DEFAULT_STATE;
 	
@@ -145,6 +147,7 @@ public class RobotMap {
 	public static final int FIRE_BALL_STATE = 2;
 	public static final int IM_DONE_STATE = 3;
 	public static final int BALL_TIMER_STATE = 4;
+	public static final int MOVE_FORWARD_NO_AIM = 5; 
 	public static int noCamSpyState = SET_ANGLE_STATE;
 	
 	
@@ -169,10 +172,11 @@ public class RobotMap {
 	public static final int BRIGHT_ARM_ZERO_HEIGHT = 3520;
 	public static final int BRIGHT_ARM_SOFT_LIMIT = 3430;
 	
-	public static final int SALLY_HEIGHT = 3692;
-	public static final int GROUND_HEIGHT = 3775;
-	public static final int ARM_ZERO_HEIGHT = 3530;
-	public static final int ARM_SOFT_LIMIT = 3530;
+	public static final int PORT_HEIGHT = 2432;
+	public static final int SALLY_HEIGHT = 2491;
+	public static final int GROUND_HEIGHT = 2582;
+	public static final int ARM_ZERO_HEIGHT = 2331;
+	public static final int ARM_SOFT_LIMIT = 2331; // not used
 	
 	
 	public static final int BANG_DRIVE_RANGE = 100;
@@ -183,8 +187,8 @@ public class RobotMap {
 	public static final double ACCEPTABLE_HOOD_RANGE = 1;
 	public static final double ACCEPTABLE_ARM_RANGE = 5;
 	
-	public static final int FAR_ANGLE_VALUE = 3232;
-	public static final int FLASH_ANGLE_VALUE = 3232;
+	public static final int FAR_ANGLE_VALUE = 3224;
+	public static final int FLASH_ANGLE_VALUE = 3224;
 	
 	public static final int BRIGHT_FAR_ANGLE_VALUE = 0;
 	public static final int BRIGHT_FLASH_ANGLE_VALUE = 376;
@@ -208,7 +212,7 @@ public class RobotMap {
 	public static final double AZIMUTH_RANGE = .3;
 	
 	public static final double AIM_SPEED = 0;
-	public static final double DRIVE_AND_SHOOT_TURN_SPEED = 0.32;
+	public static final double DRIVE_AND_SHOOT_TURN_SPEED = 0.36;
 	
 	public static final double FIRE_DISTANCE_1 = 0;
 	public static final double FIRE_DISTANCE_2 = 0;
